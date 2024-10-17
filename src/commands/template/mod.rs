@@ -1,6 +1,6 @@
 use clap::{builder, Arg, Command};
 use enums::TemplateCommand;
-use std::{env, fs, io};
+use std::{env, fs, io, path::Path};
 
 mod enums;
 
@@ -38,27 +38,32 @@ fn copy_template(template_name: &str) -> io::Result<()> {
     // Get the current directory where the CLI is executed
     let current_dir = env::current_dir()?;
 
-    // Path to the template files in the assets/templates directory
-    let template_path = format!("assets/templates/{}", template_name);
+    let template_path = format!("asses/templates/{}", template_name);
 
-    // Check if the template path exists
     if !fs::metadata(&template_path).is_ok() {
         return Err(io::Error::new(
             io::ErrorKind::NotFound,
             format!("Template path not found: {}", template_path),
         ));
     }
+    copy_all(&template_path, &current_dir)?;
 
-    // Copy the contents of the template directory to the current directory
-    for entry in fs::read_dir(template_path)? {
+    Ok(())
+}
+
+fn copy_all(src: &str, dst: &Path) -> io::Result<()> {
+    for entry in fs::read_dir(src)? {
         let entry = entry?;
         let path = entry.path();
+        let dest_path = dst.join(path.file_name().unwrap());
 
-        if path.is_file() {
-            let file_name = path.file_name().unwrap();
-            let destination = current_dir.join(file_name);
-            fs::copy(&path, &destination)?;
-            println!("Copied file to: {:?}", destination); // Debug output
+        if path.is_dir() {
+            // If it's a directory, create the directory in the destination and recurse
+            fs::create_dir_all(&dest_path)?;
+            copy_all(path.to_str().unwrap(), &dest_path)?;
+        } else {
+            fs::copy(&path, &dest_path)?;
+            println!("Copied file to: {:?}", dest_path);
         }
     }
     Ok(())
