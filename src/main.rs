@@ -1,6 +1,21 @@
-use clap::{builder, Arg, Command};
+use clap::{builder, Arg, Command, ValueEnum};
 use dotenv::dotenv;
 use std::env;
+
+#[derive(Copy, Clone, PartialEq, Eq, PartialOrd, Ord, ValueEnum, Debug)]
+enum Size {
+    Sm,
+    Md,
+    Lg,
+}
+
+// Define an enum for aspect ratio with possible values
+#[derive(Copy, Clone, PartialEq, Eq, PartialOrd, Ord, ValueEnum, Debug)]
+enum Aspect {
+    Square,
+    Wide,
+    Tall,
+}
 
 fn main() {
     dotenv().ok();
@@ -14,11 +29,14 @@ fn main() {
                     Arg::new("size")
                         .short('s')
                         .long("size")
-                        .value_parser(builder::PossibleValuesParser::new(["sm", "md", "lg"])),
+                        .value_parser(builder::EnumValueParser::<Size>::new()),
                 )
-                .arg(Arg::new("aspect").short('a').long("aspect").value_parser(
-                    builder::PossibleValuesParser::new(["square", "wide", "tall"]),
-                )),
+                .arg(
+                    Arg::new("aspect")
+                        .short('a')
+                        .long("aspect")
+                        .value_parser(builder::EnumValueParser::<Aspect>::new()),
+                ),
         )
         .subcommand(Command::new("opt").about("Optimize an image"));
     let font_command = Command::new("font")
@@ -44,23 +62,19 @@ fn main() {
 }
 
 fn handle_img(matches: &clap::ArgMatches) {
-    let default_size = "lg".to_string();
-    let default_aspect = "square".to_string();
     match matches.subcommand() {
         Some(("gen", sub_matches)) => {
             let prompt = sub_matches.get_one::<String>("prompt").expect("required");
-            let size = sub_matches
-                .get_one::<String>("size")
-                .unwrap_or(&default_size);
+            let size = sub_matches.get_one::<Size>("size").unwrap_or(&Size::Lg);
             let aspect = sub_matches
-                .get_one::<String>("aspect")
-                .unwrap_or(&default_aspect);
+                .get_one::<Aspect>("aspect")
+                .unwrap_or(&Aspect::Square);
 
             // Print the arguments
             println!("Generating image with:");
             println!("  Prompt: {}", prompt);
-            println!("  Size: {}", size);
-            println!("  Aspect Ratio: {}", aspect);
+            println!("  Size: {:?}", size);
+            println!("  Aspect Ratio: {:?}", aspect);
         }
         Some(("opt", _)) => println!("Optimizing image..."),
         _ => println!("Invalid image command. Use 'gen' or 'opt'."),
