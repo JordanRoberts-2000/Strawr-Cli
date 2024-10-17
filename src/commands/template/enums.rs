@@ -15,11 +15,7 @@ pub enum rustVariants {
     Webserver,
 }
 
-pub struct NodeTemplate {
-    typescript: bool,
-    variant: NodeVariants,
-}
-
+#[derive(Copy, Clone, PartialEq, Eq, PartialOrd, Ord, ValueEnum, Debug)]
 pub enum NodeVariants {
     Plain,
     Express,
