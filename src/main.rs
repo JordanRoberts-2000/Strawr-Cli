@@ -9,6 +9,7 @@ use dotenv::dotenv;
 use std::env;
 
 mod commands;
+mod utils;
 
 fn main() {
     dotenv().ok();

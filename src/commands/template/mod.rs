@@ -1,6 +1,8 @@
 use clap::{builder, Arg, Command};
 use enums::{NodeVariants, TemplateCommand};
-use std::{env, fs, io, path::Path, process::Command as CommandLine};
+use std::{env, fs, io};
+
+use crate::utils::{copy_all, run_command};
 
 mod enums;
 
@@ -44,12 +46,16 @@ pub fn handle_template(matches: &clap::ArgMatches) {
                             if let Err(e) = copy_template("node/typescript/vanilla") {
                                 panic!("Error generating Node template: {}", e);
                             };
-                            install_node_dependencies();
+                            if let Err(e) = run_command("npm i") {
+                                panic!("Error running npm i: {}", e);
+                            };
                         } else {
                             if let Err(e) = copy_template("node/vanilla") {
                                 panic!("Error generating Node template: {}", e);
                             };
-                            install_node_dependencies();
+                            if let Err(e) = run_command("npm i") {
+                                panic!("Error running npm i: {}", e);
+                            };
                         }
                     }
                     NodeVariants::Express => {
@@ -57,12 +63,16 @@ pub fn handle_template(matches: &clap::ArgMatches) {
                             if let Err(e) = copy_template("node/typescript/express") {
                                 panic!("Error generating Node template: {}", e);
                             };
-                            install_node_dependencies();
+                            if let Err(e) = run_command("npm i") {
+                                panic!("Error running npm i: {}", e);
+                            };
                         } else {
                             if let Err(e) = copy_template("node/express") {
                                 panic!("Error generating Node template: {}", e);
                             };
-                            install_node_dependencies();
+                            if let Err(e) = run_command("npm i") {
+                                panic!("Error running npm i: {}", e);
+                            };
                         }
                     }
                     _ => println!("not a valid node variant"),
@@ -94,38 +104,4 @@ fn copy_template(template_name: &str) -> io::Result<()> {
     copy_all(&template_path, &current_dir)?;
 
     Ok(())
-}
-
-fn copy_all(src: &str, dst: &Path) -> io::Result<()> {
-    for entry in fs::read_dir(src)? {
-        let entry = entry?;
-        let path = entry.path();
-        let dest_path = dst.join(path.file_name().unwrap());
-
-        if path.is_dir() {
-            if path.file_name().unwrap() == "node_modules" {
-                continue;
-            }
-            // If it's a directory, create the directory in the destination and recurse
-            fs::create_dir_all(&dest_path)?;
-            copy_all(path.to_str().unwrap(), &dest_path)?;
-        } else {
-            fs::copy(&path, &dest_path)?;
-            println!("Copied file to: {:?}", dest_path);
-        }
-    }
-    Ok(())
-}
-
-pub fn install_node_dependencies() {
-    let output = CommandLine::new("npm")
-        .arg("install") // Set the directory where npm install should run
-        .output()
-        .expect("Failed to install npm dependencies");
-
-    if output.status.success() {
-        println!("Dependencies installed successfully");
-    } else {
-        println!("Error installing dependencies: {:?}", output);
-    }
 }

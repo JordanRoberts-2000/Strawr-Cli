@@ -3,6 +3,8 @@ use std::{env, fs::File, io, path::Path};
 
 use clap::{Arg, Command, ValueEnum};
 
+use crate::utils::run_command;
+
 #[derive(ValueEnum, Clone)]
 enum AddVariant {
     Env,
@@ -45,6 +47,9 @@ pub fn handle_add(matches: &clap::ArgMatches) {
 fn add_env() {
     if let Err(e) = create_file_in_current_dir(".env", "") {
         panic!("Error creating .env file: {}", e);
+    };
+    if let Err(e) = run_command("npm i dotenv") {
+        panic!("Error installing dotenv: {}", e);
     };
     // add .env file
     // check for gitignore if not create one
