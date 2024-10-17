@@ -35,10 +35,9 @@ pub fn generate_template_node() -> io::Result<()> {
 }
 
 fn copy_template(template_name: &str) -> io::Result<()> {
-    // Get the current directory where the CLI is executed
-    let current_dir = env::current_dir()?;
-
-    let template_path = format!("asses/templates/{}", template_name);
+    let project_root = env!("CARGO_MANIFEST_DIR"); // Compile-time project root
+    let template_path = format!("{}/assets/templates/{}", project_root, template_name);
+    let current_dir = env::current_dir()?; // Get the current directory where the CLI is executed
 
     if !fs::metadata(&template_path).is_ok() {
         return Err(io::Error::new(
