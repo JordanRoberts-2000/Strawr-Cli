@@ -1,3 +1,5 @@
+use std::env;
+
 use clap::Command;
 use commands::{
     add::{add_command, handle_add},
@@ -5,15 +7,13 @@ use commands::{
     img::{handle_img, img_command},
     template::{command::template_command, handle_template},
 };
-use dotenv::dotenv;
+use dotenv::{dotenv, from_path};
 
 mod commands;
 mod utils;
 
 fn main() {
-    if let Err(err) = dotenv() {
-        panic!("Error loading .env file: {}", err);
-    }
+    load_env();
     let main_command = Command::new("CLI Tool")
         .version("1.0")
         .about("A tool for handling images, fonts, templates, and more")
@@ -30,4 +30,10 @@ fn main() {
         _ => println!("Invalid command. Available commands: img, font, template, add"),
     }
     // let api_key = env::var("OPENAI_API_KEY").expect("API key not found in .env file");
+}
+
+fn load_env() {
+    if let Err(err) = from_path("/Users/jordanroberts/Documents/dev/Projects/main/rustCli/.env") {
+        panic!("Error loading .env file: {}", err);
+    }
 }

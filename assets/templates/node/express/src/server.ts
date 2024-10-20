@@ -10,6 +10,15 @@ app.get("/", (req: Request, res: Response) => {
 });
 
 const port = 3000;
-app.listen(port, () => {
+const server = app.listen(port, () => {
   console.log(`Server is running on port ${port}`);
+});
+
+server.on("error", (error: NodeJS.ErrnoException) => {
+  if (error.code === "EADDRINUSE") {
+    console.error(`Port ${port} is in use`);
+  } else {
+    console.error(error, `Failed to start server`);
+  }
+  process.exit(1);
 });
