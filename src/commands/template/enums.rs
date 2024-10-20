@@ -17,7 +17,7 @@ pub enum rustVariants {
 
 #[derive(Copy, Clone, PartialEq, Eq, PartialOrd, Ord, ValueEnum, Debug)]
 pub enum NodeVariants {
-    Plain,
+    Vanilla,
     Express,
     Fastify,
 }

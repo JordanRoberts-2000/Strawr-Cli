@@ -3,16 +3,17 @@ use commands::{
     add::{add_command, handle_add},
     font::{font_command, handle_font},
     img::{handle_img, img_command},
-    template::{handle_template, template_command},
+    template::{command::template_command, handle_template},
 };
 use dotenv::dotenv;
-use std::env;
 
 mod commands;
 mod utils;
 
 fn main() {
-    dotenv().ok();
+    if let Err(err) = dotenv() {
+        panic!("Error loading .env file: {}", err);
+    }
     let main_command = Command::new("CLI Tool")
         .version("1.0")
         .about("A tool for handling images, fonts, templates, and more")
@@ -28,5 +29,5 @@ fn main() {
         Some(("add", sub_matches)) => handle_add(sub_matches),
         _ => println!("Invalid command. Available commands: img, font, template, add"),
     }
-    let api_key = env::var("OPENAI_API_KEY").expect("API key not found in .env file");
+    // let api_key = env::var("OPENAI_API_KEY").expect("API key not found in .env file");
 }

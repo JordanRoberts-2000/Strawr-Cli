@@ -1,4 +1,9 @@
-use std::{fs, io, path::Path, process::Command};
+use std::{
+    fs::{self, File},
+    io::{self, Write},
+    path::Path,
+    process::Command,
+};
 
 pub fn run_command(command_str: &str) -> io::Result<()> {
     let mut parts = command_str.split_whitespace();
@@ -33,5 +38,14 @@ pub fn copy_all(src: &str, dst: &Path) -> io::Result<()> {
             println!("Copied file to: {:?}", dest_path);
         }
     }
+    Ok(())
+}
+
+pub fn create_file(filename: &str, content: &str) -> io::Result<()> {
+    let file_path = Path::new(filename);
+    let mut file = File::create(&file_path)?;
+    file.write_all(content.as_bytes())?;
+
+    println!("File created at: {:?}", file_path);
     Ok(())
 }
