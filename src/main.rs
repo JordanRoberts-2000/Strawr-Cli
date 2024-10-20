@@ -1,5 +1,3 @@
-use std::env;
-
 use clap::Command;
 use commands::{
     add::{add_command, handle_add},
@@ -7,7 +5,7 @@ use commands::{
     img::{handle_img, img_command},
     template::{command::template_command, handle_template},
 };
-use dotenv::{dotenv, from_path};
+use dotenv::from_path;
 
 mod commands;
 mod utils;

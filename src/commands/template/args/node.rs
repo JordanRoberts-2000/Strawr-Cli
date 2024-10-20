@@ -1,6 +1,6 @@
 use crate::{
-    commands::template::{enums::NodeVariants, utils::copy_template},
-    utils::run_command,
+    commands::template::enums::NodeVariants,
+    utils::{copy_to_client, run_command},
 };
 
 pub fn handle_node(matches: &clap::ArgMatches) {
@@ -9,7 +9,7 @@ pub fn handle_node(matches: &clap::ArgMatches) {
         .unwrap_or(&NodeVariants::Express);
     match variant {
         NodeVariants::Vanilla => {
-            if let Err(e) = copy_template("node/vanilla") {
+            if let Err(e) = copy_to_client("assets/templates/node/vanilla") {
                 panic!("Error generating Node template: {}", e);
             };
             if let Err(e) = run_command("npm i") {
@@ -17,7 +17,7 @@ pub fn handle_node(matches: &clap::ArgMatches) {
             };
         }
         NodeVariants::Express => {
-            if let Err(e) = copy_template("node/express") {
+            if let Err(e) = copy_to_client("assets/templates/node/express") {
                 panic!("Error generating Node template: {}", e);
             };
             if let Err(e) = run_command("npm i") {

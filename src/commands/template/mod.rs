@@ -6,7 +6,6 @@ use enums::TemplateCommand;
 mod args;
 pub mod command;
 mod enums;
-mod utils;
 
 pub fn handle_template(matches: &clap::ArgMatches) {
     if let Some(template_type) = matches.get_one::<TemplateCommand>("template_type") {
