@@ -1,4 +1,4 @@
-use args::env::add_env;
+use args::{env::add_env, logger::add_logger};
 use clap::{builder, Arg, Command, ValueEnum};
 
 mod args;
@@ -7,6 +7,7 @@ mod utils;
 #[derive(ValueEnum, Clone)]
 enum AddVariant {
     Env,
+    Logger,
     Jwt,
     Session,
     NextAuth,
@@ -32,6 +33,7 @@ pub fn handle_add(matches: &clap::ArgMatches) {
         for auth_type in auth_types {
             match auth_type {
                 AddVariant::Env => add_env(),
+                AddVariant::Logger => add_logger(),
                 AddVariant::Jwt => println!("soup"),
                 AddVariant::Session => println!("soup"),
                 AddVariant::NextAuth => println!("soup"),

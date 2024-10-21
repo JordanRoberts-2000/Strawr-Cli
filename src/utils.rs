@@ -68,6 +68,12 @@ pub fn copy_to_client(path: &str) -> io::Result<()> {
 
 pub fn create_file(filename: &str, content: &str) -> io::Result<()> {
     let file_path = Path::new(filename);
+
+    if file_path.exists() {
+        println!("File already exists: {:?}", file_path);
+        return Ok(());
+    }
+
     let mut file = File::create(&file_path)?;
     file.write_all(content.as_bytes())?;
 

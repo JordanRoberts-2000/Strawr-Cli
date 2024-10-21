@@ -1,5 +1,5 @@
 use super::enums::{NodeVariants, TemplateCommand};
-use clap::{builder, Arg, Command};
+use clap::{builder, Arg, ArgAction, Command};
 
 pub fn template_command() -> Command {
     return Command::new("template")
@@ -15,6 +15,14 @@ pub fn template_command() -> Command {
                 .short('v')
                 .long("variant")
                 .help("Specify a variant for the template (e.g., express, typescript, etc.)")
-                .value_parser(builder::EnumValueParser::<NodeVariants>::new()),
+                .value_parser(builder::EnumValueParser::<NodeVariants>::new())
+                .default_value_if("template_type", "node", "express"),
+        )
+        .arg(
+            Arg::new("edit")
+                .short('e')
+                .long("edit")
+                .help("Edit the template")
+                .action(ArgAction::SetTrue),
         );
 }
