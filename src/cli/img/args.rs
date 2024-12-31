@@ -1,36 +1,26 @@
-use clap::{Parser, Subcommand};
+use clap::Subcommand;
 
-#[derive(Parser, Debug)]
-pub struct Cli {
+#[derive(clap::Parser, Debug)]
+pub struct ImgCommand {
     #[command(subcommand)]
-    pub commands: Commands,
-}
+    pub subcommands: Option<ImgSubcommands>,
 
-#[derive(Subcommand, Debug)]
-pub enum Commands {
-    Watcher,
-    #[command(arg_required_else_help(true))]
-    Img {
-        #[command(subcommand)]
-        subcommands: Option<ImgSubcommands>,
+    pub path: Option<String>,
 
-        path: Option<String>,
+    #[arg(short, long)]
+    pub output: Option<String>,
 
-        #[arg(short, long)]
-        output: Option<String>,
+    #[arg(short, long)]
+    pub format: Option<String>,
 
-        #[arg(short, long)]
-        format: Option<String>,
+    #[arg(short, long)]
+    pub size: Option<String>,
 
-        #[arg(short, long)]
-        size: Option<String>,
+    #[arg(short, long)]
+    pub crop: Option<String>,
 
-        #[arg(short, long)]
-        crop: Option<String>,
-
-        #[arg(short, long)]
-        ignore: bool,
-    },
+    #[arg(short, long)]
+    pub ignore: bool,
 }
 
 #[derive(Subcommand, Debug)]
