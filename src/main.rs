@@ -1,6 +1,6 @@
 use args::{Cli, Commands};
 use clap::Parser;
-use commands::img::handle_img;
+use commands::img::handle_commands_img;
 use dotenv::from_path;
 
 mod args;
@@ -12,7 +12,8 @@ fn main() {
     let cli = Cli::parse();
 
     match cli.commands {
-        Commands::Img { path } => handle_img(path),
+        Commands::Img { .. } => handle_commands_img(&cli.commands),
+
         Commands::Watcher => println!("Watching"),
     }
 }
