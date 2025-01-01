@@ -1,6 +1,6 @@
-use super::args::{ImgCommand, ImgSubcommands};
+use super::args::{ImgCommands, ImgSubcommands};
 
-impl ImgCommand {
+impl ImgCommands {
     pub fn handle_command(&self) {
         if self.subcommands.is_some() && !self.ignore {
             // check if valid folder or file exists in cwd

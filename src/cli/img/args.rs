@@ -1,7 +1,7 @@
 use clap::Subcommand;
 
 #[derive(clap::Parser, Debug)]
-pub struct ImgCommand {
+pub struct ImgCommands {
     #[command(subcommand)]
     pub subcommands: Option<ImgSubcommands>,
 
