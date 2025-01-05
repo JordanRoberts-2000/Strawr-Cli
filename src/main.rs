@@ -1,11 +1,15 @@
 use clap::Parser;
 use cli::{args::Commands, Cli};
+use config::logging::initialize_logger;
 
 pub mod cli;
 mod commands;
+pub mod config;
 mod utils;
 
 fn main() {
+    dotenv::dotenv().ok();
+    initialize_logger();
     let cli = Cli::parse();
 
     match cli.commands {

@@ -1,0 +1,23 @@
+{
+  "name": "@strawr/vite-font-plugin",
+  "version": "0.1.0",
+  "type": "module",
+  "description": "",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "tsc",
+    "dev": "vite"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "@types/node": "^22.10.3",
+    "typescript": "^5.7.2",
+    "vite": "^6.0.6"
+  }
+}
