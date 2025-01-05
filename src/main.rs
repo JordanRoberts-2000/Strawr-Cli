@@ -21,7 +21,9 @@ fn main() {
         Commands::Project => println!("Project"),
         Commands::Ping => println!("Ping"),
         Commands::Snippet => println!("Snippet"),
-        Commands::Tw => println!("Tailwind hexcode + copy to clipboard"),
+        Commands::Tw => println!(
+            "Tailwind hexcode + copy to clipboard, maybe just a editable file where typing x = y"
+        ),
         Commands::Playground => println!("Snippet"),
         Commands::Backup => println!("Snippet"),
         Commands::Uninstall => println!("Snippet"),
