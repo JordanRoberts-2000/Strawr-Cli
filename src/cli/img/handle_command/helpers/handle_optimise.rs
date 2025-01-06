@@ -1,5 +1,9 @@
-use std::fs;
+use std::fs::{self, File};
 use std::path::Path;
+
+use image::codecs::avif::AvifEncoder;
+use image::imageops::FilterType;
+use image::{GenericImageView, ImageEncoder, ImageFormat};
 
 pub fn handle_optimization(path: &String, output: &Option<String>) {
     let path = Path::new(&path);
@@ -11,8 +15,40 @@ pub fn handle_optimization(path: &String, output: &Option<String>) {
     }
 
     if let Some(file_path) = find_file_with_any_extension(path) {
-        println!("Found file: {}", file_path.display());
-        // optimize_file(&file_path, output);
+        // todo: reducing quality requires encoding
+        // toDO: encoding with webp not supported in image crate
+        // toDo: progressive jpeg / p-png options need exploring
+        // avif
+        // let img = image::open(file_path).expect("aaa");
+
+        // // Get dimensions and convert to RGB8
+        // let resized_img = img.resize(1024, 1024, FilterType::Lanczos3);
+        // let (width, height) = resized_img.dimensions();
+        // let rgb_img = resized_img.into_rgb8();
+
+        // // Get raw buffer of RGB values
+        // let buf = rgb_img.as_raw();
+
+        // // Create output file
+        // let output = File::create("./imgTestFolder/genDog.avif").expect("bbb");
+
+        // // Create encoder with:
+        // // - speed: 1 (slower but better compression, range 1-10)
+        // // - quality: 75 (0-100)
+        // let encoder = AvifEncoder::new_with_speed_quality(output, 1, 75);
+
+        // // Write the image using RGB color type
+        // encoder
+        //     .write_image(buf, width, height, image::ColorType::Rgb8.into())
+        //     .expect("ccc");
+
+        // webp
+        // let img = image::open(file_path).expect("OPEN FAIL");
+        // let resized_img = img.resize(1024, 1024, FilterType::Lanczos3);
+
+        // resized_img
+        //     .save_with_format(&Path::new("./imgTestFolder/genDog.webp"), ImageFormat::WebP)
+        //     .expect("SAVE FAIL");
     } else if path.is_dir() {
         println!("Path leads to a folder: {}", path.display());
         // optimize_folder(path, output);
