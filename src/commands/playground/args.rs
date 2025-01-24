@@ -1,7 +1,7 @@
 use clap::{Parser, Subcommand};
 
 #[derive(Parser, Debug)]
-pub struct PlaygroundCommands {
+pub struct PlaygroundCommand {
     #[arg(short, long)]
     pub replace: bool,
 

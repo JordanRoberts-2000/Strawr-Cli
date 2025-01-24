@@ -1,7 +1,9 @@
 use clap::Subcommand;
-use playground::args::PlaygroundCommands;
+use playground::args::PlaygroundCommand;
+use uninstall::UninstallCommand;
 
 pub mod playground;
+pub mod uninstall;
 
 #[derive(Subcommand, Debug)]
 pub enum Commands {
@@ -18,7 +20,7 @@ pub enum Commands {
     #[command(about = "Open saved data folder")]
     Open,
     #[command(about = "Use playground environment")]
-    Playground(PlaygroundCommands),
+    Playground(PlaygroundCommand),
     #[command(about = "Set and get encrypted data")]
     Grab,
     #[command(about = "Create or manipulate code snippets")]
@@ -26,5 +28,5 @@ pub enum Commands {
     #[command(about = "Create or manipulate templates for your projects")]
     Template,
     #[command(about = "Uninstalls cli tool and deletes its saved data")]
-    Uninstall,
+    Uninstall(UninstallCommand),
 }

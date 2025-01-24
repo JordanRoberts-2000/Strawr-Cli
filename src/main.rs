@@ -26,11 +26,7 @@ fn main() {
         Commands::Playground(ref playground) => playground.handle_command(&ctx),
 
         Commands::Backup => println!("backs up .cli, --destination --zip"),
-        Commands::Uninstall => {
-            println!("Uninstalling 'myCli'...");
-            // uninstall_binary(); // Delete the binary
-            // clean_up_config();  // Optional: Clean up `.myCli` folder
-        }
+        Commands::Uninstall(ref uninstall) => uninstall.handle_command(&ctx),
         Commands::Config => println!("opens settings, can reset settings"),
         Commands::Open => println!("Open .myCli, or print path"),
     }
