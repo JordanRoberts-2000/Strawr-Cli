@@ -1,7 +1,9 @@
 use clap::Subcommand;
+use open::OpenCommand;
 use playground::args::PlaygroundCommand;
 use uninstall::UninstallCommand;
 
+pub mod open;
 pub mod playground;
 pub mod uninstall;
 
@@ -11,14 +13,12 @@ pub enum Commands {
     Add,
     #[command(about = "Backup saved data")]
     Backup,
-    #[command(about = "Open or reset configuration file")]
-    Config,
     #[command(about = "Download google fonts")]
     Font,
     // #[command(arg_required_else_help(true), about = "Modify image files")]
     // Img(ImgCommands),
     #[command(about = "Open saved data folder")]
-    Open,
+    Open(OpenCommand),
     #[command(about = "Use playground environment")]
     Playground(PlaygroundCommand),
     #[command(about = "Set and get encrypted data")]

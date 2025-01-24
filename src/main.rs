@@ -27,7 +27,6 @@ fn main() {
 
         Commands::Backup => println!("backs up .cli, --destination --zip"),
         Commands::Uninstall(ref uninstall) => uninstall.handle_command(&ctx),
-        Commands::Config => println!("opens settings, can reset settings"),
-        Commands::Open => println!("Open .myCli, or print path"),
+        Commands::Open(ref open) => open.handle_command(&ctx),
     }
 }
