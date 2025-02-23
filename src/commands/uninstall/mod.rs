@@ -9,10 +9,10 @@ pub struct UninstallCommand;
 
 impl UninstallCommand {
     pub fn handle_command(&self, ctx: &AppContext) {
-        ctx.debug_log("Uninstall Command called");
+        log::debug!("Uninstall Command called");
 
         if self.confirm_uninstallation(ctx) {
-            ctx.debug_log("Uninstallation confirmed");
+            log::debug!("Uninstallation confirmed");
 
             self.delete_config_folder(ctx);
             // todo: delete binary

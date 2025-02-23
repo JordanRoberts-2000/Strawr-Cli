@@ -14,11 +14,11 @@ impl UninstallCommand {
             .read_line(&mut input)
             .expect("Failed to read input");
 
-        ctx.debug_log(&format!("input: {}", input.as_str()));
-        ctx.debug_log(&format!(
+        log::debug!("input: {}", input.as_str());
+        log::debug!(
             "transformed input: {}",
             input.trim().to_lowercase().as_str()
-        ));
+        );
 
         matches!(input.trim().to_lowercase().as_str(), "y" | "yes")
     }

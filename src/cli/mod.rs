@@ -26,12 +26,12 @@ impl Cli {
         match &self.config_location {
             Some(config_path) => {
                 if self.debug {
-                    println!("[Debug] Processing provided --config-location");
+                    log::debug!("Processing provided --config-location");
                 }
                 if config_path.is_dir() {
                     if self.debug {
-                        println!(
-                            "[Debug] Provided Config Path '{}' is a valid directory.",
+                        log::debug!(
+                            "Provided Config Path '{}' is a valid directory.",
                             config_path.display()
                         );
                     }
@@ -43,10 +43,10 @@ impl Cli {
                     );
                 } else {
                     if self.debug {
-                        println!(
-                          "[Debug] Provided Config Path '{}' does not exist. Attempting to create it.",
-                          config_path.display()
-                      );
+                        log::debug!(
+                            "Provided Config Path '{}' does not exist. Attempting to create it.",
+                            config_path.display()
+                        );
                     }
                     fs::create_dir_all(config_path).unwrap_or_else(|err| {
                         panic!(
@@ -56,8 +56,8 @@ impl Cli {
                         );
                     });
                     if self.debug {
-                        println!(
-                            "[Debug] Successfully created the directory '{}'.",
+                        log::debug!(
+                            "Successfully created the directory '{}'.",
                             config_path.display()
                         );
                     }
@@ -66,9 +66,7 @@ impl Cli {
             }
             None => {
                 if self.debug {
-                    println!(
-                        "[Debug] No --config-location provided. Falling back to home directory."
-                    );
+                    log::debug!("No --config-location provided. Falling back to home directory.");
                 }
                 let default_config_path = dirs::home_dir()
                   .expect("Error: Unable to locate the home directory. To set one manually, use: --config-location <FOLDERPATH>")
@@ -76,10 +74,10 @@ impl Cli {
 
                 if !default_config_path.exists() {
                     if self.debug {
-                        println!(
-                          "[Debug] Default Config Path '{}' does not exist. Attempting to create it.",
-                          default_config_path.display()
-                      );
+                        log::debug!(
+                            "Default Config Path '{}' does not exist. Attempting to create it.",
+                            default_config_path.display()
+                        );
                     }
                     fs::create_dir_all(&default_config_path).unwrap_or_else(|err| {
                         panic!(
@@ -89,14 +87,14 @@ impl Cli {
                         );
                     });
                     if self.debug {
-                        println!(
-                            "[Debug] Successfully created the default config directory '{}'.",
+                        log::debug!(
+                            "Successfully created the default config directory '{}'.",
                             default_config_path.display()
                         );
                     }
                 } else if self.debug {
-                    println!(
-                        "[Debug] Default Config Path '{}' already exists.",
+                    log::debug!(
+                        "Default Config Path '{}' already exists.",
                         default_config_path.display()
                     );
                 }

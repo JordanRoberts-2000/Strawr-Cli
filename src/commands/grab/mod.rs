@@ -23,7 +23,7 @@ pub struct GrabCommand {
 
 impl GrabCommand {
     pub fn handle_command(&self, ctx: &AppContext) -> Result<(), Box<dyn std::error::Error>> {
-        ctx.debug_log("Grab Command Called");
+        log::debug!("Grab Command Called");
 
         let (json_file_path, list_file_path) = self.initialize_data_folder(&ctx)?;
 
@@ -32,12 +32,12 @@ impl GrabCommand {
 
         if self.delete {
             if grab_data_map.remove(&self.key).is_some() {
-                ctx.debug_log(&format!("Deleting key '{}'", self.key));
+                log::debug!("Deleting key '{}'", self.key);
 
                 // Overwrite JSON file with the updated map
                 let updated_json = serde_json::to_string_pretty(&grab_data_map)?;
                 fs::write(&json_file_path, updated_json)?;
-                ctx.debug_log(&format!("Key '{}' removed from data.json", self.key));
+                log::debug!("Key '{}' removed from data.json", self.key);
 
                 // Remove key from keys.list
                 let file = File::open(&list_file_path)?;
@@ -53,7 +53,7 @@ impl GrabCommand {
                 for key in keys {
                     writeln!(writer, "{}", key)?;
                 }
-                ctx.debug_log(&format!("Key '{}' removed from keys.list", self.key));
+                log::debug!("Key '{}' removed from keys.list", self.key);
             } else {
                 println!("Key '{}' doesn't exist", self.key)
             }
@@ -63,32 +63,31 @@ impl GrabCommand {
 
         if let Some(value) = &self.value {
             if let Some(existing_entry) = grab_data_map.get_mut(&self.key) {
-                ctx.debug_log(&format!(
+                log::debug!(
                     "key '{}' value has been replaced with '{}'",
-                    self.key, value
-                ));
+                    self.key,
+                    value
+                );
                 *existing_entry = value.clone();
             } else {
-                ctx.debug_log(
-                    format!("New entry added: key '{}', value '{}'", self.key, value).as_str(),
-                );
+                log::debug!("New entry added: key '{}', value '{}'", self.key, value);
                 grab_data_map.insert(self.key.clone(), value.clone());
 
                 let mut keys_list = OpenOptions::new().append(true).open(list_file_path)?;
 
                 writeln!(keys_list, "{}", self.key)?;
-                ctx.debug_log("Updated keys.list file");
+                log::debug!("Updated keys.list file");
             }
 
             let updated_json = serde_json::to_string_pretty(&grab_data_map)?;
             fs::write(&json_file_path, updated_json)?;
-            ctx.debug_log("Updated data.json file");
+            log::debug!("Updated data.json file");
 
             return Ok(());
         }
 
         if let Some(entry) = grab_data_map.get(&self.key) {
-            ctx.debug_log(&format!("Value '{}' copied to clipboard", entry));
+            log::debug!("Value '{}' copied to clipboard", entry);
             let mut clipboard = Clipboard::new()?;
             clipboard.set_text(entry)?;
         } else {
@@ -108,18 +107,18 @@ impl GrabCommand {
 
         if !grab_folder_path.exists() {
             fs::create_dir(&grab_folder_path)?;
-            ctx.debug_log("grab folder created");
+            log::debug!("grab folder created");
         }
 
         if !data_file_path.exists() {
             let default_data = json!({});
             fs::write(&data_file_path, default_data.to_string())?;
-            ctx.debug_log("grab/data.json created");
+            log::debug!("grab/data.json created");
         }
 
         if !keys_file_path.exists() {
             fs::write(&keys_file_path, "")?;
-            ctx.debug_log("grab/keys.list created");
+            log::debug!("grab/keys.list created");
         }
 
         Ok((data_file_path, keys_file_path))

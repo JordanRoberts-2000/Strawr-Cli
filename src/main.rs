@@ -2,6 +2,7 @@ use clap::Parser;
 use cli::Cli;
 use commands::Commands;
 use state::AppContext;
+use utils::logger::init_logger;
 
 pub mod cli;
 pub mod commands;
@@ -11,6 +12,7 @@ pub mod utils;
 
 fn main() {
     let cli = Cli::parse();
+    init_logger(cli.debug);
 
     let config_path = cli.get_config_path();
     let ctx = AppContext::new(cli.debug, config_path);

@@ -8,7 +8,7 @@ pub mod args;
 
 impl PlaygroundCommand {
     pub fn handle_command(&self, ctx: &AppContext) {
-        ctx.debug_log("Playground Command Called");
+        log::debug!("Playground Command Called");
 
         // Define the paths
         let playground_data_path = ctx.config_path.join("playground_data");
@@ -16,7 +16,7 @@ impl PlaygroundCommand {
 
         // Ensure `playground_data` exists
         if !playground_data_path.exists() {
-            ctx.debug_log("playground_data folder does not exist. Creating it...");
+            log::debug!("playground_data folder does not exist. Creating it...");
             if let Err(err) = fs::create_dir_all(&playground_data_path) {
                 eprintln!(
                     "Error: Failed to create playground_data folder '{}': {}",
@@ -25,14 +25,14 @@ impl PlaygroundCommand {
                 );
                 return;
             }
-            ctx.debug_log("playground_data folder created.");
+            log::debug!("playground_data folder created.");
         } else {
-            ctx.debug_log("playground_data folder already exists.");
+            log::debug!("playground_data folder already exists.");
         }
 
         // Ensure `playground` exists inside `playground_data`
         if !playground_path.exists() {
-            ctx.debug_log("playground folder does not exist. Creating it...");
+            log::debug!("playground folder does not exist. Creating it...");
             if let Err(err) = fs::create_dir_all(&playground_path) {
                 eprintln!(
                     "Error: Failed to create playground folder '{}': {}",
@@ -41,13 +41,13 @@ impl PlaygroundCommand {
                 );
                 return;
             }
-            ctx.debug_log("playground folder created.");
+            log::debug!("playground folder created.");
         } else {
-            ctx.debug_log("playground folder already exists.");
+            log::debug!("playground folder already exists.");
         }
 
         // Open the `playground` folder in VSCode
-        ctx.debug_log("Opening playground folder in VSCode...");
+        log::debug!("Opening playground folder in VSCode...");
         if let Err(err) = Command::new("code").arg(&playground_path).spawn() {
             eprintln!(
                 "Error: Failed to open playground folder in VSCode '{}': {}",
