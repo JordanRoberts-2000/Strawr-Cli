@@ -1,17 +1,18 @@
 [package]
-name = "strawrCli"
+name = "strawr"
 description = "CLI tool designed to streamline development workflows, automate repetitive tasks, and boost productivity for developers."
 version = "0.1.0"
 edition = "2021"
 
 [dependencies]
+arboard = "3.4.1"
 clap = { version = "4.5.20", features = ["derive"] }
 colored = "3.0.0"
 dirs = "6.0.0"
 image = "0.25.5"
 libvips = "1.7.0"
 opener = "0.7.2"
+rustyline = "15.0.0"
+serde = { version = "1.0.218", features = ["derive"] }
+serde_json = "1.0.139"
 tempfile = "3.15.0"
-
-[dev-dependencies]
-mocktopus = "0.8.0"

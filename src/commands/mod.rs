@@ -1,8 +1,10 @@
 use clap::Subcommand;
+use grab::GrabCommand;
 use open::OpenCommand;
 use playground::args::PlaygroundCommand;
 use uninstall::UninstallCommand;
 
+pub mod grab;
 pub mod open;
 pub mod playground;
 pub mod uninstall;
@@ -22,7 +24,7 @@ pub enum Commands {
     #[command(about = "Use playground environment")]
     Playground(PlaygroundCommand),
     #[command(about = "Set and get encrypted data")]
-    Grab,
+    Grab(GrabCommand),
     #[command(about = "Create or manipulate code snippets")]
     Snippets,
     #[command(about = "Create or manipulate templates for your projects")]
