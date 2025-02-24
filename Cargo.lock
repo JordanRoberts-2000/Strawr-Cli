@@ -1478,6 +1478,7 @@ dependencies = [
  "libvips",
  "log",
  "opener",
+ "regex",
  "rustyline",
  "serde",
  "serde_json",

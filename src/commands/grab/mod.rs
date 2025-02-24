@@ -1,15 +1,16 @@
-use std::fs;
-
 use arboard::Clipboard;
 use service::GrabService;
+use std::fs;
+use validation::{validate_key, validate_value};
 
 pub mod service;
+pub mod validation;
 
 use crate::state::AppContext;
 
 #[derive(clap::Parser, Debug)]
 pub struct GrabCommand {
-    #[arg(required_unless_present = "list")]
+    #[arg(required_unless_present = "list", value_parser = validate_key)]
     pub key: Option<String>,
 
     #[arg(short, long)]
@@ -18,7 +19,7 @@ pub struct GrabCommand {
     #[arg(short, long)]
     pub list: bool,
 
-    #[arg(short, long)]
+    #[arg(short, long, value_parser = validate_value)]
     pub value: Option<String>,
 }
 
