@@ -11,7 +11,7 @@ impl PlaygroundCommand {
         log::debug!("Playground Command Called");
 
         // Define the paths
-        let playground_data_path = ctx.config_path.join("playground_data");
+        let playground_data_path = ctx.storage_dir.join("playground_data");
         let playground_path = playground_data_path.join("playground");
 
         // Ensure `playground_data` exists

@@ -12,10 +12,9 @@ pub mod utils;
 
 fn main() {
     let cli = Cli::parse();
-    init_logger(cli.debug);
 
-    let config_path = cli.get_config_path();
-    let ctx = AppContext::new(cli.debug, config_path);
+    init_logger(cli.debug);
+    let ctx = AppContext::initialize(&cli.debug).unwrap(); // Todo: handle error
 
     let command_result = match cli.commands {
         // Commands::Img(ref img) => img.handle_command(),

@@ -23,7 +23,7 @@ impl OpenCommand {
     pub fn handle_command(&self, ctx: &AppContext) {
         if self.explorer {
             println!("Opening the configuration folder in file explorer...");
-            if let Err(err) = opener::open(&ctx.config_path) {
+            if let Err(err) = opener::open(&ctx.storage_dir) {
                 eprintln!("Error: Failed to open the folder in file explorer: {}", err);
             }
             return;
@@ -31,20 +31,20 @@ impl OpenCommand {
 
         if self.vscode {
             println!("Opening the configuration folder in Visual Studio Code...");
-            if let Err(err) = Command::new("code").arg(&ctx.config_path).spawn() {
+            if let Err(err) = Command::new("code").arg(&ctx.storage_dir).spawn() {
                 eprintln!("Error: Failed to open the folder in VSCode: {}", err);
             }
             return;
         }
 
         if self.path {
-            println!("Configuration folder path: {}", ctx.config_path.display());
+            println!("Configuration folder path: {}", ctx.storage_dir.display());
             return;
         }
 
         // Default to VSCode if no flag is provided
         println!("No flag provided. Defaulting to opening the configuration folder in Visual Studio Code...");
-        if let Err(err) = Command::new("code").arg(&ctx.config_path).spawn() {
+        if let Err(err) = Command::new("code").arg(&ctx.storage_dir).spawn() {
             eprintln!("Error: Failed to open the folder in VSCode: {}", err);
         }
     }

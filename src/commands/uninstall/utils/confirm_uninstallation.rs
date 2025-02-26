@@ -6,7 +6,7 @@ impl UninstallCommand {
     pub fn confirm_uninstallation(&self, ctx: &AppContext) -> bool {
         println!(
             "Are you sure you want to uninstall and delete all configuration data at '{}'? (y/N)",
-            ctx.config_path.display()
+            ctx.storage_dir.display()
         );
 
         let mut input = String::new();

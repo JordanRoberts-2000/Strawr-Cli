@@ -11,7 +11,7 @@ impl GrabService {
         &mut self,
         ctx: &AppContext,
     ) -> Result<(), Box<dyn std::error::Error>> {
-        let grab_folder_path = ctx.config_path.join("grab");
+        let grab_folder_path = ctx.storage_dir.join("grab");
         self.json_file_path = grab_folder_path.join("data.json");
         self.list_file_path = grab_folder_path.join("keys.list");
 
