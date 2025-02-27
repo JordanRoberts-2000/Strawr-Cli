@@ -1,9 +1,9 @@
 use std::path::PathBuf;
 
-use parse_settings::Config;
+use parse_config::Config;
 
 pub mod get_storage_dir;
-pub mod parse_settings;
+pub mod parse_config;
 
 pub struct AppContext {
     pub debug: bool,

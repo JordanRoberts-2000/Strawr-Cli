@@ -2,4 +2,4 @@
 encrypt_values_by_default = true
 
 [open]
-open = "vscode" # "vscode", "nano", "vim", "path"
+editor = "vscode" # "vscode", "nano", "vim", "path"

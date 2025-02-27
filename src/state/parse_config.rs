@@ -1,13 +1,15 @@
-use serde::Deserialize;
+use serde::{Deserialize, Serialize};
 use std::{fs, path::PathBuf};
+use validator::{Validate, ValidationError};
 
 use crate::config::constants::INITIAL_CONFIG_CONTENT;
 
 use super::AppContext;
 
-#[derive(Debug, Deserialize)]
+#[derive(Debug, Deserialize, Validate)]
 pub struct Config {
     pub grab: GrabConfig,
+    #[validate(nested)]
     pub open: OpenConfig,
 }
 
@@ -16,19 +18,31 @@ pub struct GrabConfig {
     pub encrypt_values_by_default: bool,
 }
 
-#[derive(Debug, Deserialize)]
+fn validate_editor(editor: &Editor) -> Result<(), ValidationError> {
+    if let Editor::Unknown = editor {
+        let mut err = ValidationError::new("invalid_editor");
+        err.message = Some("Editor must be one of 'vscode', 'nano', 'path' or 'vim'".into());
+        Err(err)
+    } else {
+        Ok(())
+    }
+}
+
+#[derive(Debug, Deserialize, Serialize)]
 #[serde(rename_all = "lowercase")]
 pub enum Editor {
     VSCode,
     Nano,
     Vim,
+    Path,
     #[serde(other)]
     Unknown,
 }
 
-#[derive(Debug, Deserialize)]
+#[derive(Debug, Deserialize, Validate)]
 pub struct OpenConfig {
-    pub open: Editor,
+    #[validate(custom(function = "validate_editor"))]
+    pub editor: Editor,
 }
 
 impl AppContext {
@@ -47,6 +61,10 @@ impl AppContext {
 
         let config: Config = toml::from_str(&config_contents)
             .map_err(|e| format!("Failed to parse config file {:?}: {}", config_path, e))?;
+
+        config
+            .validate()
+            .map_err(|e| format!("Config validation error: {}", e))?;
 
         Ok(config)
     }
