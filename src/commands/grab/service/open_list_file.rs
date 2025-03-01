@@ -5,7 +5,14 @@ use super::GrabService;
 
 impl GrabService {
     pub fn open_list_file(&self) -> Result<()> {
-        let path = self.list_file_path.to_str().unwrap();
+        let path = match self.list_file_path.to_str() {
+            Some(path_str) => path_str,
+            None => {
+                return Err(Error::Custom(
+                    "Path contains invalid UTF-8 characters".to_string(),
+                ));
+            }
+        };
 
         let status = if cfg!(target_os = "macos") {
             log::debug!("Opened using macOS 'TextEdit'");

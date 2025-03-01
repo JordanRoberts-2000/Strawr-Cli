@@ -1,4 +1,3 @@
-use arboard::Clipboard;
 use service::GrabService;
 use std::fs;
 use validation::{validate_key, validate_value};
@@ -20,6 +19,9 @@ pub struct GrabCommand {
     #[arg(short, long)]
     pub list: bool,
 
+    #[arg(short, long)]
+    pub encrypt: Option<bool>,
+
     #[arg(short, long, value_parser = validate_value)]
     pub value: Option<String>,
 }
@@ -37,21 +39,27 @@ impl GrabCommand {
             .map_err(|e| Error::Parse(ParseError::Json(e), "failed to ".to_string()))?;
 
         if self.list {
-            service.open_list_file()?;
-        } else if self.delete {
-            service.delete_entry(self.key.as_ref().unwrap())?;
-        } else if let Some(ref value) = self.value {
-            service.set_entry(self.key.as_ref().unwrap(), value)?;
-        } else if let Some(val) = service.data_map.get(self.key.as_ref().unwrap()) {
-            log::debug!("Value '{}' copied to clipboard", val);
-            let mut clipboard = Clipboard::new()
-                .map_err(|e| Error::Custom(format!("Failed to access clipboard, {}", e)))?;
-            clipboard
-                .set_text(val)
-                .map_err(|e| Error::Custom(format!("Failed to save text to clipboard, {}", e)))?;
-        } else {
-            println!("Key '{}' not found", self.key.as_ref().unwrap());
+            return service.open_list_file();
         }
+
+        let key = match &self.key {
+            Some(k) => k,
+            None => return Err(Error::Custom("Key was not found".to_string())),
+        };
+
+        if self.delete {
+            return service.delete_entry(key);
+        }
+
+        if let Some(ref value) = self.value {
+            return service.set_entry(key, value);
+        }
+
+        if let Some(val) = service.data_map.get(key) {
+            return service.get_entry(val);
+        }
+
+        println!("Key '{}' not found", key);
 
         Ok(())
     }

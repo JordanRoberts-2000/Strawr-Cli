@@ -26,11 +26,12 @@ pub fn run_app() -> Result<()> {
         // Commands::Font => println!("Font"),
         // Commands::Snippets => println!("Snippet"),
         Commands::Grab(ref grab) => grab.handle_command(&ctx),
-        _ => Ok(()), // Commands::Playground(ref playground) => playground.handle_command(&ctx),
+        _ => Ok(()),
+        // Commands::Playground(ref playground) => playground.handle_command(&ctx),
 
-                     // Commands::Backup => println!("backs up .cli, --destination --zip"),
-                     // Commands::Uninstall(ref uninstall) => uninstall.handle_command(&ctx),
-                     // Commands::Open(ref open) => open.handle_command(&ctx),
+        // Commands::Backup => println!("backs up .cli, --destination --zip"),
+        // Commands::Uninstall(ref uninstall) => uninstall.handle_command(&ctx),
+        // Commands::Open(ref open) => open.handle_command(&ctx),
     }?;
 
     Ok(())
