@@ -1,20 +1,21 @@
 use std::{env, fs, path::PathBuf};
 
 use crate::config::constants::{CONFIG_FOLDER_NAME, CONFIG_HOME_ENV, DEV_CONFIG_FOLDER_NAME};
+use crate::error::{Error, Result};
 
 use super::AppContext;
 
 impl AppContext {
-    pub fn get_storage_dir() -> Result<PathBuf, Box<dyn std::error::Error>> {
+    pub fn get_storage_dir() -> Result<PathBuf> {
         let base_dir = if let Ok(custom) = env::var("STRAWR_HOME") {
             log::debug!("Env variable STRAWR_HOME used: '{}'", custom);
 
             let custom_dir = PathBuf::from(custom);
             if !custom_dir.exists() {
                 fs::create_dir_all(&custom_dir).map_err(|e| {
-                    format!(
-                        "Failed to create STRAWR_HOME directory {:?}: {}",
-                        custom_dir, e
+                    Error::Io(
+                        e,
+                        format!("Failed to create STRAWR_HOME directory '{:?}'", custom_dir),
                     )
                 })?;
                 log::debug!("Created dirs for STRAWR_HOME path successfully");
@@ -23,11 +24,10 @@ impl AppContext {
         } else if let Some(home) = dirs::home_dir() {
             home
         } else {
-            return Err(format!(
+            return Err(Error::Custom(format!(
                 "Could not determine home directory. Please set the {} environment variable.",
                 CONFIG_HOME_ENV
-            )
-            .into());
+            )));
         };
 
         let folder_name = if cfg!(debug_assertions) {
@@ -39,12 +39,8 @@ impl AppContext {
         let storage_dir = base_dir.join(folder_name);
 
         if !storage_dir.exists() {
-            fs::create_dir_all(&storage_dir).map_err(|e| {
-                format!(
-                    "Failed to create storage directory {:?}: {}",
-                    storage_dir, e
-                )
-            })?;
+            fs::create_dir_all(&storage_dir)
+                .map_err(|e| Error::Io(e, "Failed to create storage directory".to_string()))?;
             log::debug!("Created storage directory '{:?}' successfully", storage_dir);
         }
 
