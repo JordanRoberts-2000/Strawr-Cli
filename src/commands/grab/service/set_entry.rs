@@ -1,4 +1,8 @@
-use crate::error::{Error, ParseError, Result};
+use crate::{
+    config::constants::{KEYRING_ENCRYPTION_PASSWORD, KEYRING_SERVICE},
+    error::{Error, ParseError, Result},
+    utils::get_or_prompt_keyring::get_or_prompt_keyring,
+};
 use std::{
     fs::{self, OpenOptions},
     io::Write,
@@ -7,7 +11,12 @@ use std::{
 use super::GrabService;
 
 impl GrabService {
-    pub fn set_entry(&mut self, key: &String, value: &String) -> Result<()> {
+    pub fn set_entry(&mut self, key: &String, value: &String, encrypt: &bool) -> Result<()> {
+        if *encrypt {
+            let password = get_or_prompt_keyring(KEYRING_SERVICE, KEYRING_ENCRYPTION_PASSWORD)?;
+            println!("PASSWORD AHHH: {}", password);
+        }
+
         if let Some(existing_entry) = self.data_map.get_mut(key) {
             log::debug!("key '{}' value has been replaced with '{}'", key, value);
             *existing_entry = value.clone();

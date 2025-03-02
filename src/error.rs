@@ -14,6 +14,7 @@ pub enum Error {
     Validation(validator::ValidationErrors, String),
     Io(io::Error, String),
     Parse(ParseError, String),
+    Keyring(keyring::Error, String),
     Custom(String),
 }
 
@@ -21,7 +22,7 @@ impl fmt::Display for Error {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         match self {
             Error::Io(err, msg) => {
-                write!(f, "{}", format!("Io Error: {}, {}", msg, err).red())
+                write!(f, "{}", format!("Io error: {}, {}", msg, err).red())
             }
             Error::Parse(e, msg) => match e {
                 ParseError::Toml(e) => write!(f, "TOML parse error: {}, {}", msg, e),
@@ -46,6 +47,7 @@ impl fmt::Display for Error {
                     .collect();
                 write!(f, "Validation error: {} \n{}", title, msgs.join("\n"))
             }
+            Error::Keyring(err, msg) => write!(f, "Keyring error: {}, {}", msg, err),
             Error::Custom(msg) => write!(f, "Error: {}", msg),
         }
     }

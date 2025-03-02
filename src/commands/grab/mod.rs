@@ -19,8 +19,8 @@ pub struct GrabCommand {
     #[arg(short, long)]
     pub list: bool,
 
-    #[arg(short, long)]
-    pub encrypt: Option<bool>,
+    #[arg(short, long, default_value_t = false)]
+    pub encrypt: bool,
 
     #[arg(short, long, value_parser = validate_value)]
     pub value: Option<String>,
@@ -31,7 +31,7 @@ impl GrabCommand {
         log::debug!("Grab Command Called");
 
         let mut service = GrabService::new();
-        service.initialize_data_folder(&ctx)?;
+        service.initialize_data_folder(ctx)?;
 
         let json_data = fs::read_to_string(&service.json_file_path)
             .map_err(|e| Error::Io(e, "failed to read grab/data.json".to_string()))?;
@@ -52,7 +52,8 @@ impl GrabCommand {
         }
 
         if let Some(ref value) = self.value {
-            return service.set_entry(key, value);
+            let encrypt = ctx.config.grab.encrypt_values_by_default || self.encrypt;
+            return service.set_entry(key, value, &encrypt);
         }
 
         if let Some(val) = service.data_map.get(key) {
