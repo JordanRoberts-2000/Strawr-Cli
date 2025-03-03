@@ -9,3 +9,5 @@ pub const INITIAL_CONFIG_CONTENT: &str = include_str!("initial_config.toml");
 pub const KEYRING_SERVICE: &str = "strawrCli";
 
 pub const KEYRING_ENCRYPTION_PASSWORD: &str = "encryption_password";
+
+pub const ENCRYPTION_PREFIX: &str = "ENC:";

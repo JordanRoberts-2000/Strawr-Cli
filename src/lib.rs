@@ -31,6 +31,7 @@ pub fn run_app() -> Result<()> {
 
         // Commands::Backup => println!("backs up .cli, --destination --zip"),
         // Commands::Uninstall(ref uninstall) => uninstall.handle_command(&ctx),
+        // change to config, allow reset or removal of cheychain password
         // Commands::Open(ref open) => open.handle_command(&ctx),
     }?;
 

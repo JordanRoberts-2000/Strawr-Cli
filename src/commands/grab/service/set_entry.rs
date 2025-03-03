@@ -1,5 +1,7 @@
+use base64::{engine::general_purpose, Engine};
+
 use crate::{
-    config::constants::{KEYRING_ENCRYPTION_PASSWORD, KEYRING_SERVICE},
+    config::constants::{ENCRYPTION_PREFIX, KEYRING_ENCRYPTION_PASSWORD, KEYRING_SERVICE},
     error::{Error, ParseError, Result},
     utils::get_or_prompt_keyring::get_or_prompt_keyring,
 };
@@ -12,17 +14,27 @@ use super::GrabService;
 
 impl GrabService {
     pub fn set_entry(&mut self, key: &String, value: &String, encrypt: &bool) -> Result<()> {
-        if *encrypt {
+        let entry_value = if *encrypt {
             let password = get_or_prompt_keyring(KEYRING_SERVICE, KEYRING_ENCRYPTION_PASSWORD)?;
-            println!("PASSWORD AHHH: {}", password);
-        }
+            let encrypted_data: Vec<u8> =
+                simple_crypt::encrypt(value.as_bytes(), password.as_bytes())
+                    .map_err(|e| Error::Custom(format!("failed to encrypt value, {}", e)))?;
+
+            ENCRYPTION_PREFIX.to_string() + &general_purpose::STANDARD.encode(&encrypted_data)
+        } else {
+            value.clone()
+        };
 
         if let Some(existing_entry) = self.data_map.get_mut(key) {
-            log::debug!("key '{}' value has been replaced with '{}'", key, value);
-            *existing_entry = value.clone();
+            log::debug!(
+                "key '{}' value has been replaced with '{}'",
+                key,
+                entry_value
+            );
+            *existing_entry = entry_value;
         } else {
-            log::debug!("New entry added: key '{}', value '{}'", key, value);
-            self.data_map.insert(key.clone(), value.clone());
+            log::debug!("New entry added: key '{}', value '{}'", key, entry_value);
+            self.data_map.insert(key.clone(), entry_value);
 
             let mut keys_list = OpenOptions::new()
                 .append(true)

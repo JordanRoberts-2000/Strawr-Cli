@@ -5,7 +5,7 @@ use super::GrabService;
 
 impl GrabService {
     pub fn open_list_file(&self) -> Result<()> {
-        let path = match self.list_file_path.to_str() {
+        let path = match self.json_file_path.to_str() {
             Some(path_str) => path_str,
             None => {
                 return Err(Error::Custom(
