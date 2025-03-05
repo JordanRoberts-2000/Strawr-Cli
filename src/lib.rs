@@ -8,6 +8,7 @@ use utils::logger::init_logger;
 pub mod cli;
 pub mod commands;
 pub mod config;
+pub mod crypto;
 pub mod error;
 pub mod state;
 pub mod utils;

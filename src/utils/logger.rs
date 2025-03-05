@@ -6,7 +6,7 @@ use std::io::Write;
 pub fn init_logger(debug: bool) {
     let mut builder = Builder::new();
     builder.filter_level(if debug {
-        LevelFilter::Debug
+        LevelFilter::Trace
     } else {
         LevelFilter::Info
     });

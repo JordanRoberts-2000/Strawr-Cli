@@ -1,2 +1,4 @@
-pub mod get_or_prompt_keyring;
+pub mod add_to_clipboard;
 pub mod logger;
+
+pub use add_to_clipboard::add_to_clipboard;
