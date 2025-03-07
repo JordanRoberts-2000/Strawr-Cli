@@ -7,7 +7,7 @@ use super::GrabCommand;
 
 impl GrabCommand {
     pub fn handle_command(&self, ctx: &AppContext) -> Result<()> {
-        log::debug!("Grab Command Called");
+        log::trace!("Grab Command Called");
 
         let mut service = GrabService::new();
         service.initialize_data_folder(ctx)?;
