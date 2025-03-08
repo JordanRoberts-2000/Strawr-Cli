@@ -1,6 +1,6 @@
 use std::{env, fs, path::PathBuf};
 
-use crate::config::constants::{CONFIG_FOLDER_NAME, CONFIG_HOME_ENV, DEV_CONFIG_FOLDER_NAME};
+use crate::config::constants::{CONFIG_FOLDER_NAME, CONFIG_HOME_ENV, DEV_CONFIG_FOLDER_PATH};
 use crate::error::{Error, Result};
 
 use super::AppContext;
@@ -30,13 +30,11 @@ impl AppContext {
             )));
         };
 
-        let folder_name = if cfg!(debug_assertions) {
-            DEV_CONFIG_FOLDER_NAME
+        let storage_dir = if cfg!(debug_assertions) {
+            PathBuf::from(DEV_CONFIG_FOLDER_PATH)
         } else {
-            CONFIG_FOLDER_NAME
+            base_dir.join(CONFIG_FOLDER_NAME)
         };
-
-        let storage_dir = base_dir.join(folder_name);
 
         if !storage_dir.exists() {
             fs::create_dir_all(&storage_dir).map_err(|e| {

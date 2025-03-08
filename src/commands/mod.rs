@@ -1,10 +1,12 @@
 use clap::Subcommand;
 use grab::GrabCommand;
+use img::ImgCommand;
 use open::OpenCommand;
 use playground::args::PlaygroundCommand;
 use uninstall::UninstallCommand;
 
 pub mod grab;
+pub mod img;
 pub mod open;
 pub mod playground;
 pub mod uninstall;
@@ -17,8 +19,8 @@ pub enum Commands {
     Backup,
     #[command(about = "Download google fonts")]
     Font,
-    // #[command(arg_required_else_help(true), about = "Modify image files")]
-    // Img(ImgCommands),
+    #[command(about = "Modify image files")]
+    Img(ImgCommand),
     #[command(about = "Open saved data folder")]
     Open(OpenCommand),
     #[command(about = "Use playground environment")]

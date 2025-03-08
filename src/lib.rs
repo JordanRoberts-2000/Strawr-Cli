@@ -20,7 +20,7 @@ pub fn run_app() -> Result<()> {
     let ctx = AppContext::initialize(&cli.debug)?;
 
     match cli.commands {
-        // Commands::Img(ref img) => img.handle_command(),
+        Commands::Img(ref img) => img.handle_command(&ctx),
         // Commands::Add => println!("Add"),
         // Commands::Template => println!("Template"),
 
