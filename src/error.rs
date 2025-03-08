@@ -15,6 +15,7 @@ pub enum Error {
     Io(io::Error, String),
     Parse(ParseError, String),
     Keyring(keyring::Error, String),
+    Internal,
     Custom(String),
 }
 
@@ -48,6 +49,7 @@ impl fmt::Display for Error {
                 write!(f, "Validation error: {} \n{}", title, msgs.join("\n"))
             }
             Error::Keyring(err, msg) => write!(f, "Keyring error: {}, {}", msg, err),
+            Error::Internal => write!(f, "An internal error occured"),
             Error::Custom(msg) => write!(f, "Error: {}", msg),
         }
     }

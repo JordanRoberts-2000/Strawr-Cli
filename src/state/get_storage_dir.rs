@@ -39,9 +39,13 @@ impl AppContext {
         let storage_dir = base_dir.join(folder_name);
 
         if !storage_dir.exists() {
-            fs::create_dir_all(&storage_dir)
-                .map_err(|e| Error::Io(e, "Failed to create storage directory".to_string()))?;
-            log::debug!("Created storage directory '{:?}' successfully", storage_dir);
+            fs::create_dir_all(&storage_dir).map_err(|e| {
+                Error::Io(
+                    e,
+                    format!("Failed to create storage directory '{:?}'", storage_dir),
+                )
+            })?;
+            log::info!("Created storage directory '{:?}' successfully", storage_dir);
         }
 
         Ok(storage_dir)

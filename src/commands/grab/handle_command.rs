@@ -13,9 +13,14 @@ impl GrabCommand {
         service.initialize_data_folder(ctx)?;
 
         let json_data = fs::read_to_string(&service.json_file_path)
-            .map_err(|e| Error::Io(e, "failed to read grab/data.json".to_string()))?;
-        service.data_map = serde_json::from_str(&json_data)
-            .map_err(|e| Error::Parse(ParseError::Json(e), "failed to ".to_string()))?;
+            .map_err(|e| Error::Io(e, format!("failed to read {:?}", service.json_file_path)))?;
+        service.data_map = serde_json::from_str(&json_data).map_err(|e| {
+            Error::Parse(
+                ParseError::Json(e),
+                format!("failed to parse {:?}", service.json_file_path),
+            )
+        })?;
+        log::trace!("Json data loaded into memory");
 
         if self.list {
             return service.open_list_file();
@@ -23,7 +28,10 @@ impl GrabCommand {
 
         let key = match &self.key {
             Some(k) => k,
-            None => return Err(Error::Custom("Key was not found".to_string())),
+            None => {
+                log::error!("Key should have a value but does't");
+                return Err(Error::Internal);
+            }
         };
 
         if self.delete {
@@ -41,9 +49,9 @@ impl GrabCommand {
 
         if let Some(val) = service.data_map.get(key) {
             return service.get_entry(val);
+        } else {
+            println!("Key '{}' not found", key);
         }
-
-        println!("Key '{}' not found", key);
 
         Ok(())
     }

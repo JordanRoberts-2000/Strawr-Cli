@@ -12,6 +12,8 @@ use super::GrabService;
 
 impl GrabService {
     pub fn set_entry(&mut self, key: &String, value: &String, encrypt: &bool) -> Result<()> {
+        log::trace!("attempting to set key '{key}' to '{value}'");
+
         let entry_value = if *encrypt {
             let password = get_or_prompt_keyring(KEYRING_SERVICE, KEYRING_ENCRYPTION_PASSWORD)?;
             encrypt_data(value, &password)?

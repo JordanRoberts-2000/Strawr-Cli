@@ -25,6 +25,7 @@ impl AppContext {
         let storage_dir = AppContext::get_storage_dir()?;
         let config = AppContext::parse_config(&storage_dir)?;
 
+        log::trace!("App context initialized");
         Ok(AppContext::new(*debug, storage_dir, config))
     }
 }

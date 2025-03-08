@@ -9,6 +9,6 @@ pub fn add_to_clipboard(text: &String) -> Result<()> {
         .set_text(text)
         .map_err(|e| Error::Custom(format!("Failed to set text to clipboard: {}", e)))?;
 
-    log::debug!("Added to clipboard: '{}'", text);
+    log::trace!("Added text to clipboard");
     Ok(())
 }
