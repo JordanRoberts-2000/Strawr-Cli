@@ -6,7 +6,7 @@ pub fn get_or_prompt_keyring(service: &str, field: &str) -> Result<String> {
     log::trace!("Attempting to retrieve keyring value for {}", field);
 
     let keyring = Entry::new(service, field)
-        .map_err(|e| Error::Keyring(e, format!("failed to initialize '{}'", field)))?;
+        .map_err(|e| Error::Keyring(e, format!("failed to initialize keyring, if this feature is unavailable on your operating system then set '--encypt false' or use the config command to set the encryption default to false")))?;
 
     match keyring.get_password() {
         Ok(password) => {
