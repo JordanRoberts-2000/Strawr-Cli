@@ -1,4 +1,10 @@
+use crate::error::{Error, Result};
+use image::ImageFormat;
+use utils::valid_image_format::ValidImageFormat;
+
+pub mod config;
 pub mod handle_command;
+pub mod image_service;
 pub mod utils;
 
 #[derive(clap::Parser, Debug)]
@@ -12,8 +18,16 @@ pub struct ImgCommand {
 
     #[arg(help = "Path to img file or folder (positional argument)", index = 1)]
     pub positional_path: Option<String>,
-    // #[arg(short, long, conflicts_with = "flag_b")]
-    // pub flag_a: bool,
+
+    #[arg(
+        short,
+        long,
+        help = "Output path, if not provided the input image is overwritten"
+    )]
+    pub output: Option<String>,
+
+    #[arg(short, long, help = "Fomat image file to be converted to")]
+    pub format: Option<ValidImageFormat>,
 }
 
 #[derive(clap::Subcommand, Debug)]

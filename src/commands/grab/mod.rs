@@ -1,5 +1,6 @@
 use validation::{validate_key, validate_value};
 
+pub mod config;
 pub mod handle_command;
 pub mod service;
 pub mod validation;

@@ -1,7 +1,9 @@
 use serde::{Deserialize, Serialize};
 use std::{fs, path::PathBuf};
-use validator::{Validate, ValidationError};
+use validator::Validate;
 
+use crate::commands::grab::config::GrabConfig;
+use crate::commands::img::config::ImgConfig;
 use crate::config::constants::INITIAL_CONFIG_CONTENT;
 use crate::error::{Error, ParseError, Result};
 
@@ -11,22 +13,9 @@ use super::AppContext;
 pub struct Config {
     pub grab: GrabConfig,
     #[validate(nested)]
+    pub img: ImgConfig,
+    #[validate(nested)]
     pub open: OpenConfig,
-}
-
-#[derive(Debug, Deserialize)]
-pub struct GrabConfig {
-    pub encrypt_values_by_default: bool,
-}
-
-fn validate_editor(editor: &Editor) -> std::result::Result<(), ValidationError> {
-    if let Editor::Unknown = editor {
-        let mut err = ValidationError::new("invalid_editor");
-        err.message = Some("Editor must be one of 'vscode', 'nano', 'path' or 'vim'".into());
-        Err(err)
-    } else {
-        Ok(())
-    }
 }
 
 #[derive(Debug, Deserialize, Serialize)]
@@ -36,13 +25,10 @@ pub enum Editor {
     Nano,
     Vim,
     Path,
-    #[serde(other)]
-    Unknown,
 }
 
 #[derive(Debug, Deserialize, Validate)]
 pub struct OpenConfig {
-    #[validate(custom(function = "validate_editor"))]
     pub editor: Editor,
 }
 
