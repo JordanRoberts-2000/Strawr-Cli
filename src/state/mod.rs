@@ -1,10 +1,8 @@
-use parse_config::Config;
 use std::path::PathBuf;
 
-use crate::error::Result;
+use crate::{error::Result, services::Config};
 
 pub mod get_storage_dir;
-pub mod parse_config;
 
 pub struct AppContext {
     pub debug: bool,
@@ -23,7 +21,7 @@ impl AppContext {
 
     pub fn initialize(debug: &bool) -> Result<AppContext> {
         let storage_dir = AppContext::get_storage_dir()?;
-        let config = AppContext::parse_config(&storage_dir)?;
+        let config = Config::parse(&storage_dir)?;
 
         log::trace!("App context initialized");
         Ok(AppContext::new(*debug, storage_dir, config))

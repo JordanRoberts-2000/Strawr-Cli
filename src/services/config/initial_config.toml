@@ -1,0 +1,13 @@
+[grab]
+encrypt_values_by_default = true
+
+[img]
+default_format = "original" # "webp", "jpeg", "png", "avif", "original"
+default_avif_speed = 6 # 1 - 10
+default_avif_compression = "lossless" # "lossless", "lossy"
+default_webp_compression = "lossless" # "lossless", "lossy"
+default_quality = 100 # 1 - 100
+# max_size = 1024 # - optional
+
+[open]
+editor = "vscode" # "vscode", "nano", "vim", "path"

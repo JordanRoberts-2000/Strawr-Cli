@@ -1,9 +1,0 @@
-[grab]
-encrypt_values_by_default = true
-
-[img]
-default_format = "original" # "webp", "jpeg", "png", "avif", "original"
-# max_size = 1024 # - optional
-
-[open]
-editor = "vscode" # "vscode", "nano", "vim", "path"

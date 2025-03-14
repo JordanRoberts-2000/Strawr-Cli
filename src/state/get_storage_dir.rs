@@ -1,6 +1,6 @@
 use std::{env, fs, path::PathBuf};
 
-use crate::config::constants::{CONFIG_FOLDER_NAME, CONFIG_HOME_ENV, DEV_CONFIG_FOLDER_PATH};
+use crate::constants::{CONFIG_FOLDER_NAME, CONFIG_HOME_ENV, DEV_CONFIG_FOLDER_PATH};
 use crate::error::{Error, Result};
 
 use super::AppContext;

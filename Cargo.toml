@@ -29,3 +29,4 @@ simple_crypt = "0.2.3"
 tempfile = "3.15.0"
 toml = "0.8.20"
 validator = { version = "0.20.0", features = ["derive"] }
+webp = "0.3.0"
