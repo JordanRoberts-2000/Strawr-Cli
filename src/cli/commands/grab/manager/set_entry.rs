@@ -35,12 +35,8 @@ impl GrabManager {
             .map_err(|e| Error::Io(e, format!("Failed to write to '{:?}'", self.list_file_path)))?;
         log::debug!("Updated keys.list file");
 
-        let updated_json = serde_json::to_string_pretty(&self.data_map).map_err(|e| {
-            Error::Parse(
-                ParseError::Json(e),
-                "Failed to convert new data to json".to_string(),
-            )
-        })?;
+        let updated_json = serde_json::to_string_pretty(&self.data_map)
+            .map_err(|e| ParseError::Json(e, "Failed to convert new data to json".to_string()))?;
         fs::write(&self.json_file_path, updated_json)
             .map_err(|e| Error::Io(e, format!("Failed to write to '{:?}'", self.json_file_path)))?;
         log::debug!("Updated data.json file");

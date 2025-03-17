@@ -1,6 +1,6 @@
 use std::path::PathBuf;
 
-use crate::{error::Result, services::Config};
+use crate::{config::Config, error::Result};
 
 pub mod get_storage_dir;
 

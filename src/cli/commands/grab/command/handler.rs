@@ -1,4 +1,4 @@
-use crate::cli::commands::grab::GrabManager;
+use crate::cli::commands::grab::{GrabError, GrabManager};
 use crate::error::{Error, ParseError, Result};
 use crate::state::AppContext;
 use std::fs;
@@ -12,12 +12,8 @@ impl GrabCommand {
 
         let json_data = fs::read_to_string(&manager.json_file_path)
             .map_err(|e| Error::Io(e, format!("failed to read {:?}", manager.json_file_path)))?;
-        manager.data_map = serde_json::from_str(&json_data).map_err(|e| {
-            Error::Parse(
-                ParseError::Json(e),
-                format!("failed to parse {:?}", manager.json_file_path),
-            )
-        })?;
+        manager.data_map = serde_json::from_str(&json_data)
+            .map_err(|e| ParseError::Json(e, format!("{:?}", manager.json_file_path)))?;
         log::trace!("Json data loaded into memory");
 
         if self.list {
@@ -45,11 +41,10 @@ impl GrabCommand {
             return manager.set_entry(key, value, &encrypt);
         }
 
-        if let Some(val) = manager.data_map.get(key) {
-            return manager.get_entry(val);
-        } else {
-            println!("Key '{}' not found", key);
-        }
+        match manager.data_map.get(key) {
+            Some(val) => manager.get_entry(val),
+            None => Err(GrabError::KeyNotFound(key.to_string()).into()),
+        }?;
 
         Ok(())
     }
