@@ -12,11 +12,9 @@ impl AppContext {
 
             let custom_dir = PathBuf::from(custom);
             if !custom_dir.exists() {
-                fs::create_dir_all(&custom_dir).map_err(|e| {
-                    Error::Io(
-                        e,
-                        format!("Failed to create STRAWR_HOME directory '{:?}'", custom_dir),
-                    )
+                fs::create_dir_all(&custom_dir).map_err(|e| Error::Io {
+                    source: e,
+                    context: format!("Failed to create STRAWR_HOME directory '{:?}'", custom_dir),
                 })?;
                 log::debug!("Created dirs for STRAWR_HOME path successfully");
             }
@@ -37,11 +35,9 @@ impl AppContext {
         };
 
         if !storage_dir.exists() {
-            fs::create_dir_all(&storage_dir).map_err(|e| {
-                Error::Io(
-                    e,
-                    format!("Failed to create storage directory '{:?}'", storage_dir),
-                )
+            fs::create_dir_all(&storage_dir).map_err(|e| Error::Io {
+                source: e,
+                context: format!("Failed to create storage directory '{:?}'", storage_dir),
             })?;
             log::info!("Created storage directory '{:?}' successfully", storage_dir);
         }

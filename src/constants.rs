@@ -8,5 +8,3 @@ pub const CONFIG_HOME_ENV: &str = "STRAWR_HOME";
 pub const KEYRING_SERVICE: &str = "strawrCli";
 
 pub const KEYRING_ENCRYPTION_PASSWORD: &str = "encryption_password";
-
-pub const ENCRYPTION_PREFIX: &str = "ENC:";

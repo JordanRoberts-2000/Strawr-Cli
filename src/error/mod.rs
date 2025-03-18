@@ -3,7 +3,10 @@ use std::io;
 pub use parse::ParseError;
 use thiserror::Error;
 
-use crate::cli::commands::grab::GrabError;
+use crate::{
+    cli::commands::grab::GrabError,
+    services::{crypto::CryptoError, keychain::error::KeychainError},
+};
 
 pub type Result<T> = std::result::Result<T, Error>;
 
@@ -33,8 +36,8 @@ fn format_validation_errors(errors: &validator::ValidationErrors) -> String {
 pub enum Error {
     #[error("[Validation Error]: \n{}, {}", format_validation_errors(.0), .1)]
     Validation(validator::ValidationErrors, String),
-    #[error("[Io Error]: {1}\nCaused by: {0}")]
-    Io(io::Error, String),
+    #[error("[Io Error]: {context}\nCaused by: {source}")]
+    Io { source: io::Error, context: String },
     #[error("[Parse Error]: {0}")]
     Parse(#[from] ParseError),
     #[error("[Error]: An internal error occurred")]
@@ -43,8 +46,10 @@ pub enum Error {
     Custom(String),
 
     // Services
-    #[error("[Keyring Error]: {1}, {0}")]
-    Keyring(keyring::Error, String),
+    #[error("[Error]: {0}")]
+    KeyChain(#[from] KeychainError),
+    #[error("[Error]: {0}")]
+    Crypto(#[from] CryptoError),
 
     // Commands
     #[error("[Error]: {0}")]

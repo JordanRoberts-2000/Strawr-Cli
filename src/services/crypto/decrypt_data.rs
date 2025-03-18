@@ -1,12 +1,11 @@
-use crate::{
-    constants::ENCRYPTION_PREFIX,
-    error::{Error, Result},
+use super::{
+    constants::{ENCRYPTION_PREFIX, NONCE_SIZE},
+    error::{CryptoError, Result},
+    utils::derive_key,
 };
 
 use aes_gcm::{aead::Aead, Aes256Gcm, KeyInit};
 use base64::{engine::general_purpose, Engine};
-
-use super::{derive_key, NONCE_SIZE};
 
 pub fn decrypt_data(msg: &str, password: &str) -> Result<String> {
     log::trace!("Decryption attempted");
@@ -15,13 +14,13 @@ pub fn decrypt_data(msg: &str, password: &str) -> Result<String> {
 
     let combined_bytes = general_purpose::STANDARD.decode(encoded).map_err(|e| {
         log::error!("Failed to Base64-decode the encrypted string, {}", e);
-        Error::Internal
+        CryptoError::Internal
     })?;
 
     if combined_bytes.len() < NONCE_SIZE {
         #[cfg(debug_assertions)]
         log::error!("Decryption failed due to size invalidation");
-        return Err(Error::Custom("Decryption failed".to_string()));
+        return Err(CryptoError::Decryption);
     }
 
     let nonce_bytes = &combined_bytes[..NONCE_SIZE];
@@ -35,12 +34,12 @@ pub fn decrypt_data(msg: &str, password: &str) -> Result<String> {
         .map_err(|e| {
             #[cfg(debug_assertions)]
             log::error!("Decryption failed: {}", e);
-            Error::Custom("Decryption failed".to_string())
+            CryptoError::Decryption
         })?;
 
     let plaintext = String::from_utf8(plaintext_bytes).map_err(|_| {
         log::error!("Failed to turn decryped data from bytes to a string");
-        Error::Internal
+        CryptoError::Internal
     })?;
 
     log::trace!("Decryption successfull");

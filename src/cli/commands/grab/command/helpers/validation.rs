@@ -1,6 +1,6 @@
 use regex::Regex;
 
-use crate::constants::ENCRYPTION_PREFIX;
+use crate::services::crypto::ENCRYPTION_PREFIX;
 
 pub fn validate_key(s: &str) -> Result<String, String> {
     let re = Regex::new(r"^[a-zA-Z0-9_-]{1,20}$").map_err(|e| e.to_string())?;

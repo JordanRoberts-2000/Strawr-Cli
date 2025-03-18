@@ -1,7 +1,7 @@
 use crate::{
     constants::{KEYRING_ENCRYPTION_PASSWORD, KEYRING_SERVICE},
     error::{Error, ParseError, Result},
-    services::crypto::{encrypt_data, get_or_prompt_keyring},
+    services::{crypto::encrypt_data, keychain::get_or_prompt_keyring},
 };
 use natord::compare;
 use std::fs;
@@ -31,14 +31,22 @@ impl GrabManager {
         let mut keys: Vec<String> = self.data_map.keys().cloned().collect();
         keys.sort_by(|a, b| compare(a, b));
 
-        fs::write(&self.list_file_path, keys.join("\n"))
-            .map_err(|e| Error::Io(e, format!("Failed to write to '{:?}'", self.list_file_path)))?;
+        fs::write(&self.list_file_path, keys.join("\n")).map_err(|e| Error::Io {
+            source: e,
+            context: format!("Failed to write to '{:?}'", self.list_file_path),
+        })?;
         log::debug!("Updated keys.list file");
 
-        let updated_json = serde_json::to_string_pretty(&self.data_map)
-            .map_err(|e| ParseError::Json(e, "Failed to convert new data to json".to_string()))?;
-        fs::write(&self.json_file_path, updated_json)
-            .map_err(|e| Error::Io(e, format!("Failed to write to '{:?}'", self.json_file_path)))?;
+        let updated_json = serde_json::to_string_pretty(&self.data_map).map_err(|e| {
+            ParseError::JsonSerialize {
+                source: e,
+                title: "updated data".to_string(),
+            }
+        })?;
+        fs::write(&self.json_file_path, updated_json).map_err(|e| Error::Io {
+            source: e,
+            context: format!("Failed to write to '{:?}'", self.json_file_path),
+        })?;
         log::debug!("Updated data.json file");
 
         if entry_already_exists {

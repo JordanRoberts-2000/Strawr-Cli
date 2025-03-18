@@ -1,7 +1,10 @@
 use crate::{
-    constants::{ENCRYPTION_PREFIX, KEYRING_ENCRYPTION_PASSWORD, KEYRING_SERVICE},
+    constants::{KEYRING_ENCRYPTION_PASSWORD, KEYRING_SERVICE},
     error::Result,
-    services::crypto::{decrypt_data, get_or_prompt_keyring},
+    services::{
+        crypto::{decrypt_data, ENCRYPTION_PREFIX},
+        keychain::get_or_prompt_keyring,
+    },
     utils::add_to_clipboard,
 };
 

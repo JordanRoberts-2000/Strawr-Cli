@@ -10,10 +10,14 @@ impl GrabCommand {
         let mut manager = GrabManager::new();
         manager.initialize_data_folder(ctx)?;
 
-        let json_data = fs::read_to_string(&manager.json_file_path)
-            .map_err(|e| Error::Io(e, format!("failed to read {:?}", manager.json_file_path)))?;
-        manager.data_map = serde_json::from_str(&json_data)
-            .map_err(|e| ParseError::Json(e, format!("{:?}", manager.json_file_path)))?;
+        let json_data = fs::read_to_string(&manager.json_file_path).map_err(|e| Error::Io {
+            source: e,
+            context: format!("failed to read {:?}", manager.json_file_path),
+        })?;
+        manager.data_map = serde_json::from_str(&json_data).map_err(|e| ParseError::Json {
+            source: e,
+            title: format!("{:?}", manager.json_file_path),
+        })?;
         log::trace!("Json data loaded into memory");
 
         if self.list {
@@ -43,7 +47,10 @@ impl GrabCommand {
 
         match manager.data_map.get(key) {
             Some(val) => manager.get_entry(val),
-            None => Err(GrabError::KeyNotFound(key.to_string()).into()),
+            None => Err(GrabError::KeyNotFound {
+                key: key.to_string(),
+            }
+            .into()),
         }?;
 
         Ok(())

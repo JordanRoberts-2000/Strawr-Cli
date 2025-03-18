@@ -2,9 +2,21 @@ use thiserror::Error;
 
 #[derive(Debug, Error)]
 pub enum ParseError {
-    #[error("failed to parse {1}\n{0}")]
-    Toml(toml::de::Error, String),
+    #[error("failed to parse {title}\n{source}")]
+    Toml {
+        source: toml::de::Error,
+        title: String,
+    },
 
-    #[error("failed to parse {1}\n{0}")]
-    Json(serde_json::Error, String),
+    #[error("failed to parse {title}\n{source}")]
+    Json {
+        source: serde_json::Error,
+        title: String,
+    },
+
+    #[error("failed to serialize {title} to JSON\n{source}")]
+    JsonSerialize {
+        source: serde_json::Error,
+        title: String,
+    },
 }

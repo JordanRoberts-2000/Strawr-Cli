@@ -2,6 +2,8 @@ use thiserror::Error;
 
 #[derive(Error, Debug)]
 pub enum GrabError {
-    #[error("Key {0} could not be foumd")]
-    KeyNotFound(String),
+    #[error("Key '{key}' could not be found")]
+    KeyNotFound { key: String },
+    #[error("Path '{path}' contains invalid UTF-8 characters")]
+    InvalidPathString { path: String },
 }

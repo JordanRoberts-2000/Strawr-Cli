@@ -2,12 +2,11 @@ use aes_gcm::{aead::Aead, Aes256Gcm, KeyInit};
 use base64::{engine::general_purpose, Engine};
 use rand::prelude::*;
 
-use crate::{
-    constants::ENCRYPTION_PREFIX,
-    error::{Error, Result},
+use super::{
+    constants::{ENCRYPTION_PREFIX, NONCE_SIZE},
+    error::{CryptoError, Result},
+    utils::derive_key,
 };
-
-use super::{derive_key, NONCE_SIZE};
 
 // The output layout is: [prefix] + [nonce (12 bytes)][ciphertext],
 pub fn encrypt_data(msg: &str, password: &str) -> Result<String> {
@@ -24,7 +23,7 @@ pub fn encrypt_data(msg: &str, password: &str) -> Result<String> {
         .encrypt(&nonce_bytes.into(), msg.as_bytes())
         .map_err(|e| {
             log::error!("failed to encrypt value: {}", e);
-            Error::Internal
+            CryptoError::Internal
         })?;
 
     let mut combined = Vec::new();
