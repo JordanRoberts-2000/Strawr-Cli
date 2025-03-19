@@ -4,6 +4,7 @@ use crate::{config::Config, error::Result};
 
 pub mod get_storage_dir;
 
+#[derive(Debug)]
 pub struct AppContext {
     pub debug: bool,
     pub storage_dir: PathBuf,

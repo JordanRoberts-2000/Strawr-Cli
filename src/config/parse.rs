@@ -28,9 +28,13 @@ impl Config {
             title: "Config file".to_string(),
         })?;
 
-        config
-            .validate()
-            .map_err(|e| Error::Validation(e, "egg".to_string()))?;
+        config.validate().map_err(|e| {
+            println!("EEEE:  {}", e);
+            Error::Validation {
+                source: e,
+                context: "Failed to validate config file".to_string(),
+            }
+        })?;
 
         Ok(config)
     }

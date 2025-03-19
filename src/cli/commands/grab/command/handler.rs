@@ -33,7 +33,9 @@ impl GrabCommand {
         };
 
         if self.delete {
-            return manager.delete_entry(key);
+            return manager
+                .delete_entry(key)
+                .inspect_err(|_| log::error!("Error deleting entry"));
         }
 
         let encrypt = match self.encrypt {

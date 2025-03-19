@@ -1,6 +1,10 @@
-use image::GenericImageView;
-use std::path::PathBuf;
-use webp::{Encoder, PixelLayout};
+// use image::GenericImageView;
+// use std::path::PathBuf;
+// use webp::{Encoder, PixelLayout};
+
+pub mod enums;
+
+pub use enums::compression_type::CompressionType;
 
 // struct ImageService {};
 

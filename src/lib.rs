@@ -1,5 +1,8 @@
 use clap::Parser;
-use cli::{commands::grab::handler::Grab, Cli, Commands};
+use cli::{
+    commands::{grab::handler::Grab, img::handler::Img},
+    Cli, Commands,
+};
 use error::Result;
 use state::AppContext;
 use utils::logger::init_logger;
@@ -19,9 +22,8 @@ pub fn run_app() -> Result<()> {
     let ctx = AppContext::initialize(&cli.debug)?;
 
     match cli.commands {
-        // Commands::Img(ref command) => command.execute(&ctx),
-        // Commands::Img(args) => Img::execute(&args, &ctx),
-
+        Commands::Grab(args) => Grab::execute(&args, &ctx),
+        Commands::Img(args) => Img::execute(&args, &ctx),
         // Commands::Add => println!("Add"),
         // Commands::Template => println!("Template"),
 
@@ -32,7 +34,6 @@ pub fn run_app() -> Result<()> {
         // Commands::Font => println!("Font"),
 
         // Commands::Snippets => println!("Snippet"),
-        Commands::Grab(args) => Grab::execute(&args, &ctx),
         _ => Ok(()),
         // Commands::Playground(ref playground) => playground.handle_command(&ctx),
 
