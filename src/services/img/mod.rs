@@ -1,24 +1,38 @@
-// use image::GenericImageView;
-// use std::path::PathBuf;
-// use webp::{Encoder, PixelLayout};
+use image::{DynamicImage, GenericImageView};
+use std::path::PathBuf;
 
+pub mod conversions;
 pub mod enums;
+pub mod transformations;
 
 pub use enums::compression_type::CompressionType;
 
-// struct ImageService {};
+pub struct Img {
+    img: DynamicImage,
+    path: PathBuf,
+    height: u32,
+    width: u32,
+}
 
-// impl ImageService {
-//     pub fn webp_convert(path: &PathBuf) -> Result<(), Box<dyn std::error::Error>> {
-//         let img = image::open(path)?;
-//         let (width, height) = img.dimensions();
+impl Img {
+    pub fn new(path: &PathBuf) -> Result<Self, Box<dyn std::error::Error>> {
+        let img = image::open(path)?;
+        let (width, height) = img.dimensions();
+        Ok(Self {
+            img,
+            path: path.clone(),
+            height,
+            width,
+        })
+    }
 
-//         // Convert the image to RGBA8, which is what the webp encoder expects.
-//         let rgba_image = img.to_rgba8();
+    pub fn save(&self) -> Result<(), Box<dyn std::error::Error>> {
+        self.img.save(&self.path)?;
+        Ok(())
+    }
 
-//         // Create a WebP encoder.
-//         let encoder = Encoder::new(&rgba_image, PixelLayout::Rgba, width, height);
-//         encoder.encode_simple(lossless: bool, quality)
-//         Ok(())
-//     }
-// }
+    pub fn save_to(&self, output_path: &PathBuf) -> Result<(), Box<dyn std::error::Error>> {
+        self.img.save(output_path)?;
+        Ok(())
+    }
+}

@@ -1,8 +1,8 @@
 use colored::*;
-use strawr::run_app;
+use strawr::run_cli;
 
 fn main() {
-    if let Err(error) = run_app() {
+    if let Err(error) = run_cli() {
         eprintln!("{}", format!("{}", error).red());
         std::process::exit(1);
     }

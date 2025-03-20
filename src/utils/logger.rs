@@ -3,7 +3,7 @@ use env_logger::Builder;
 use log::{Level, LevelFilter, Record};
 use std::{env, io::Write};
 
-pub fn init_logger(debug: bool) {
+pub fn initialize(debug: bool) {
     if !debug {
         return;
     }
