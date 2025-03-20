@@ -12,6 +12,7 @@ pub struct Img {
     path: PathBuf,
     height: u32,
     width: u32,
+    aspect_ratio: f32,
 }
 
 impl Img {
@@ -23,6 +24,7 @@ impl Img {
             path: path.clone(),
             height,
             width,
+            aspect_ratio: width as f32 / height as f32,
         })
     }
 
