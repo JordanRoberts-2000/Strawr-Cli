@@ -1,9 +1,9 @@
 use crate::services::img::Img;
 
 impl Img {
-    pub fn crop_aspect(&mut self, aspect_ratio: f32) {
+    pub fn crop_aspect(&mut self, aspect_ratio: f32) -> &mut Self {
         if (self.aspect_ratio - aspect_ratio).abs() < 0.01 {
-            return;
+            return self;
         }
 
         let (new_width, new_height) = if self.aspect_ratio > aspect_ratio {
@@ -24,5 +24,7 @@ impl Img {
         self.width = new_width;
         self.height = new_height;
         self.aspect_ratio;
+
+        self
     }
 }

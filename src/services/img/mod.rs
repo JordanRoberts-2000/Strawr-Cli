@@ -3,6 +3,7 @@ use std::{fs, path::PathBuf};
 
 pub mod conversions;
 pub mod enums;
+pub mod error;
 pub mod transformations;
 
 pub use enums::compression_type::CompressionType;

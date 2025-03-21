@@ -12,14 +12,16 @@ impl ImgCommand {
             "/Users/jordanroberts/Documents/dev/Projects/main/rustCli/playground/img/croc.png",
         );
         let temp_output_path = PathBuf::from(
-            "/Users/jordanroberts/Documents/dev/Projects/main/rustCli/playground/img/croc.webp",
+            "/Users/jordanroberts/Documents/dev/Projects/main/rustCli/playground/img/croc_lossy_q100.webp",
         );
 
         let mut img = Img::new(&temp_input_path).expect("Failed to open image");
-        img.max_size(64);
-        img.blur(8);
-        img.webp_convert().expect("failed to convert to web p");
-        img.save_to(&temp_output_path).expect("failed to save");
+        img.max_size(764)
+            .webp_lossy(100)
+            .expect("failed to convert to web p")
+            .save_to(&temp_output_path)
+            .expect("failed to save");
+
         Ok(())
     }
 }
