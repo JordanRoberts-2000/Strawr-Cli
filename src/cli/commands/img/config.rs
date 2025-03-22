@@ -16,7 +16,6 @@ pub struct ImgConfig {
     pub blur_size: u32,
     #[validate(range(min = 1, message = "Must be greater than 0"))]
     pub blur_intensity: u32,
-    pub deleted_images_to_recycling_bin: bool,
     #[validate(range(min = 1, message = "Must be greater than 0"))]
     pub max_size: Option<u32>,
 }

@@ -14,10 +14,15 @@ impl Img {
         }
 
         if output_path != self.path {
-            fs::remove_file(&self.path).map_err(|e| ImgError::Io {
-                context: format!("failed to delete file '{:?}'", self.path),
-                source: e,
-            })?;
+            if let Err(trash_err) = trash::delete(&self.path) {
+                fs::remove_file(&self.path).map_err(|fs_err| ImgError::Io {
+                    context: format!(
+                        "failed to delete file '{:?}' (trash error: {:?})",
+                        self.path, trash_err
+                    ),
+                    source: fs_err,
+                })?;
+            }
         }
 
         self.img.save(output_path).map_err(|e| ImgError::Save {
