@@ -23,6 +23,7 @@ impl Img {
             format: ImageFormat::Png,
         })?;
 
+        self.format = ImageFormat::Png;
         Ok(self)
     }
 }

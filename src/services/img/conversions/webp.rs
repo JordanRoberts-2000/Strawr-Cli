@@ -21,6 +21,8 @@ impl Img {
                     format: ImageFormat::WebP,
                 }
             })?;
+
+        self.format = ImageFormat::WebP;
         Ok(self)
     }
     pub fn webp_lossy(&mut self, quality: u8) -> Result<&mut Self> {
@@ -44,6 +46,8 @@ impl Img {
                     format: ImageFormat::WebP,
                 }
             })?;
+
+        self.format = ImageFormat::WebP;
         Ok(self)
     }
 }

@@ -5,7 +5,7 @@ use crate::services::img::{
 use image::{codecs::jpeg::JpegEncoder, load_from_memory, ExtendedColorType, ImageFormat};
 
 impl Img {
-    pub fn jpeg_convert(&mut self, quality: u8) -> Result<&mut Self> {
+    pub fn jpeg(&mut self, quality: u8) -> Result<&mut Self> {
         let mut buffer = Vec::new();
         let mut encoder = JpegEncoder::new_with_quality(&mut buffer, quality);
 
@@ -30,6 +30,7 @@ impl Img {
             format: ImageFormat::Jpeg,
         })?;
 
+        self.format = ImageFormat::Jpeg;
         Ok(self)
     }
 }

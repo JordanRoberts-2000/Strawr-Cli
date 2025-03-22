@@ -9,17 +9,17 @@ use super::args::ImgCommand;
 impl ImgCommand {
     pub fn execute(&self, _ctx: &AppContext) -> Result<()> {
         let temp_input_path = PathBuf::from(
-            "/Users/jordanroberts/Documents/dev/Projects/main/rustCli/playground/img/croc.png",
+            "/Users/jordanroberts/Documents/dev/Projects/main/rustCli/playground/img/croc.webp",
         );
         let temp_output_path = PathBuf::from(
-            "/Users/jordanroberts/Documents/dev/Projects/main/rustCli/playground/img/croc_lossy_q100.webp",
+            "/Users/jordanroberts/Documents/dev/Projects/main/rustCli/playground/img/croc.jpg",
         );
 
         let mut img = Img::new(&temp_input_path).expect("Failed to open image");
-        img.max_size(764)
-            .webp_lossy(100)
+        img.max_size(600)
+            .jpeg(100)
             .expect("failed to convert to web p")
-            .save_to(&temp_output_path)
+            .save()
             .expect("failed to save");
 
         Ok(())

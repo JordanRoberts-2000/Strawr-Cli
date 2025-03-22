@@ -28,4 +28,21 @@ pub enum ImgError {
         source: image::ImageError,
         format: image::ImageFormat,
     },
+    #[error("failed to open img '{:?}', err:{}", path, source)]
+    Open {
+        source: image::ImageError,
+        path: PathBuf,
+    },
+    #[error("{}, err: {}", context, source)]
+    Io {
+        context: String,
+        source: std::io::Error,
+    },
+    #[error("failed to retrieve file format")]
+    GuessFormat,
+    #[error("failed to create new image '{:?}', err: {}", output, source)]
+    Save {
+        source: image::ImageError,
+        output: PathBuf,
+    },
 }
