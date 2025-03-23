@@ -1,6 +1,4 @@
-// use super::utils::valid_image_format::ValidImageFormat;
-
-use crate::cli::commands::img::sub_commands::ImgSubcommands;
+use crate::cli::commands::img::{sub_commands::ImgSubcommands, utils::formats::ValidImageFormat};
 
 #[derive(clap::Parser, Debug)]
 #[command(arg_required_else_help = true)]
@@ -21,11 +19,15 @@ pub struct ImgCommand {
     )]
     pub output: Option<String>,
 
-    // #[arg(short, long, help = "Fomat image file to be converted to")]
-    // pub format: Option<ValidImageFormat>,
-    #[arg(long, help = "Image to use lossless compression when possible", action = clap::ArgAction::SetTrue, conflicts_with = "lossy")]
-    pub lossless: bool,
+    #[arg(short, long, help = "Fomat image file to be converted to")]
+    pub format: Option<ValidImageFormat>,
 
-    #[arg(long, help = "Image to use lossy compression when possible", action = clap::ArgAction::SetTrue, conflicts_with = "lossless")]
-    pub lossy: bool,
+    #[arg(short, long, help = "Configure image quality")]
+    pub quality: Option<u8>,
+
+    #[arg(long, help = "Image to use lossless compression when possible", action = clap::ArgAction::SetTrue)]
+    pub thumbnail: Option<bool>,
+
+    #[arg(long, help = "Image to use lossless compression when possible", num_args = 0..=1)]
+    pub blur: Option<Option<u8>>,
 }

@@ -7,20 +7,26 @@ use crate::state::AppContext;
 use super::args::ImgCommand;
 
 impl ImgCommand {
-    pub fn execute(&self, _ctx: &AppContext) -> Result<()> {
-        let temp_input_path = PathBuf::from(
-            "/Users/jordanroberts/Documents/dev/Projects/main/rustCli/playground/img/croc.webp",
-        );
-        let temp_output_path = PathBuf::from(
-            "/Users/jordanroberts/Documents/dev/Projects/main/rustCli/playground/img/croc.jpg",
-        );
+    pub fn execute(&self, ctx: &AppContext) -> Result<()> {
+        let input_str = self.path.clone().or(self.positional_path.clone()).unwrap();
+        let input = PathBuf::from(input_str);
 
-        let mut img = Img::new(&temp_input_path).expect("Failed to open image");
-        img.max_size(600)
-            .jpeg(100)
-            .expect("failed to convert to web p")
-            .save()
-            .expect("failed to save");
+        let mut img = Img::new(&input).unwrap();
+
+        if let Some(blur) = &self.blur {
+            let blur_intensity = match blur {
+                None => ctx.config.img.blur_intensity,
+                Some(val) => *val,
+            };
+            img.blur(blur_intensity);
+        }
+
+        if let Some(output_str) = &self.output {
+            let output_path = PathBuf::from(output_str);
+            img.save_to(&output_path).expect("egg1");
+        } else {
+            img.save().expect("egg2");
+        }
 
         Ok(())
     }
