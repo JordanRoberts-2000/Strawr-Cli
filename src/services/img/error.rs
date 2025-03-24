@@ -50,6 +50,8 @@ pub enum ImgError {
         source: color_thief::Error,
         context: String,
     },
+    #[error("Blurhash failed to encode img, err: {0}")]
+    BlurHash(blurhash::Error),
     #[error("{0}")]
     Custom(String),
 }

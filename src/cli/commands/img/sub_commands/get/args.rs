@@ -21,6 +21,13 @@ pub struct Get {
     pub blur_data_url: bool,
 
     #[arg(
+        help = "Retrieve the blurhash string of the image",
+        long,
+        action = clap::ArgAction::SetTrue
+    )]
+    pub hash: bool,
+
+    #[arg(
         help = "Retrieve the format of the image",
         short,
         long,

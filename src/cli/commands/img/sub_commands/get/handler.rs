@@ -14,6 +14,8 @@ impl Get {
             manager.handle_blur_url()?;
         } else if self.alt {
             manager.handle_alt()?;
+        } else if self.hash {
+            manager.handle_blurhash()?;
         } else {
             manager.handle_default()?;
         }
