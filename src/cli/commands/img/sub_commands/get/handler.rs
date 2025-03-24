@@ -1,24 +1,21 @@
-use std::path::PathBuf;
+use crate::{error::Result, state::AppContext};
 
-use crate::{cli::commands::img::ImgError, error::Result, services::img::Img, state::AppContext};
-
-use super::args::Get;
+use super::{args::Get, manager::GetManager};
 
 impl Get {
     pub fn execute(&self, ctx: &AppContext) -> Result<()> {
-        let path = PathBuf::from(self.path.clone());
-        let mut img = Img::new(&path).map_err(ImgError::ImgFailed)?;
+        let mut manager = GetManager::new(&self.path, &ctx)?;
 
         if self.color {
+            manager.handle_color()?;
+        } else if self.data_url {
+            manager.handle_data_url()?;
         } else if self.blur_data_url {
-            let data_url = img
-                .max_size(ctx.config.img.placeholder_size)
-                .blur(ctx.config.img.placeholder_blur_intensity)
-                .data_url()
-                .map_err(ImgError::ImgFailed)?;
-            println!("{data_url}");
+            manager.handle_blur_url()?;
         } else if self.alt {
+            manager.handle_alt()?;
         } else {
+            manager.handle_default()?;
         }
 
         Ok(())

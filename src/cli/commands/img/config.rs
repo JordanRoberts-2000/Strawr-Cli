@@ -2,7 +2,7 @@ use crate::services::img::CompressionType;
 
 use super::utils::formats::ValidImageFormat;
 
-#[derive(Debug, serde::Deserialize, validator::Validate)]
+#[derive(Debug, serde::Deserialize, validator::Validate, Clone)]
 pub struct ImgConfig {
     pub default_format: ValidImageFormat,
     pub default_webp_compression: CompressionType,

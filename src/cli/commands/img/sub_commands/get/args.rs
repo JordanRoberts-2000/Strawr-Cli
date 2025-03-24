@@ -5,6 +5,14 @@ pub struct Get {
     pub path: String,
 
     #[arg(
+        help = "Retrieve the data URL representation of the image",
+        short,
+        long,
+        action = clap::ArgAction::SetTrue
+    )]
+    pub data_url: bool,
+
+    #[arg(
         help = "Retrieve the blur data URL representation of the image",
         short,
         long,
