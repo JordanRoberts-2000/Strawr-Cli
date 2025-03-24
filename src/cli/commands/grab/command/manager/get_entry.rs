@@ -5,7 +5,7 @@ use crate::{
         crypto::{decrypt_data, ENCRYPTION_PREFIX},
         keychain::get_or_prompt_keyring,
     },
-    utils::add_to_clipboard,
+    utils::to_clipboard,
 };
 
 use super::GrabManager;
@@ -20,7 +20,7 @@ impl GrabManager {
             val.clone()
         };
 
-        add_to_clipboard(&final_value)?;
+        to_clipboard(&final_value)?;
 
         println!("Value saved to clipboard");
         Ok(())

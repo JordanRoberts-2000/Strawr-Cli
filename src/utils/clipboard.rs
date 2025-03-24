@@ -2,7 +2,7 @@ use arboard::Clipboard;
 
 use crate::error::{Error, Result};
 
-pub fn add_to_clipboard(text: &String) -> Result<()> {
+pub fn to_clipboard(text: &String) -> Result<()> {
     let mut clipboard = Clipboard::new()
         .map_err(|e| Error::Custom(format!("Failed to access clipboard: {}", e)))?;
     clipboard

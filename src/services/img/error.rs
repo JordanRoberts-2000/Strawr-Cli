@@ -7,7 +7,7 @@ pub type Result<T> = std::result::Result<T, ImgError>;
 #[derive(Error, Debug)]
 pub enum ImgError {
     #[error(
-        "failed to convert img '{:?}' to format '{:?}', err:{}",
+        "failed to convert img '{:?}' to format '{:?}', err: {}",
         path,
         format,
         err_string
@@ -28,7 +28,7 @@ pub enum ImgError {
         source: image::ImageError,
         format: image::ImageFormat,
     },
-    #[error("failed to open img '{:?}', err:{}", path, source)]
+    #[error("failed to open img '{:?}', err: {}", path, source)]
     Open {
         source: image::ImageError,
         path: PathBuf,
