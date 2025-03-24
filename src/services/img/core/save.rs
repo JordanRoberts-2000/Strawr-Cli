@@ -1,15 +1,12 @@
+use super::Img;
+use crate::services::img::error::{ImgError, Result};
 use std::{fs, path::PathBuf};
-
-use super::{
-    error::{ImgError, Result},
-    Img,
-};
 
 impl Img {
     pub fn save(&self) -> Result<()> {
         let mut output_path = self.path.clone();
 
-        if let Some(extention) = self.get_extention() {
+        if let Some(extention) = self.extention() {
             output_path.set_extension(extention);
         }
 
@@ -36,7 +33,7 @@ impl Img {
     pub fn save_to(&self, path: &PathBuf) -> Result<()> {
         let mut output_path = path.clone();
 
-        if let Some(extention) = self.get_extention() {
+        if let Some(extention) = self.extention() {
             output_path.set_extension(extention);
         }
 

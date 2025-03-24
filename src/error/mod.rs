@@ -5,7 +5,7 @@ use thiserror::Error;
 use validation::format_validation_errors;
 
 use crate::{
-    cli::commands::grab::GrabError,
+    cli::commands::{grab::GrabError, img::ImgError},
     services::{crypto::CryptoError, keychain::error::KeychainError},
 };
 
@@ -39,4 +39,6 @@ pub enum Error {
     // Commands
     #[error("[Error]: {0}")]
     Grab(#[from] GrabError),
+    #[error("[Error]: {0}")]
+    Img(#[from] ImgError),
 }

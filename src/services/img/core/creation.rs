@@ -1,11 +1,9 @@
+use image::{guess_format, GenericImageView};
 use std::{fs, path::PathBuf};
 
-use image::{guess_format, GenericImageView};
+use crate::services::img::error::{ImgError, Result};
 
-use super::{
-    error::{ImgError, Result},
-    Img,
-};
+use super::Img;
 
 impl Img {
     pub fn new(path: &PathBuf) -> Result<Self> {
