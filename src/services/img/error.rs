@@ -45,4 +45,11 @@ pub enum ImgError {
         source: image::ImageError,
         output: PathBuf,
     },
+    #[error("{}, err: {}", source, context)]
+    Color {
+        source: color_thief::Error,
+        context: String,
+    },
+    #[error("{0}")]
+    Custom(String),
 }

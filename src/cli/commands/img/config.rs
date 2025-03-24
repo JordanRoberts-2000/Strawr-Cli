@@ -2,6 +2,13 @@ use crate::services::img::CompressionType;
 
 use super::utils::formats::ValidImageFormat;
 
+#[derive(Debug, serde::Deserialize, Clone)]
+#[serde(rename_all = "lowercase")]
+pub enum ColorOutput {
+    Rgb,
+    Hex,
+}
+
 #[derive(Debug, serde::Deserialize, validator::Validate, Clone)]
 pub struct ImgConfig {
     pub default_format: ValidImageFormat,
@@ -19,4 +26,5 @@ pub struct ImgConfig {
     pub placeholder_blur_intensity: u8,
     #[validate(range(min = 1, message = "Must be greater than 0"))]
     pub max_size: Option<u32>,
+    pub default_get_color_output: ColorOutput,
 }
