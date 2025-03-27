@@ -5,7 +5,7 @@ use crate::services::keychain::error::{KeychainError, Result};
 
 pub mod error;
 
-pub fn get_or_prompt_keyring(service: &str, field: &str) -> Result<String> {
+pub fn keychain(service: &str, field: &str) -> Result<String> {
     log::trace!("Attempting to retrieve keyring value for {}", field);
 
     let keyring = Entry::new(service, field).map_err(|e| KeychainError::Keyring {
@@ -20,10 +20,7 @@ pub fn get_or_prompt_keyring(service: &str, field: &str) -> Result<String> {
         }
         Err(err) => match err {
             keyring::Error::NoEntry => {
-                println!(
-                    "No value detected for '{}'. Please enter one:",
-                    field.replace("_", " ")
-                );
+                println!("Please enter value for '{}':", field);
                 let input = read_password().map_err(KeychainError::ReadPasswordFailed)?;
                 keyring
                     .set_password(&input)

@@ -1,7 +1,7 @@
 use crate::{
     constants::{KEYRING_ENCRYPTION_PASSWORD, KEYRING_SERVICE},
     error::{Error, ParseError, Result},
-    services::{crypto::encrypt_data, keychain::get_or_prompt_keyring},
+    services::{crypto::encrypt_data, keychain::keychain},
 };
 use natord::compare;
 use std::fs;
@@ -13,7 +13,7 @@ impl GrabManager {
         log::trace!("attempting to set key '{}' to '{}'", key, value);
 
         let entry_value = if *encrypt {
-            let password = get_or_prompt_keyring(KEYRING_SERVICE, KEYRING_ENCRYPTION_PASSWORD)?;
+            let password = keychain(KEYRING_SERVICE, KEYRING_ENCRYPTION_PASSWORD)?;
             encrypt_data(value, &password)?
         } else {
             value.clone()

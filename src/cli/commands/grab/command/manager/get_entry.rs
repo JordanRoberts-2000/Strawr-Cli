@@ -3,7 +3,7 @@ use crate::{
     error::Result,
     services::{
         crypto::{decrypt_data, ENCRYPTION_PREFIX},
-        keychain::get_or_prompt_keyring,
+        keychain::keychain,
     },
     utils::to_clipboard,
 };
@@ -14,7 +14,7 @@ impl GrabManager {
     pub fn get_entry(&self, val: &String) -> Result<()> {
         let final_value: String = if val.starts_with(ENCRYPTION_PREFIX) {
             log::trace!("Value requires decryption");
-            let password = get_or_prompt_keyring(KEYRING_SERVICE, KEYRING_ENCRYPTION_PASSWORD)?;
+            let password = keychain(KEYRING_SERVICE, KEYRING_ENCRYPTION_PASSWORD)?;
             decrypt_data(val, &password)?
         } else {
             val.clone()
