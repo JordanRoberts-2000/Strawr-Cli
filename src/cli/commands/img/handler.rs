@@ -1,7 +1,7 @@
 use crate::{
     cli::commands::img::{
         command::args::ImgCommand,
-        sub_commands::{get::args::Get, ImgSubcommands},
+        sub_commands::{gen::args::Gen, get::args::Get, ImgSubcommands},
     },
     error::Result,
     state::AppContext,
@@ -15,7 +15,7 @@ impl Img {
 
         if let Some(subcommand) = &args.subcommands {
             match subcommand {
-                ImgSubcommands::Gen(_args) => println!("gen"),
+                ImgSubcommands::Gen(args) => Gen::execute(args, ctx)?,
                 ImgSubcommands::Get(args) => Get::execute(args, ctx)?,
             }
         } else {

@@ -1,4 +1,4 @@
-use crate::cli::commands::img::{sub_commands::ImgSubcommands, utils::formats::ValidImageFormat};
+use crate::cli::commands::img::{sub_commands::ImgSubcommands, utils::enums::ValidImageFormat};
 
 #[derive(clap::Parser, Debug)]
 #[command(arg_required_else_help = true)]
