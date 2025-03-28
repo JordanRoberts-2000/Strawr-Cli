@@ -2,7 +2,7 @@ use crate::{
     cli::commands::img::ImgError,
     constants::{KEYRING_OPEN_API_KEY, KEYRING_SERVICE},
     error::Result,
-    services::{ai::sync::alt::alt_tag, keychain::keychain},
+    services::{ai, keychain::keychain},
     utils::to_clipboard,
 };
 
@@ -19,7 +19,7 @@ impl GetManager {
             .data_url()
             .map_err(ImgError::ImgFailed)?;
 
-        let description = alt_tag(&api_key, &data_url).map_err(ImgError::AltTag)?;
+        let description = ai::sync::alt_tag(&api_key, &data_url).map_err(ImgError::AltTag)?;
         to_clipboard(&description)?;
         println!("Alt Text: {}", description);
 
