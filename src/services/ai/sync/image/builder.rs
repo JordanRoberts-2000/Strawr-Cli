@@ -11,7 +11,11 @@ pub struct ImageBuilder {
 }
 
 impl ImageBuilder {
-    pub fn new<S: Into<String>>(api_key: S, description: S) -> Self {
+    pub fn new<A, D>(api_key: A, description: D) -> Self
+    where
+        A: Into<String>,
+        D: Into<String>,
+    {
         Self {
             api_key: api_key.into(),
             description: description.into(),
