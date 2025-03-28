@@ -6,6 +6,10 @@ use image::{codecs::jpeg::JpegEncoder, load_from_memory, ExtendedColorType, Imag
 
 impl Img {
     pub fn jpeg(&mut self, quality: u8) -> Result<&mut Self> {
+        if self.format == ImageFormat::Jpeg && quality == 100 {
+            return Ok(self);
+        }
+
         let mut buffer = Vec::new();
         let mut encoder = JpegEncoder::new_with_quality(&mut buffer, quality);
 

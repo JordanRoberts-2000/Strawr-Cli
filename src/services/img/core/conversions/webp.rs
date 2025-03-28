@@ -8,6 +8,10 @@ use crate::services::img::{
 
 impl Img {
     pub fn webp(&mut self) -> Result<&mut Self> {
+        if self.format == ImageFormat::WebP {
+            return Ok(self);
+        }
+
         let rgba_image = self.img.to_rgba8();
         let encoder = Encoder::new(&rgba_image, PixelLayout::Rgba, self.width, self.height);
 
@@ -26,6 +30,10 @@ impl Img {
         Ok(self)
     }
     pub fn webp_lossy(&mut self, quality: u8) -> Result<&mut Self> {
+        if self.format == ImageFormat::WebP && quality == 100 {
+            return Ok(self);
+        }
+
         let rgba_image = self.img.to_rgba8();
         let encoder = Encoder::new(&rgba_image, PixelLayout::Rgba, self.width, self.height);
 

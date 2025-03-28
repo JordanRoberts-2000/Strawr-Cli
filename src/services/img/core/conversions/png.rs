@@ -8,6 +8,10 @@ use crate::services::img::{
 
 impl Img {
     pub fn png(&mut self) -> Result<&mut Self> {
+        if self.format == ImageFormat::Png {
+            return Ok(self);
+        }
+
         let mut buffer = Vec::new();
         self.img
             .write_to(&mut Cursor::new(&mut buffer), ImageFormat::Png)
