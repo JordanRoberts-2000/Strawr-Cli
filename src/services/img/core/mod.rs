@@ -22,13 +22,20 @@ pub enum ImgSrc {
 }
 
 impl Img {
-    pub fn id(&self) -> String {
-        match &self.src {
-            ImgSrc::Local { path, .. } => path
-                .file_name()
-                .map(|s| s.to_string_lossy().into_owned())
-                .unwrap_or_else(|| path.to_string_lossy().into_owned()),
-            ImgSrc::Remote { url, .. } => url.to_string(),
+    pub fn file_name(&mut self, new_name: &str) -> &mut Self {
+        match &mut self.src {
+            ImgSrc::Local { target, .. } | ImgSrc::Remote { target, .. } => {
+                *target = target.with_file_name(new_name);
+            }
+        }
+        self
+    }
+
+    pub fn update_extension(&mut self, new_ext: &str) {
+        match &mut self.src {
+            ImgSrc::Local { target, .. } | ImgSrc::Remote { target, .. } => {
+                *target = target.with_extension(new_ext);
+            }
         }
     }
 }

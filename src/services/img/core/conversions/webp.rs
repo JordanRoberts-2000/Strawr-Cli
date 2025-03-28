@@ -56,6 +56,8 @@ impl Img {
             })?;
 
         self.format = ImageFormat::WebP;
+        self.update_extension("webp");
+
         Ok(self)
     }
 }

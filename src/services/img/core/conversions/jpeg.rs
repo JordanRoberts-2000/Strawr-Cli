@@ -35,6 +35,8 @@ impl Img {
         })?;
 
         self.format = ImageFormat::Jpeg;
+        self.update_extension("jpg");
+
         Ok(self)
     }
 }

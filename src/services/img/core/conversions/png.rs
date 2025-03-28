@@ -28,6 +28,8 @@ impl Img {
         })?;
 
         self.format = ImageFormat::Png;
+        self.update_extension("png");
+
         Ok(self)
     }
 }
