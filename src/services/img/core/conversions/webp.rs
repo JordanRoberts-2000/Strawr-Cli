@@ -15,8 +15,8 @@ impl Img {
 
         self.img =
             image::load_from_memory_with_format(&webp_data, ImageFormat::WebP).map_err(|e| {
-                ImgError::ImageDecoding {
-                    path: self.path.clone(),
+                ImgError::Decoding {
+                    id: self.id(),
                     source: e,
                     format: ImageFormat::WebP,
                 }
@@ -34,14 +34,14 @@ impl Img {
                 .encode_simple(false, quality as f32)
                 .map_err(|e| ImgError::Conversion {
                     err_string: format!("{:?}", e),
-                    path: self.path.clone(),
+                    id: self.id(),
                     format: ImageFormat::WebP,
                 })?;
 
         self.img =
             image::load_from_memory_with_format(&webp_data, ImageFormat::WebP).map_err(|e| {
-                ImgError::ImageDecoding {
-                    path: self.path.clone(),
+                ImgError::Decoding {
+                    id: self.id(),
                     source: e,
                     format: ImageFormat::WebP,
                 }

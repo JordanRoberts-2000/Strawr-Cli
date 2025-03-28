@@ -11,7 +11,7 @@ impl ImgCommand {
         let input_str = self.path.clone().or(self.positional_path.clone()).unwrap();
         let input = PathBuf::from(input_str);
 
-        let mut img = Img::new(&input).unwrap();
+        let mut img = Img::open(&input).unwrap();
 
         if let Some(blur) = &self.blur {
             let blur_intensity = match blur {

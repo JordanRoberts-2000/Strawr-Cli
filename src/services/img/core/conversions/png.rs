@@ -13,12 +13,12 @@ impl Img {
             .write_to(&mut Cursor::new(&mut buffer), ImageFormat::Png)
             .map_err(|e| ImgError::Conversion {
                 err_string: format!("{:?}", e),
-                path: self.path.clone(),
+                id: self.id(),
                 format: ImageFormat::Png,
             })?;
 
-        self.img = load_from_memory(&buffer).map_err(|e| ImgError::ImageDecoding {
-            path: self.path.clone(),
+        self.img = load_from_memory(&buffer).map_err(|e| ImgError::Decoding {
+            id: self.id(),
             source: e,
             format: ImageFormat::Png,
         })?;

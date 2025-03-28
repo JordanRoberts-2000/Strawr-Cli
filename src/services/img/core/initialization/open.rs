@@ -1,12 +1,14 @@
 use image::{guess_format, GenericImageView};
 use std::{fs, path::PathBuf};
 
-use crate::services::img::error::{ImgError, Result};
-
-use super::Img;
+use crate::services::img::{
+    core::ImgSrc,
+    error::{ImgError, Result},
+    Img,
+};
 
 impl Img {
-    pub fn new(path: &PathBuf) -> Result<Self> {
+    pub fn open(path: &PathBuf) -> Result<Self> {
         let img = image::open(path).map_err(|e| ImgError::Open {
             source: e,
             path: path.clone(),
@@ -24,7 +26,10 @@ impl Img {
 
         Ok(Self {
             img,
-            path: path.clone(),
+            src: ImgSrc::Local {
+                path: path.clone(),
+                target: path.clone(),
+            },
             height,
             width,
             aspect_ratio: width as f32 / height as f32,

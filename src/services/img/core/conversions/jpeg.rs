@@ -18,14 +18,14 @@ impl Img {
             )
             .map_err(|e| ImgError::Conversion {
                 err_string: format!("{:?}", e),
-                path: self.path.clone(),
+                id: self.id(),
                 format: ImageFormat::Jpeg,
             })?;
 
         // Note: This decoding will re-read the JPEG data, so any JPEG-specific encoding
         // (like progressive settings) will be lost.
-        self.img = load_from_memory(&buffer).map_err(|e| ImgError::ImageDecoding {
-            path: self.path.clone(),
+        self.img = load_from_memory(&buffer).map_err(|e| ImgError::Decoding {
+            id: self.id(),
             source: e,
             format: ImageFormat::Jpeg,
         })?;

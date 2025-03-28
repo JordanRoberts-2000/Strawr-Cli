@@ -22,7 +22,7 @@ pub struct GetManager {
 impl GetManager {
     pub fn new(path_str: &String, ctx: &AppContext) -> Result<Self> {
         let path = PathBuf::from(path_str);
-        let img = Img::new(&path).map_err(ImgError::ImgFailed)?;
+        let img = Img::open(&path).map_err(ImgError::ImgFailed)?;
         let config = ctx.config.img.clone();
 
         Ok(Self { img, config })

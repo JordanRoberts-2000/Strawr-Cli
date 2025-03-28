@@ -7,24 +7,24 @@ pub type Result<T> = std::result::Result<T, ImgError>;
 #[derive(Error, Debug)]
 pub enum ImgError {
     #[error(
-        "failed to convert img '{:?}' to format '{:?}', err: {}",
-        path,
+        "failed to convert img '{}' to format '{:?}', err: {}",
+        id,
         format,
         err_string
     )]
     Conversion {
         err_string: String,
-        path: PathBuf,
+        id: String,
         format: image::ImageFormat,
     },
     #[error(
-        "failed to decode image '{:?}' after to format '{:?}', err: {}",
-        path,
+        "failed to decode image '{}' after to format '{:?}', err: {}",
+        id,
         format,
         source
     )]
-    ImageDecoding {
-        path: PathBuf,
+    Decoding {
+        id: String,
         source: image::ImageError,
         format: image::ImageFormat,
     },
@@ -52,6 +52,8 @@ pub enum ImgError {
     },
     #[error("Blurhash failed to encode img, err: {0}")]
     BlurHash(blurhash::Error),
+    #[error("Output path does not have a file name: {0:?}")]
+    MissingFileName(PathBuf),
     #[error("{0}")]
     Custom(String),
 }
