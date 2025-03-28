@@ -2819,6 +2819,7 @@ dependencies = [
  "thiserror 2.0.12",
  "toml",
  "trash",
+ "url",
  "validator",
  "webp",
 ]

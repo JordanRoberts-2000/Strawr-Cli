@@ -18,7 +18,7 @@ pub struct Img {
 
 pub enum ImgSrc {
     Local { path: PathBuf, target: PathBuf },
-    Remote { url: String, target: PathBuf },
+    Remote { url: url::Url, target: PathBuf },
 }
 
 impl Img {
@@ -28,7 +28,7 @@ impl Img {
                 .file_name()
                 .map(|s| s.to_string_lossy().into_owned())
                 .unwrap_or_else(|| path.to_string_lossy().into_owned()),
-            ImgSrc::Remote { url, .. } => url.clone(),
+            ImgSrc::Remote { url, .. } => url.to_string(),
         }
     }
 }

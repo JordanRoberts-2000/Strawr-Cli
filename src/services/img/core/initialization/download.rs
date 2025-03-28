@@ -1,36 +1,66 @@
+use std::env;
+
 use image::{guess_format, GenericImageView};
-use std::{fs, path::PathBuf};
+use reqwest::blocking;
+use url::Url;
 
 use crate::services::img::{
+    core::ImgSrc,
     error::{ImgError, Result},
     Img,
 };
 
 impl Img {
-    // pub fn download(path: &PathBuf) -> Result<Self> {
-    //     let img = image::open(path).map_err(|e| ImgError::Open {
-    //         source: e,
-    //         path: path.clone(),
-    //     })?;
+    pub fn download(url: &String) -> Result<Self> {
+        let parsed_url = Url::parse(url).map_err(|e| ImgError::InvalidUrl {
+            url: url.clone(),
+            source: e,
+        })?;
 
-    //     let (width, height) = img.dimensions();
+        let response = blocking::get(parsed_url.clone()).map_err(|e| {
+            ImgError::Custom(format!(
+                "Failed to download image from '{}': {}",
+                parsed_url, e
+            ))
+        })?;
 
-    //     let bytes = fs::read(path).map_err(|e| ImgError::Io {
-    //         context: format!("failed to read '{:?}'", path),
-    //         source: e,
-    //     })?;
+        let bytes = response.bytes().map_err(|e| {
+            ImgError::Custom(format!(
+                "Failed to read bytes from response for '{}': {}",
+                parsed_url, e
+            ))
+        })?;
 
-    //     let size_bytes = bytes.len();
-    //     let format = guess_format(&bytes).map_err(|_| ImgError::GuessFormat)?;
+        let format = guess_format(&bytes).map_err(|_| ImgError::GuessFormat)?;
+        let size_bytes = bytes.len();
 
-    //     Ok(Self {
-    //         img,
-    //         path: path.clone(),
-    //         height,
-    //         width,
-    //         aspect_ratio: width as f32 / height as f32,
-    //         format,
-    //         size_bytes,
-    //     })
-    // }
+        let img = image::load_from_memory(&bytes).map_err(|e| ImgError::Decoding {
+            id: url.clone(),
+            source: e,
+            format,
+        })?;
+
+        let (width, height) = img.dimensions();
+
+        let cwd = env::current_dir().map_err(|e| ImgError::Io {
+            context: "Failed to get current working directory".into(),
+            source: e,
+        })?;
+
+        let filename = format!("image.{:?}", format.extensions_str());
+        let target = cwd.join(filename);
+
+        Ok(Self {
+            img,
+            src: ImgSrc::Remote {
+                url: parsed_url,
+                target,
+            },
+            height,
+            width,
+            aspect_ratio: width as f32 / height as f32,
+            format,
+            size_bytes,
+        })
+    }
 }
