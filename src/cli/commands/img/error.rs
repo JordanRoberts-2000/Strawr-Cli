@@ -6,7 +6,5 @@ pub enum ImgError {
     #[error("Internal error occured: {0}")]
     ImgFailed(img::ImgError),
     #[error("Internal error occured: {0}")]
-    Request(reqwest::Error),
-    #[error("Internal error occured: {0}")]
-    InvalidResponse(String),
+    AltTag(String),
 }
