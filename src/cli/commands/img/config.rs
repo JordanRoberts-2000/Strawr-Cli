@@ -1,6 +1,9 @@
 use crate::services::img::CompressionType;
 
-use super::utils::enums::{ImageSize, ValidImageFormat};
+use super::{
+    sub_commands::{gen::config::ImgGenConfig, get::config::ImgGetConfig},
+    utils::enums::ValidImageFormat,
+};
 
 #[derive(Debug, serde::Deserialize, Clone)]
 #[serde(rename_all = "lowercase")]
@@ -26,8 +29,6 @@ pub struct ImgConfig {
     pub placeholder_blur_intensity: u8,
     #[validate(range(min = 1, message = "Must be greater than 0"))]
     pub max_size: Option<u32>,
-    pub default_get_color_output: ColorOutput,
-    #[validate(range(min = 2, max = 3, message = "Must be either 2 or 3"))]
-    pub default_dalle_version: u8,
-    pub default_dalle_size: ImageSize,
+    pub get: ImgGetConfig,
+    pub gen: ImgGenConfig,
 }

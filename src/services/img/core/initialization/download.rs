@@ -47,7 +47,11 @@ impl Img {
             source: e,
         })?;
 
-        let filename = format!("image.{:?}", format.extensions_str());
+        let ext = match format.extensions_str().first() {
+            Some(ext) => ext,
+            None => return Err(ImgError::Custom("No valid extentions found".to_string())),
+        };
+        let filename = format!("image.{}", ext);
         let target = cwd.join(filename);
 
         Ok(Self {

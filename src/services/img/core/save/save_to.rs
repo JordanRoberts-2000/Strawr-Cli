@@ -16,7 +16,7 @@ impl Img {
         let file_name = output
             .file_name()
             .ok_or_else(|| ImgError::MissingFileName(output.clone()))?;
-        let temp_path = output.with_file_name(format!(".{:?}.tmp", file_name));
+        let temp_path = output.with_file_name(format!(".{}", file_name.to_string_lossy()));
 
         self.img.save(&temp_path).map_err(|e| ImgError::Save {
             source: e,

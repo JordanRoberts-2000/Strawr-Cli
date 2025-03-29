@@ -40,7 +40,7 @@ pub enum ImgError {
     },
     #[error("failed to retrieve file format")]
     GuessFormat,
-    #[error("failed to create new image '{:?}', err: {}", output, source)]
+    #[error("failed to create new image {:?}, err: {}", output, source)]
     Save {
         source: image::ImageError,
         output: PathBuf,

@@ -1,6 +1,7 @@
 use std::fmt;
 
-#[derive(Debug, Clone, Default)]
+#[derive(Debug, Clone, Default, serde::Deserialize)]
+#[serde(rename_all = "lowercase")]
 pub enum Model {
     #[default]
     Dalle2,
@@ -8,7 +9,8 @@ pub enum Model {
     Custom(String),
 }
 
-#[derive(Debug, Clone, Default)]
+#[derive(Debug, Clone, Default, serde::Deserialize)]
+#[serde(rename_all = "lowercase")]
 pub enum ImageSize {
     Sm,
     Md,

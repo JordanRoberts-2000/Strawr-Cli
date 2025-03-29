@@ -8,7 +8,7 @@ use super::GetManager;
 
 impl GetManager {
     pub fn handle_color(&mut self) -> Result<()> {
-        match self.config.default_get_color_output {
+        match self.config.get.default_color_output {
             ColorOutput::Rgb => {
                 let rgb = self.img.color().map_err(ImgError::ImgFailed)?.rgb();
                 to_clipboard(&rgb)?;
