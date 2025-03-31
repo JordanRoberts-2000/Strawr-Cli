@@ -1,14 +1,18 @@
 use arboard::Clipboard;
 
-use crate::error::{Error, Result};
-
-pub fn to_clipboard(text: &String) -> Result<()> {
-    let mut clipboard = Clipboard::new()
-        .map_err(|e| Error::Custom(format!("Failed to access clipboard: {}", e)))?;
+pub fn clipboard(text: &String) -> Result<(), ClipboardError> {
+    let mut clipboard = Clipboard::new().map_err(ClipboardError::ClipboardAccess)?;
     clipboard
         .set_text(text)
-        .map_err(|e| Error::Custom(format!("Failed to set text to clipboard: {}", e)))?;
+        .map_err(ClipboardError::ClipboardSet)?;
 
-    log::trace!("Added text to clipboard");
     Ok(())
+}
+
+#[derive(thiserror::Error, Debug)]
+pub enum ClipboardError {
+    #[error("failed to access clipboard")]
+    ClipboardAccess(#[source] arboard::Error),
+    #[error("failed to set text to clipboard")]
+    ClipboardSet(#[source] arboard::Error),
 }
