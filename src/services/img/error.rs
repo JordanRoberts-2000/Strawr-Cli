@@ -1,25 +1,24 @@
 use std::path::PathBuf;
 
-use thiserror::Error;
-
 pub type Result<T> = std::result::Result<T, ImgError>;
 
-#[derive(Error, Debug)]
+#[derive(thiserror::Error, Debug)]
 pub enum ImgError {
-    #[error(
-        "failed to convert img '{}' to format '{:?}', err: {}",
-        id,
-        format,
-        err_string
-    )]
+    #[error("failed to convert img '{id}' to format '{format:?}'")]
     Conversion {
-        err_string: String,
+        source: image::ImageError,
         id: String,
         format: image::ImageFormat,
     },
 
+    #[error("failed to convert img '{id}' to format 'webp'")]
+    WebPConversion {
+        err: webp::WebPEncodingError,
+        id: String,
+    },
+
     #[error(
-        "failed to decode image '{}' after to format '{:?}', err: {}",
+        "failed to decode image '{}' to format '{:?}', err: {}",
         id,
         format,
         source
@@ -42,8 +41,17 @@ pub enum ImgError {
         source: std::io::Error,
     },
 
+    #[error("Failed to download image from '{url}': {source}")]
+    DownloadFailed { url: String, source: reqwest::Error },
+
+    #[error("Failed to read bytes from response for '{url}': {source}")]
+    ResponseReadFailed { url: String, source: reqwest::Error },
+
     #[error("failed to retrieve file format")]
     GuessFormat,
+
+    #[error("No valid extentions found")]
+    ExtensionInvalid,
 
     #[error("failed to create new image {:?}, err: {}", output, source)]
     Save {
@@ -51,11 +59,11 @@ pub enum ImgError {
         output: PathBuf,
     },
 
-    #[error("{}, err: {}", source, context)]
-    Color {
-        source: color_thief::Error,
-        context: String,
-    },
+    #[error("Could not retrieve palette: {0}")]
+    GetColors(color_thief::Error),
+
+    #[error("No colors in retrieved palette")]
+    EmptyPalette,
 
     #[error("Blurhash failed to encode img, err: {0}")]
     BlurHash(blurhash::Error),
@@ -64,11 +72,8 @@ pub enum ImgError {
     MissingFileName(PathBuf),
 
     #[error("failed to parse url '{url}', {source}")]
-    InvalidUrl {
+    UrlParseFailed {
         url: String,
         source: url::ParseError,
     },
-
-    #[error("{0}")]
-    Custom(String),
 }

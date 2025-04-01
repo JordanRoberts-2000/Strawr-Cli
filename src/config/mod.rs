@@ -3,6 +3,7 @@ use validator::Validate;
 
 use crate::cli::commands::{grab::GrabConfig, img::ImgConfig};
 
+pub mod error;
 pub mod parse;
 
 #[derive(Debug, Deserialize, Validate)]

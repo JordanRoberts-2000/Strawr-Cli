@@ -1,18 +1,17 @@
 use std::{env, fs, path::PathBuf};
 
 use crate::constants::{CONFIG_FOLDER_NAME, CONFIG_HOME_ENV, DEV_CONFIG_FOLDER_PATH};
-use crate::error::{Error, Result};
 
-use super::AppContext;
+use super::{error::StateError, AppContext};
 
 impl AppContext {
-    pub fn get_storage_dir() -> Result<PathBuf> {
+    pub fn get_storage_dir() -> Result<PathBuf, StateError> {
         let base_dir = if let Ok(custom) = env::var("STRAWR_HOME") {
             log::debug!("Env variable STRAWR_HOME used: '{}'", custom);
 
             let custom_dir = PathBuf::from(custom);
             if !custom_dir.exists() {
-                fs::create_dir_all(&custom_dir).map_err(|e| Error::Io {
+                fs::create_dir_all(&custom_dir).map_err(|e| StateError::Io {
                     source: e,
                     context: format!("Failed to create STRAWR_HOME directory '{:?}'", custom_dir),
                 })?;
@@ -22,10 +21,9 @@ impl AppContext {
         } else if let Some(home) = dirs::home_dir() {
             home
         } else {
-            return Err(Error::Custom(format!(
-                "Could not determine home directory. Please set the {} environment variable.",
-                CONFIG_HOME_ENV
-            )));
+            return Err(StateError::HomeDirNotFound {
+                env_var: CONFIG_HOME_ENV,
+            });
         };
 
         let storage_dir = if cfg!(debug_assertions) {
@@ -35,7 +33,7 @@ impl AppContext {
         };
 
         if !storage_dir.exists() {
-            fs::create_dir_all(&storage_dir).map_err(|e| Error::Io {
+            fs::create_dir_all(&storage_dir).map_err(|e| StateError::Io {
                 source: e,
                 context: format!("Failed to create storage directory '{:?}'", storage_dir),
             })?;

@@ -12,7 +12,7 @@ pub fn clipboard(text: &String) -> Result<(), ClipboardError> {
 #[derive(thiserror::Error, Debug)]
 pub enum ClipboardError {
     #[error("failed to access clipboard")]
-    ClipboardAccess(#[source] arboard::Error),
+    ClipboardAccess(arboard::Error),
     #[error("failed to set text to clipboard")]
-    ClipboardSet(#[source] arboard::Error),
+    ClipboardSet(arboard::Error),
 }

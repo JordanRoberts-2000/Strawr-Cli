@@ -4,14 +4,12 @@ use rand::prelude::*;
 
 use super::{
     constants::{ENCRYPTION_PREFIX, NONCE_SIZE},
-    error::{CryptoError, Result},
+    error::{Error, Result},
     utils::derive_key,
 };
 
 // The output layout is: [prefix] + [nonce (12 bytes)][ciphertext],
-pub fn encrypt_data(msg: &str, password: &str) -> Result<String> {
-    log::trace!("Encryption attempted");
-
+pub fn encrypt(msg: &str, password: &str) -> Result<String> {
     let key_bytes = derive_key(password);
     let cipher = Aes256Gcm::new(&key_bytes.into());
 
@@ -22,15 +20,14 @@ pub fn encrypt_data(msg: &str, password: &str) -> Result<String> {
     let ciphertext = cipher
         .encrypt(&nonce_bytes.into(), msg.as_bytes())
         .map_err(|e| {
-            log::error!("failed to encrypt value: {}", e);
-            CryptoError::Internal
+            log::error!("Failed to encrypt value: {}", e);
+            Error::Encryption(e)
         })?;
 
     let mut combined = Vec::new();
     combined.extend_from_slice(&nonce_bytes);
     combined.extend_from_slice(&ciphertext);
 
-    log::trace!("Encryption successfull");
     Ok(format!(
         "{}{}",
         ENCRYPTION_PREFIX,

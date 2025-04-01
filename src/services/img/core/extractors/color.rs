@@ -26,14 +26,9 @@ impl Img {
         let rgb_pixels = self.img.to_rgb8().into_raw();
 
         let palette =
-            get_palette(&rgb_pixels, ColorFormat::Rgb, 5, 5).map_err(|e| ImgError::Color {
-                source: e,
-                context: "Could not retrieve palette".to_string(),
-            })?;
+            get_palette(&rgb_pixels, ColorFormat::Rgb, 5, 5).map_err(ImgError::GetColors)?;
 
-        let dominant_color = palette
-            .get(0)
-            .ok_or_else(|| ImgError::Custom("No colors in retrieved palette".to_string()))?;
+        let dominant_color = palette.get(0).ok_or_else(|| ImgError::EmptyPalette)?;
 
         Ok(Rgb {
             r: dominant_color.r,

@@ -16,7 +16,7 @@ impl Img {
         self.img
             .write_to(&mut Cursor::new(&mut buffer), ImageFormat::Png)
             .map_err(|e| ImgError::Conversion {
-                err_string: format!("{:?}", e),
+                source: e,
                 id: self.id(),
                 format: ImageFormat::Png,
             })?;

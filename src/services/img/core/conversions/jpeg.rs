@@ -21,7 +21,7 @@ impl Img {
                 ExtendedColorType::Rgb8,
             )
             .map_err(|e| ImgError::Conversion {
-                err_string: format!("{:?}", e),
+                source: e,
                 id: self.id(),
                 format: ImageFormat::Jpeg,
             })?;

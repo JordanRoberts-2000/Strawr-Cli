@@ -12,7 +12,7 @@ impl Img {
         self.img
             .write_to(&mut buffer, self.format)
             .map_err(|e| ImgError::Conversion {
-                err_string: format!("{:?}", e),
+                source: e,
                 id: self.id(),
                 format: self.format,
             })?;

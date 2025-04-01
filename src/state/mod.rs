@@ -2,6 +2,7 @@ use std::path::PathBuf;
 
 use crate::{config::Config, error::Result};
 
+pub mod error;
 pub mod get_storage_dir;
 
 #[derive(Debug)]

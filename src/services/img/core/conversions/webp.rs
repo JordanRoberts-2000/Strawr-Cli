@@ -40,10 +40,9 @@ impl Img {
         let webp_data =
             encoder
                 .encode_simple(false, quality as f32)
-                .map_err(|e| ImgError::Conversion {
-                    err_string: format!("{:?}", e),
+                .map_err(|e| ImgError::WebPConversion {
+                    err: e,
                     id: self.id(),
-                    format: ImageFormat::WebP,
                 })?;
 
         self.img =

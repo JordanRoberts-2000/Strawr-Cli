@@ -12,23 +12,19 @@ use crate::services::img::{
 
 impl Img {
     pub fn download(url: &String) -> Result<Self> {
-        let parsed_url = Url::parse(url).map_err(|e| ImgError::InvalidUrl {
+        let parsed_url = Url::parse(url).map_err(|e| ImgError::UrlParseFailed {
             url: url.clone(),
             source: e,
         })?;
 
-        let response = blocking::get(parsed_url.clone()).map_err(|e| {
-            ImgError::Custom(format!(
-                "Failed to download image from '{}': {}",
-                parsed_url, e
-            ))
+        let response = blocking::get(parsed_url.clone()).map_err(|e| ImgError::DownloadFailed {
+            source: e,
+            url: url.clone(),
         })?;
 
-        let bytes = response.bytes().map_err(|e| {
-            ImgError::Custom(format!(
-                "Failed to read bytes from response for '{}': {}",
-                parsed_url, e
-            ))
+        let bytes = response.bytes().map_err(|e| ImgError::ResponseReadFailed {
+            source: e,
+            url: url.clone(),
         })?;
 
         let format = guess_format(&bytes).map_err(|_| ImgError::GuessFormat)?;
@@ -49,7 +45,7 @@ impl Img {
 
         let ext = match format.extensions_str().first() {
             Some(ext) => ext,
-            None => return Err(ImgError::Custom("No valid extentions found".to_string())),
+            None => return Err(ImgError::ExtensionInvalid),
         };
         let filename = format!("image.{}", ext);
         let target = cwd.join(filename);

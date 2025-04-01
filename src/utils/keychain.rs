@@ -30,11 +30,11 @@ pub fn keychain(service: &str, field: &str) -> Result<String, KeyChainError> {
 #[derive(thiserror::Error, Debug)]
 pub enum KeyChainError {
     #[error("failed to initialize keyring: {0}")]
-    Initialization(#[source] keyring::Error),
+    Initialization(keyring::Error),
     #[error("failed to read password: {0}")]
-    UserInputRead(#[source] std::io::Error),
+    UserInputRead(std::io::Error),
     #[error("failed to read password: {0}")]
-    SetKeyringPassword(#[source] keyring::Error),
+    SetKeyringPassword(keyring::Error),
     #[error("failed to read password: {0}")]
-    GetKeyringPassword(#[source] keyring::Error),
+    GetKeyringPassword(keyring::Error),
 }
