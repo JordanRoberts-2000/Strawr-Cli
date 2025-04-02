@@ -1,9 +1,9 @@
-use crate::{error::Result, state::AppContext};
+use crate::{cli::commands::img::ImgError, state::AppContext};
 
 use super::{args::Get, manager::GetManager};
 
 impl Get {
-    pub fn execute(&self, ctx: &AppContext) -> Result<()> {
+    pub fn execute(&self, ctx: &AppContext) -> Result<(), ImgError> {
         let mut manager = GetManager::new(&self.path, &ctx)?;
 
         if self.color {

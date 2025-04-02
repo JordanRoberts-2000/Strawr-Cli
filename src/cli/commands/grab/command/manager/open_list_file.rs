@@ -1,10 +1,11 @@
-use crate::error::{Error, Result};
 use std::process::Command;
+
+use crate::cli::commands::grab::GrabError;
 
 use super::GrabManager;
 
 impl GrabManager {
-    pub fn open_list_file(&self) -> Result<()> {
+    pub fn open_list_file(&self) -> Result<(), GrabError> {
         log::trace!("Attempting to open list file");
 
         let path = self.json_file_path.display().to_string();
@@ -24,7 +25,7 @@ impl GrabManager {
             log::warn!("Unsupported OS");
             Command::new("false").status()
         }
-        .map_err(|e| Error::Io {
+        .map_err(|e| GrabError::Io {
             source: e,
             context: format!("Failed to open list file '{}'", &path),
         })?;

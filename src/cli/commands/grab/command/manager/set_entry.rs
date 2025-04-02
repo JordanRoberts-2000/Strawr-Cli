@@ -1,7 +1,9 @@
 use crate::{
+    cli::commands::grab::GrabError,
     constants::{KEYRING_ENCRYPTION_PASSWORD, KEYRING_SERVICE},
-    error::{Error, ParseError, Result},
-    services::{crypto::encrypt_data, keychain::keychain},
+    error::ParseError,
+    services::crypto,
+    utils,
 };
 use natord::compare;
 use std::fs;
@@ -9,12 +11,17 @@ use std::fs;
 use super::GrabManager;
 
 impl GrabManager {
-    pub fn set_entry(&mut self, key: &String, value: &String, encrypt: &bool) -> Result<()> {
+    pub fn set_entry(
+        &mut self,
+        key: &String,
+        value: &String,
+        encrypt: &bool,
+    ) -> Result<(), GrabError> {
         log::trace!("attempting to set key '{}' to '{}'", key, value);
 
         let entry_value = if *encrypt {
-            let password = keychain(KEYRING_SERVICE, KEYRING_ENCRYPTION_PASSWORD)?;
-            encrypt_data(value, &password)?
+            let password = utils::keychain(KEYRING_SERVICE, KEYRING_ENCRYPTION_PASSWORD)?;
+            crypto::encrypt(value, &password)?
         } else {
             value.clone()
         };
@@ -31,7 +38,7 @@ impl GrabManager {
         let mut keys: Vec<String> = self.data_map.keys().cloned().collect();
         keys.sort_by(|a, b| compare(a, b));
 
-        fs::write(&self.list_file_path, keys.join("\n")).map_err(|e| Error::Io {
+        fs::write(&self.list_file_path, keys.join("\n")).map_err(|e| GrabError::Io {
             source: e,
             context: format!("Failed to write to '{:?}'", self.list_file_path),
         })?;
@@ -43,7 +50,7 @@ impl GrabManager {
                 title: "updated data".to_string(),
             }
         })?;
-        fs::write(&self.json_file_path, updated_json).map_err(|e| Error::Io {
+        fs::write(&self.json_file_path, updated_json).map_err(|e| GrabError::Io {
             source: e,
             context: format!("Failed to write to '{:?}'", self.json_file_path),
         })?;

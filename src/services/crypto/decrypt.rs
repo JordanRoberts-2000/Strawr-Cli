@@ -1,6 +1,6 @@
 use super::{
     constants::{ENCRYPTION_PREFIX, NONCE_SIZE},
-    error::{Error, Result},
+    error::{CryptoError, Result},
     utils::derive_key,
 };
 
@@ -14,7 +14,7 @@ pub fn decrypt(msg: &str, password: &str) -> Result<String> {
     // Attempt to decode the Base64 string.
     let combined_bytes = general_purpose::STANDARD.decode(encoded).map_err(|e| {
         log::error!("Failed to Base64-decode the encrypted string: {}", e);
-        Error::Base64Decode { source: e }
+        CryptoError::Base64Decode { source: e }
     })?;
 
     // Verify that the combined data has at least enough bytes for the nonce.
@@ -24,7 +24,7 @@ pub fn decrypt(msg: &str, password: &str) -> Result<String> {
             NONCE_SIZE,
             combined_bytes.len()
         );
-        return Err(Error::InvalidCiphertextLength {
+        return Err(CryptoError::InvalidCiphertextLength {
             expected: NONCE_SIZE,
             found: combined_bytes.len(),
         });
@@ -41,13 +41,13 @@ pub fn decrypt(msg: &str, password: &str) -> Result<String> {
         .decrypt(nonce_bytes.into(), ciphertext)
         .map_err(|e| {
             log::error!("Decryption failed: {}", e);
-            Error::Decryption(e)
+            CryptoError::Decryption(e)
         })?;
 
     // Convert decrypted bytes into a UTF-8 string.
     let plaintext = String::from_utf8(plaintext_bytes).map_err(|e| {
         log::error!("Failed to convert decrypted bytes to a string: {}", e);
-        Error::Utf8Conversion { source: e }
+        CryptoError::Utf8Conversion { source: e }
     })?;
 
     Ok(plaintext)

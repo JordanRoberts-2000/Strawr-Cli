@@ -1,5 +1,5 @@
 use crate::cli::commands::grab::GrabError;
-use crate::error::{Error, ParseError, Result};
+use crate::error::ParseError;
 use std::{
     fs::{self, File},
     io::{BufRead, BufReader, BufWriter, Write},
@@ -8,7 +8,7 @@ use std::{
 use super::GrabManager;
 
 impl GrabManager {
-    pub fn delete_entry(&mut self, key: &String) -> Result<()> {
+    pub fn delete_entry(&mut self, key: &String) -> Result<(), GrabError> {
         log::trace!("Attempting to delete key '{}'", key);
 
         if self.data_map.remove(key).is_some() {
@@ -20,14 +20,14 @@ impl GrabManager {
                 }
             })?;
 
-            fs::write(&self.json_file_path, updated_json).map_err(|e| Error::Io {
+            fs::write(&self.json_file_path, updated_json).map_err(|e| GrabError::Io {
                 source: e,
                 context: format!("Failed to write to '{:?}'", self.json_file_path),
             })?;
             log::debug!("Key '{}' removed from data.json", key);
 
             // Remove key from keys.list
-            let file = File::open(&self.list_file_path).map_err(|e| Error::Io {
+            let file = File::open(&self.list_file_path).map_err(|e| GrabError::Io {
                 source: e,
                 context: format!("Failed to open '{:?}'", self.list_file_path),
             })?;
@@ -38,13 +38,13 @@ impl GrabManager {
                 .filter(|line| line.trim() != key)
                 .collect();
 
-            let file = File::create(&self.list_file_path).map_err(|e| Error::Io {
+            let file = File::create(&self.list_file_path).map_err(|e| GrabError::Io {
                 source: e,
                 context: format!("Failed to recreate '{:?}'", self.list_file_path),
             })?;
             let mut writer = BufWriter::new(file);
             for key in keys {
-                writeln!(writer, "{}", key).map_err(|e| Error::Io {
+                writeln!(writer, "{}", key).map_err(|e| GrabError::Io {
                     source: e,
                     context: format!("Failed to write to '{:?}'", self.list_file_path),
                 })?;

@@ -1,7 +1,7 @@
-pub(crate) type Result<T> = std::result::Result<T, Error>;
+pub(crate) type Result<T> = std::result::Result<T, AiError>;
 
 #[derive(thiserror::Error, Debug)]
-pub enum Error {
+pub enum AiError {
     #[error("I/O error: {0}")]
     Io(#[from] std::io::Error),
     #[error("request error: {0}")]

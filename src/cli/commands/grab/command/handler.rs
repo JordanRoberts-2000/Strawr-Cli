@@ -1,16 +1,16 @@
 use crate::cli::commands::grab::{GrabError, GrabManager};
-use crate::error::{Error, ParseError, Result};
+use crate::error::ParseError;
 use crate::state::AppContext;
 use std::fs;
 
 use super::args::GrabCommand;
 
 impl GrabCommand {
-    pub fn execute(&self, ctx: &AppContext) -> Result<()> {
+    pub fn execute(&self, ctx: &AppContext) -> Result<(), GrabError> {
         let mut manager = GrabManager::new();
         manager.initialize_data_folder(ctx)?;
 
-        let json_data = fs::read_to_string(&manager.json_file_path).map_err(|e| Error::Io {
+        let json_data = fs::read_to_string(&manager.json_file_path).map_err(|e| GrabError::Io {
             source: e,
             context: format!("failed to read {:?}", manager.json_file_path),
         })?;
@@ -25,12 +25,9 @@ impl GrabCommand {
         }
 
         let key = match &self.key {
-            Some(k) => k,
-            None => {
-                log::error!("Key should have a value but does't");
-                return Err(Error::Internal);
-            }
-        };
+            Some(k) => Ok(k),
+            None => Err(GrabError::KeyValueMissing),
+        }?;
 
         if self.delete {
             return manager

@@ -2,7 +2,6 @@ use std::path::PathBuf;
 
 use crate::{
     cli::commands::img::{ImgConfig, ImgError},
-    error::Result,
     services::img::Img,
     state::AppContext,
 };
@@ -20,9 +19,9 @@ pub struct GetManager {
 }
 
 impl GetManager {
-    pub fn new(path_str: &String, ctx: &AppContext) -> Result<Self> {
+    pub fn new(path_str: &String, ctx: &AppContext) -> Result<Self, ImgError> {
         let path = PathBuf::from(path_str);
-        let img = Img::open(&path).map_err(ImgError::ImgFailed)?;
+        let img = Img::open(&path)?;
         let config = ctx.config.img.clone();
 
         Ok(Self { img, config })

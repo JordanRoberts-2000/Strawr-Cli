@@ -1,26 +1,23 @@
 use crate::{
+    cli::commands::grab::GrabError,
     constants::{KEYRING_ENCRYPTION_PASSWORD, KEYRING_SERVICE},
-    error::Result,
-    services::{
-        crypto::{decrypt_data, ENCRYPTION_PREFIX},
-        keychain::keychain,
-    },
-    utils::to_clipboard,
+    services::crypto::{decrypt, ENCRYPTION_PREFIX},
+    utils,
 };
 
 use super::GrabManager;
 
 impl GrabManager {
-    pub fn get_entry(&self, val: &String) -> Result<()> {
+    pub fn get_entry(&self, val: &String) -> Result<(), GrabError> {
         let final_value: String = if val.starts_with(ENCRYPTION_PREFIX) {
             log::trace!("Value requires decryption");
-            let password = keychain(KEYRING_SERVICE, KEYRING_ENCRYPTION_PASSWORD)?;
-            decrypt_data(val, &password)?
+            let password = utils::keychain(KEYRING_SERVICE, KEYRING_ENCRYPTION_PASSWORD)?;
+            decrypt(val, &password)?
         } else {
             val.clone()
         };
 
-        to_clipboard(&final_value)?;
+        utils::clipboard(&final_value)?;
 
         println!("Value saved to clipboard");
         Ok(())

@@ -1,4 +1,4 @@
-use crate::error::Result;
+use crate::cli::commands::img::ImgError;
 
 use super::GetManager;
 
@@ -13,7 +13,7 @@ fn format_size(size_bytes: usize) -> String {
 }
 
 impl GetManager {
-    pub fn handle_default(&mut self) -> Result<()> {
+    pub fn handle_default(&mut self) -> Result<(), ImgError> {
         println!(
             "{:?} - {}x{} - {}",
             self.img.format,

@@ -1,7 +1,7 @@
-pub type Result<T> = std::result::Result<T, Error>;
+pub type Result<T> = std::result::Result<T, CryptoError>;
 
 #[derive(thiserror::Error, Debug)]
-pub enum Error {
+pub enum CryptoError {
     #[error("Failed to Base64-decode the encrypted string: {source}")]
     Base64Decode { source: base64::DecodeError },
     #[error("Encryption failed: {0}")]

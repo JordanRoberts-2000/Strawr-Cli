@@ -1,7 +1,7 @@
 use reqwest::blocking::Client;
 use serde_json::json;
 
-use crate::services::ai::error::{Error, Result};
+use crate::services::ai::error::{AiError, Result};
 
 pub fn alt_tag(api_key: &String, url: &String) -> Result<String> {
     let request_body = json!({
@@ -28,7 +28,7 @@ pub fn alt_tag(api_key: &String, url: &String) -> Result<String> {
     if let Some(content) = response_json["choices"][0]["message"]["content"].as_str() {
         Ok(content.to_string())
     } else {
-        Err(Error::InvalidJson {
+        Err(AiError::InvalidJson {
             json: response_json,
             message: "Expected structure choices[0].message.content not found".to_string(),
         })

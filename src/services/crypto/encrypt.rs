@@ -4,7 +4,7 @@ use rand::prelude::*;
 
 use super::{
     constants::{ENCRYPTION_PREFIX, NONCE_SIZE},
-    error::{Error, Result},
+    error::{CryptoError, Result},
     utils::derive_key,
 };
 
@@ -21,7 +21,7 @@ pub fn encrypt(msg: &str, password: &str) -> Result<String> {
         .encrypt(&nonce_bytes.into(), msg.as_bytes())
         .map_err(|e| {
             log::error!("Failed to encrypt value: {}", e);
-            Error::Encryption(e)
+            CryptoError::Encryption(e)
         })?;
 
     let mut combined = Vec::new();

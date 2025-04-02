@@ -7,4 +7,4 @@ pub mod utils;
 pub use constants::ENCRYPTION_PREFIX;
 pub use decrypt::decrypt;
 pub use encrypt::encrypt;
-pub use error::Error;
+pub use error::CryptoError;

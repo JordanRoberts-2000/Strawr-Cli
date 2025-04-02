@@ -14,6 +14,7 @@ pub mod utils;
 
 #[derive(Error, Debug)]
 pub enum Error {
+    // #[error(transparent)]
     #[error("[Error] {0}")]
     State(#[from] StateError),
     #[error("[Error] {0}")]
