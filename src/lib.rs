@@ -1,8 +1,7 @@
+use std::time::Instant;
+
 use clap::Parser;
-use cli::{
-    commands::{grab::handler::Grab, img::handler::Img},
-    Cli, Commands,
-};
+use cli::{Cli, Commands};
 use error::Result;
 use state::AppContext;
 use utils::logger;
@@ -20,26 +19,22 @@ pub fn run_cli() -> Result<()> {
 
     logger::initialize(cli.debug);
     let ctx = AppContext::initialize(&cli.debug)?;
+    let start_time = Instant::now();
 
     match cli.commands {
-        Commands::Grab(args) => Grab::execute(&args, &ctx),
-        Commands::Img(args) => Img::execute(&args, &ctx),
-        // Commands::Temp ??? - creates random folder in ./temp
-        // Commands::Playground(ref playground) => playground.handle_command(&ctx),
-        // Commands::Template => println!("Template"),
+        Commands::Grab(cmd) => cmd.execute(&ctx)?,
+        Commands::Img(cmd) => cmd.execute(&ctx)?,
+        // Commands::Temp => todo!(),
+        // Commands::Playground => todo!(),
+        Commands::Template => todo!(),
+        Commands::Font => todo!(),
+        Commands::Add => todo!(),
+        Commands::Snippets => todo!(),
+        Commands::Backup => todo!(),
+    };
 
-        // variable options,weights, italics, axes, all available with terminal providing options after choosing font
-        // strawr font "inter" --output "src/fonts" --css "src/styles/fonts.css" // if not exist create, if exists append
-        // Commands::Font => println!("Font"),
-        // Commands::Add => println!("Add"),
-        // Commands::Snippets => println!("Snippet"),
-
-        // Commands::Backup => println!("backs up .cli, --destination --zip"), // encrypt stored data
-        // Commands::Uninstall(ref uninstall) => uninstall.handle_command(&ctx), // delete keyring
-        // change to config, allow reset or removal of cheychain password, openai api key
-        // Commands::Open(ref open) => open.handle_command(&ctx),
-        _ => Ok(()),
-    }?;
+    let duration = start_time.elapsed();
+    log::info!("⏱️ Completed in {:.2?}", duration);
 
     Ok(())
 }

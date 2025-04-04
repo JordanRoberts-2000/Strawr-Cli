@@ -7,6 +7,31 @@ use super::args::GrabCommand;
 
 impl GrabCommand {
     pub fn execute(&self, ctx: &AppContext) -> Result<(), GrabError> {
+        // let mut manager = GrabManager::new();
+
+        // manager.initialize_data_folder(ctx)?;
+        // manager.read_json_file()?;
+
+        // if self.list {
+        //     return manager.list_options();
+        // }
+
+        // let key = self.key.ok_or(GrabError::KeyValueMissing)?;
+
+        // if self.delete {
+        //     return manager.delete_entry(&key);
+        // }
+
+        // if let Some(ref value) = self.value {
+        //     let encrypt = self
+        //         .encrypt
+        //         .unwrap_or(ctx.config.grab.encrypt_values_by_default);
+        //     return manager.set_entry(&key, value, &encrypt);
+        // }
+
+        // manager.get_entry(&key)?;
+
+        // Ok(())
         let mut manager = GrabManager::new();
         manager.initialize_data_folder(ctx)?;
 

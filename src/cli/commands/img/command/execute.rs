@@ -1,13 +1,17 @@
 use std::path::PathBuf;
 
-use crate::error::Result;
+use crate::cli::commands::img::ImgError;
 use crate::services::img::Img;
 use crate::state::AppContext;
 
 use super::args::ImgCommand;
 
 impl ImgCommand {
-    pub fn execute(&self, ctx: &AppContext) -> Result<()> {
+    pub fn execute(&self, ctx: &AppContext) -> Result<(), ImgError> {
+        if let Some(subcommand) = &self.subcommands {
+            return subcommand.execute(ctx);
+        }
+
         let input_str = self.path.clone().or(self.positional_path.clone()).unwrap();
         let input = PathBuf::from(input_str);
 
