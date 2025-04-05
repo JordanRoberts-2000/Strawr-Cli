@@ -8,6 +8,8 @@ pub struct GrabCommand {
     #[arg(short, long, action = clap::ArgAction::SetTrue)]
     pub delete: bool,
 
+    // #[arg(short, long, action = clap::ArgAction::SetTrue)]
+    // pub edit: bool,
     #[arg(short, long, action = clap::ArgAction::SetTrue)]
     pub list: bool,
 

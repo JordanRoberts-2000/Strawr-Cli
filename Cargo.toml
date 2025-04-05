@@ -12,10 +12,12 @@ blurhash = "0.2.3"
 clap = { version = "4.5.20", features = ["derive"] }
 color-thief = "0.2.2"
 colored = "3.0.0"
+crossterm = "0.28.1"
 dirs = "6.0.0"
 env_logger = "0.11.6"
 image = "0.25.5"
 indicatif = "0.17.11"
+inquire = "0.7.5"
 keyring = { version = "3.6.2", features = ["apple-native", "windows-native", "sync-secret-service"] }
 libvips = "1.7.0"
 log = "0.4.26"
