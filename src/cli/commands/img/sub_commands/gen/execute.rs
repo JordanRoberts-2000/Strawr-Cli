@@ -14,9 +14,7 @@ impl Gen {
 
         let api_key = utils::keychain(KEYRING_SERVICE, KEYRING_OPEN_API_KEY)?;
 
-        let url = ai::sync::image(&api_key, &self.description)
-            .generate()
-            .expect("image failed to generate");
+        let url = ai::sync::image(&api_key, &self.description).generate()?;
 
         Img::download(&url.to_string())?.save()?;
 

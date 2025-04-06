@@ -1,6 +1,8 @@
 use reqwest::blocking::Client;
 use serde_json::json;
 
+use crate::{error::ParseError, services::ai::AiError};
+
 use super::models::{ImageSize, Model};
 
 pub struct ImageBuilder {
@@ -34,13 +36,13 @@ impl ImageBuilder {
         self
     }
 
-    pub fn generate(&self) -> Result<String, String> {
-        if self.description.is_empty() {
-            return Err("Description cannot be empty".to_string());
+    pub fn generate(&self) -> Result<String, AiError> {
+        if self.description.trim().is_empty() {
+            return Err(AiError::Validation("Description cannot be empty".into()));
         }
 
-        if self.api_key.is_empty() {
-            return Err("API key cannot be empty".to_string());
+        if self.api_key.trim().is_empty() {
+            return Err(AiError::Validation("API key cannot be empty".into()));
         }
 
         let request_body = json!({
@@ -49,30 +51,43 @@ impl ImageBuilder {
             "size": self.size.to_string(),
         });
 
+        let open_ai_image_gen_url = "https://api.openai.com/v1/images/generations";
         let client = Client::new();
+
         let response = client
-            .post("https://api.openai.com/v1/images/generations")
+            .post(open_ai_image_gen_url)
             .bearer_auth(&self.api_key)
             .json(&request_body)
             .send()
-            .map_err(|e| format!("Failed to send post request, err: {}", e))?;
+            .map_err(AiError::RequestError)?;
 
-        let response_json: serde_json::Value = response
-            .json()
-            .map_err(|e| format!("Failed to parse response to json, err: {}", e))?;
+        let response_json: serde_json::Value =
+            response.json().map_err(|e| ParseError::JsonFetch {
+                source: e,
+                title: open_ai_image_gen_url.to_string(),
+            })?;
 
         if let Some(data_array) = response_json.get("data").and_then(|v| v.as_array()) {
             if let Some(first_image) = data_array.first() {
                 if let Some(url) = first_image.get("url").and_then(|v| v.as_str()) {
                     return Ok(url.to_string());
                 } else {
-                    return Err("No 'url' field found in the image response".to_string());
+                    return Err(AiError::InvalidJson {
+                        json: first_image.clone(),
+                        message: "Missing 'url' field in image object".to_string(),
+                    });
                 }
             } else {
-                return Err("The 'data' array is empty".to_string());
+                return Err(AiError::InvalidJson {
+                    json: response_json.clone(),
+                    message: "'data' array is empty".to_string(),
+                });
             }
         } else {
-            return Err(format!("No image data returned: {:#?}", response_json));
+            return Err(AiError::InvalidJson {
+                json: response_json,
+                message: "Missing or malformed 'data' array".to_string(),
+            });
         }
     }
 }

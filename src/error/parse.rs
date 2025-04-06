@@ -19,4 +19,10 @@ pub enum ParseError {
         source: serde_json::Error,
         title: String,
     },
+
+    #[error("failed to fetch or decode JSON from {title}:\n{source}")]
+    JsonFetch {
+        source: reqwest::Error,
+        title: String,
+    },
 }
