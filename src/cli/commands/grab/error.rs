@@ -8,12 +8,12 @@ use crate::{
 
 #[derive(Error, Debug)]
 pub enum GrabError {
-    #[error("Key '{key}' could not be found")]
-    KeyNotFound { key: String },
-    #[error("Key should have a value but does't")]
-    KeyValueMissing,
-    #[error("Path '{path}' contains invalid UTF-8 characters")]
-    InvalidPathString { path: String },
+    #[error("Key '{0}' could not be found")]
+    KeyNotFound(String),
+    #[error("No keys found. Try adding one first.")]
+    NoKeysAvailable,
+    #[error("Failed to retrieve key")]
+    FailedToRetrieveKey(#[from] inquire::InquireError),
     #[error("Failed to parse: {0}")]
     Parse(#[from] ParseError),
     #[error("io error: {context}")]

@@ -1,14 +1,11 @@
 use crate::{
-    cli::commands::grab::GrabError,
+    cli::commands::grab::{GrabError, GrabManager},
     constants::{KEYRING_ENCRYPTION_PASSWORD, KEYRING_SERVICE},
     error::ParseError,
     services::crypto,
     utils,
 };
-use natord::compare;
 use std::fs;
-
-use super::GrabManager;
 
 impl GrabManager {
     pub fn set_entry(
@@ -34,15 +31,6 @@ impl GrabManager {
         } else {
             self.data_map.insert(key.clone(), entry_value);
         }
-
-        let mut keys: Vec<String> = self.data_map.keys().cloned().collect();
-        keys.sort_by(|a, b| compare(a, b));
-
-        fs::write(&self.list_file_path, keys.join("\n")).map_err(|e| GrabError::Io {
-            source: e,
-            context: format!("Failed to write to '{:?}'", self.list_file_path),
-        })?;
-        log::debug!("Updated keys.list file");
 
         let updated_json = serde_json::to_string_pretty(&self.data_map).map_err(|e| {
             ParseError::JsonSerialize {
