@@ -5,6 +5,7 @@ use crate::services::img::Img;
 use crate::state::AppContext;
 
 use super::args::ImgCommand;
+use super::helpers::input_detection::InputType;
 
 impl ImgCommand {
     pub fn execute(&self, ctx: &AppContext) -> Result<(), ImgError> {
@@ -12,24 +13,22 @@ impl ImgCommand {
             return subcommand.execute(ctx);
         }
 
-        let input_str = self.path.clone().or(self.positional_path.clone()).unwrap();
-        let input = PathBuf::from(input_str);
+        let input_type = self.detect_input_type()?;
+        log::debug!("Input was type: {:?}", input_type);
 
-        let mut img = Img::open(&input).unwrap();
-
-        if let Some(blur) = &self.blur {
-            let blur_intensity = match blur {
-                None => ctx.config.img.blur_intensity,
-                Some(val) => *val,
-            };
-            img.blur(blur_intensity);
-        }
-
-        if let Some(output_str) = &self.output {
-            let output_path = PathBuf::from(output_str);
-            img.save_to(&output_path).expect("egg1");
-        } else {
-            img.save().expect("egg2");
+        match &input_type {
+            InputType::Directory => self.handle_directory()?,
+            InputType::File => {
+                let path = PathBuf::from(&self.input);
+                let mut img = Img::open(&path)?;
+                let output = self.process_image(&mut img)?;
+                img.save_to(&output)?;
+            }
+            InputType::Url => {
+                let mut img = Img::download(&self.input)?;
+                let output = self.process_image(&mut img)?;
+                img.save_to(&output)?;
+            }
         }
 
         Ok(())

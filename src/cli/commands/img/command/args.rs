@@ -6,11 +6,8 @@ pub struct ImgCommand {
     #[command(subcommand)]
     pub subcommands: Option<ImgSubcommands>,
 
-    #[arg(help = "Path to img file or folder containing images", short, long)]
-    pub path: Option<String>,
-
-    #[arg(help = "Path to img file or folder (positional argument)", index = 1)]
-    pub positional_path: Option<String>,
+    #[arg(help = "Path to an image file, a folder of images, or an image URL")]
+    pub input: String,
 
     #[arg(
         short,
