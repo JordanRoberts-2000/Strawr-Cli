@@ -1,5 +1,5 @@
 use image::{guess_format, GenericImageView};
-use std::{fs, path::PathBuf};
+use std::{fs, path::Path};
 
 use crate::services::img::{
     core::ImgSrc,
@@ -8,10 +8,11 @@ use crate::services::img::{
 };
 
 impl Img {
-    pub fn open(path: &PathBuf) -> Result<Self> {
+    pub fn open<P: AsRef<Path>>(path: P) -> Result<Self> {
+        let path = path.as_ref();
         let img = image::open(path).map_err(|e| ImgError::Open {
             source: e,
-            path: path.clone(),
+            path: path.to_path_buf(),
         })?;
 
         let (width, height) = img.dimensions();
@@ -27,8 +28,8 @@ impl Img {
         Ok(Self {
             img,
             src: ImgSrc::Local {
-                path: path.clone(),
-                target: path.clone(),
+                path: path.to_path_buf(),
+                target: path.to_path_buf(),
             },
             height,
             width,

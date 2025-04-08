@@ -19,8 +19,7 @@ impl ImgCommand {
         match &input_type {
             InputType::Directory => self.handle_directory()?,
             InputType::File => {
-                let path = PathBuf::from(&self.input);
-                let mut img = Img::open(&path)?;
+                let mut img = Img::open(&self.input)?;
                 let output = self.process_image(&mut img)?;
                 img.save_to(&output)?;
             }
