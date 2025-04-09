@@ -1,4 +1,6 @@
-#[derive(Debug, serde::Serialize, serde::Deserialize, Clone, clap::ValueEnum)]
+use image::ImageFormat;
+
+#[derive(Debug, serde::Serialize, serde::Deserialize, Clone, clap::ValueEnum, PartialEq)]
 #[serde(rename_all = "lowercase")]
 pub enum ValidImageFormat {
     #[serde(alias = "jpg")]
@@ -6,6 +8,17 @@ pub enum ValidImageFormat {
     WebP,
     Png,
     Original,
+}
+
+impl ValidImageFormat {
+    pub fn to_image_format(&self) -> Option<ImageFormat> {
+        match self {
+            ValidImageFormat::Jpeg => Some(ImageFormat::Jpeg),
+            ValidImageFormat::Png => Some(ImageFormat::Png),
+            ValidImageFormat::WebP => Some(ImageFormat::WebP),
+            ValidImageFormat::Original => None,
+        }
+    }
 }
 
 #[derive(Debug, serde::Serialize, serde::Deserialize, Clone, clap::ValueEnum)]

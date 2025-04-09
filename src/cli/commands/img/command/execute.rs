@@ -20,12 +20,12 @@ impl ImgCommand {
             InputType::Directory => self.handle_directory()?,
             InputType::File => {
                 let mut img = Img::open(&self.input)?;
-                let output = self.process_image(&mut img)?;
+                let output = self.process_image(&mut img, &ctx)?;
                 img.save_to(&output)?;
             }
             InputType::Url => {
                 let mut img = Img::download(&self.input)?;
-                let output = self.process_image(&mut img)?;
+                let output = self.process_image(&mut img, &ctx)?;
                 img.save_to(&output)?;
             }
         }
