@@ -1,9 +1,17 @@
+use clap::Parser;
 use colored::*;
-use strawr::run_cli;
+use strawr::{cli::Cli, run_cli};
 
 fn main() {
-    if let Err(error) = run_cli() {
-        eprintln!("{}", format!("{}", error).red());
+    let cli = Cli::parse();
+    let debug = cli.debug;
+
+    if let Err(error) = run_cli(cli) {
+        if debug {
+            eprintln!("Error: {:#?}", error);
+        } else {
+            eprintln!("{}", format!("{}", error).red());
+        }
         std::process::exit(1);
     }
 }

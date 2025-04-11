@@ -10,6 +10,7 @@ use crate::services::img::{
 impl Img {
     pub fn open<P: AsRef<Path>>(path: P) -> Result<Self> {
         let path = path.as_ref();
+
         let img = image::open(path).map_err(|e| ImgError::Open {
             source: e,
             path: path.to_path_buf(),

@@ -1,6 +1,5 @@
 use std::time::Instant;
 
-use clap::Parser;
 use cli::{Cli, Commands};
 use error::Result;
 use state::AppContext;
@@ -14,9 +13,7 @@ pub mod services;
 pub mod state;
 pub mod utils;
 
-pub fn run_cli() -> Result<()> {
-    let cli = Cli::parse();
-
+pub fn run_cli(cli: Cli) -> Result<()> {
     logger::initialize(cli.debug);
     let ctx = AppContext::initialize(&cli.debug)?;
     let start_time = Instant::now();
@@ -28,8 +25,6 @@ pub fn run_cli() -> Result<()> {
         // Commands::Playground => todo!(),
         Commands::Template => todo!(),
         Commands::Font => todo!(),
-        Commands::Add => todo!(),
-        Commands::Snippets => todo!(),
         Commands::Backup => todo!(),
     };
 

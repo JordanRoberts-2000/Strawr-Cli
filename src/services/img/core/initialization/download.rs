@@ -11,27 +11,29 @@ use crate::services::img::{
 };
 
 impl Img {
-    pub fn download(url: &String) -> Result<Self> {
-        let parsed_url = Url::parse(url).map_err(|e| ImgError::UrlParseFailed {
-            url: url.clone(),
+    pub fn download<T: AsRef<str>>(url: T) -> Result<Self> {
+        let raw = url.as_ref();
+
+        let parsed_url = Url::parse(raw).map_err(|e| ImgError::UrlParseFailed {
+            url: raw.to_string(),
             source: e,
         })?;
 
         let response = blocking::get(parsed_url.clone()).map_err(|e| ImgError::DownloadFailed {
             source: e,
-            url: url.clone(),
+            url: raw.to_string(),
         })?;
 
         let bytes = response.bytes().map_err(|e| ImgError::ResponseReadFailed {
             source: e,
-            url: url.clone(),
+            url: raw.to_string(),
         })?;
 
         let format = guess_format(&bytes).map_err(|_| ImgError::GuessFormat)?;
         let size_bytes = bytes.len();
 
         let img = image::load_from_memory(&bytes).map_err(|e| ImgError::Decoding {
-            id: url.clone(),
+            id: raw.to_string(),
             source: e,
             format,
         })?;

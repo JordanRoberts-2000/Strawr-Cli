@@ -12,8 +12,6 @@ pub mod img;
 
 #[derive(Subcommand, Debug)]
 pub enum Commands {
-    #[command(about = "Create or manipulate additions for your current projects")]
-    Add,
     #[command(about = "Backup saved data")]
     Backup,
     #[command(about = "Download google fonts")]
@@ -26,8 +24,6 @@ pub enum Commands {
     // Playground(PlaygroundCommand),
     #[command(about = "Set and get encrypted data")]
     Grab(GrabCommand),
-    #[command(about = "Create or manipulate code snippets")]
-    Snippets,
     #[command(about = "Create or manipulate templates for your projects")]
     Template,
     // #[command(about = "Uninstalls cli tool and deletes its saved data")]

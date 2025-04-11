@@ -21,14 +21,10 @@ impl ImgCommand {
 
         // handle quality + format
         let format = match &self.format {
-            Some(format) => format.to_image_format().unwrap_or(img.format),
-            None => ctx
-                .config
-                .img
-                .default_format
-                .to_image_format()
-                .unwrap_or(img.format),
-        };
+            Some(format) => format.try_into(),
+            None => (&ctx.config.img.default_format).try_into(),
+        }
+        .unwrap_or(img.format);
 
         const DEFAULT_QUALITY: u8 = 100;
         let quality = self.quality.unwrap_or_else(|| match format {

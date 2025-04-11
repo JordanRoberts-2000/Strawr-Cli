@@ -10,13 +10,34 @@ pub enum ValidImageFormat {
     Original,
 }
 
-impl ValidImageFormat {
-    pub fn to_image_format(&self) -> Option<ImageFormat> {
-        match self {
-            ValidImageFormat::Jpeg => Some(ImageFormat::Jpeg),
-            ValidImageFormat::Png => Some(ImageFormat::Png),
-            ValidImageFormat::WebP => Some(ImageFormat::WebP),
-            ValidImageFormat::Original => None,
+#[derive(Debug, Clone, thiserror::Error)]
+pub enum ImageFormatConversionError {
+    #[error("ValidImageFormat::Original does not map to a concrete ImageFormat")]
+    NoConcreteFormat,
+}
+
+impl TryFrom<ValidImageFormat> for ImageFormat {
+    type Error = ImageFormatConversionError;
+
+    fn try_from(value: ValidImageFormat) -> Result<Self, Self::Error> {
+        match value {
+            ValidImageFormat::Jpeg => Ok(ImageFormat::Jpeg),
+            ValidImageFormat::Png => Ok(ImageFormat::Png),
+            ValidImageFormat::WebP => Ok(ImageFormat::WebP),
+            ValidImageFormat::Original => Err(ImageFormatConversionError::NoConcreteFormat),
+        }
+    }
+}
+
+impl TryFrom<&ValidImageFormat> for ImageFormat {
+    type Error = ImageFormatConversionError;
+
+    fn try_from(value: &ValidImageFormat) -> Result<Self, Self::Error> {
+        match value {
+            ValidImageFormat::Jpeg => Ok(ImageFormat::Jpeg),
+            ValidImageFormat::Png => Ok(ImageFormat::Png),
+            ValidImageFormat::WebP => Ok(ImageFormat::WebP),
+            ValidImageFormat::Original => Err(ImageFormatConversionError::NoConcreteFormat),
         }
     }
 }
