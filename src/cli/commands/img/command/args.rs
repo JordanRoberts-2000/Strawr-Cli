@@ -1,4 +1,7 @@
-use crate::cli::commands::img::{sub_commands::ImgSubcommands, utils::enums::ValidImageFormat};
+use crate::cli::commands::img::{
+    sub_commands::ImgSubcommands,
+    utils::enums::{Size, ValidImageFormat},
+};
 
 #[derive(clap::Parser, Debug)]
 #[command(arg_required_else_help = true)]
@@ -22,8 +25,17 @@ pub struct ImgCommand {
     #[arg(short, long, help = "Configure image quality")]
     pub quality: Option<u8>,
 
+    #[arg(short, long, help = "Configure image quality", conflicts_with = "size")]
+    pub max: Option<u32>,
+
+    #[arg(short, long, help = "Configure image quality", conflicts_with = "max")]
+    pub size: Option<Size>,
+
     #[arg(long, help = "Image to use lossless compression when possible", action = clap::ArgAction::SetTrue)]
     pub thumbnail: Option<bool>,
+
+    #[arg(long, help = "Image to use lossless compression when possible", action = clap::ArgAction::SetTrue)]
+    pub placeholder: Option<bool>,
 
     #[arg(long, help = "Image to use lossless compression when possible", num_args = 0..=1)]
     pub blur: Option<Option<u8>>,

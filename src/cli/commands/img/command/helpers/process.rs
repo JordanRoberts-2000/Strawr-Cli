@@ -10,16 +10,40 @@ use crate::{
 
 impl ImgCommand {
     pub fn process_image(&self, img: &mut Img, ctx: &AppContext) -> Result<PathBuf, ImgError> {
-        // handle blur
-        if let Some(blur) = &self.blur {
-            let blur_intensity = match blur {
-                None => ctx.config.img.blur_intensity,
-                Some(val) => *val,
-            };
-            img.blur(blur_intensity);
-        }
+        self.apply_blur(img, ctx);
 
-        // handle quality + format
+        self.apply_resize(img, ctx);
+
+        self.apply_conversion(img, ctx)?;
+
+        Ok(PathBuf::new())
+    }
+
+    fn apply_blur(&self, img: &mut Img, ctx: &AppContext) {
+        if let Some(blur) = &self.blur {
+            img.blur(blur.unwrap_or(ctx.config.img.blur_intensity));
+        } else if self.placeholder.unwrap_or(false) {
+            img.blur(ctx.config.img.placeholder_blur_intensity);
+        }
+    }
+
+    fn apply_resize(&self, img: &mut Img, ctx: &AppContext) {
+        if let Some(size) = &self.size {
+            let resize_to: u32 = size.into();
+            img.resize(resize_to, resize_to);
+        } else if let Some(size) = self.max.or(ctx.config.img.max_size) {
+            img.resize(size, size);
+        } else if self.placeholder.unwrap_or(false) {
+            img.resize(
+                ctx.config.img.placeholder_size,
+                ctx.config.img.placeholder_size,
+            );
+        } else if self.thumbnail.unwrap_or(false) {
+            img.resize(ctx.config.img.thumbnail_size, ctx.config.img.thumbnail_size);
+        }
+    }
+
+    fn apply_conversion(&self, img: &mut Img, ctx: &AppContext) -> Result<(), ImgError> {
         let format = match &self.format {
             Some(format) => format.try_into(),
             None => (&ctx.config.img.default_format).try_into(),
@@ -36,12 +60,12 @@ impl ImgCommand {
         if format != img.format || (quality != 100 && format != ImageFormat::Png) {
             match format {
                 ImageFormat::Jpeg => {
-                    log::trace!("Jpeg conversion with quality '{quality}' successful");
                     img.jpeg(quality)?;
+                    log::trace!("Jpeg conversion with quality '{quality}' successful");
                 }
                 ImageFormat::Png => {
-                    log::trace!("Png conversion successful");
                     img.png()?;
+                    log::trace!("Png conversion successful");
                 }
                 ImageFormat::WebP => {
                     let is_lossy = matches!(
@@ -49,11 +73,11 @@ impl ImgCommand {
                         CompressionType::Lossy
                     );
                     if is_lossy || quality != 100 {
-                        log::trace!("Lossy Webp conversion with quality '{quality}' successful");
                         img.webp_lossy(quality)?;
+                        log::trace!("Lossy Webp conversion with quality '{quality}' successful");
                     } else {
-                        log::trace!("Lossless Webp conversion successful");
                         img.webp()?;
+                        log::trace!("Lossless Webp conversion successful");
                     }
                 }
                 _ => {
@@ -62,6 +86,6 @@ impl ImgCommand {
             }
         }
 
-        Ok(PathBuf::new())
+        Ok(())
     }
 }

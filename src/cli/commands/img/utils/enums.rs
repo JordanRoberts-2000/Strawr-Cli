@@ -1,3 +1,5 @@
+use std::str::FromStr;
+
 use image::ImageFormat;
 
 #[derive(Debug, serde::Serialize, serde::Deserialize, Clone, clap::ValueEnum, PartialEq)]
@@ -38,6 +40,52 @@ impl TryFrom<&ValidImageFormat> for ImageFormat {
             ValidImageFormat::Png => Ok(ImageFormat::Png),
             ValidImageFormat::WebP => Ok(ImageFormat::WebP),
             ValidImageFormat::Original => Err(ImageFormatConversionError::NoConcreteFormat),
+        }
+    }
+}
+
+#[derive(Debug, Clone)]
+pub enum Size {
+    Sm,
+    Md,
+    Lg,
+    Pixels(u32),
+}
+
+impl FromStr for Size {
+    type Err = String;
+
+    fn from_str(input: &str) -> Result<Self, Self::Err> {
+        match input {
+            "sm" => Ok(Size::Sm),
+            "md" => Ok(Size::Md),
+            "lg" => Ok(Size::Lg),
+            _ => input
+                .parse::<u32>()
+                .map(Size::Pixels)
+                .map_err(|_| format!("invalid size: {input}")),
+        }
+    }
+}
+
+impl Into<u32> for Size {
+    fn into(self) -> u32 {
+        match self {
+            Size::Sm => 640,
+            Size::Md => 768,
+            Size::Lg => 1024,
+            Size::Pixels(px) => px,
+        }
+    }
+}
+
+impl Into<u32> for &Size {
+    fn into(self) -> u32 {
+        match self {
+            Size::Sm => 640,
+            Size::Md => 768,
+            Size::Lg => 1024,
+            Size::Pixels(px) => *px,
         }
     }
 }
