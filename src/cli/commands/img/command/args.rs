@@ -4,20 +4,21 @@ use crate::cli::commands::img::{
 };
 
 #[derive(clap::Parser, Debug)]
-#[command(arg_required_else_help = true)]
+#[command(subcommand_negates_reqs = true)]
 pub struct ImgCommand {
     #[command(subcommand)]
     pub subcommands: Option<ImgSubcommands>,
 
     #[arg(help = "Path to an image file, a folder of images, or an image URL")]
-    pub input: String,
+    pub input: Option<String>,
 
     #[arg(
-        short,
-        long,
-        help = "Output path, if not provided the input image is overwritten"
-    )]
-    pub output: Option<String>,
+      short,
+      long,
+      help = "Output path. If no value is given, a default filename will be generated.",
+      num_args = 0..=1
+  )]
+    pub output: Option<Option<String>>,
 
     #[arg(short, long, help = "Fomat image file to be converted to")]
     pub format: Option<ValidImageFormat>,

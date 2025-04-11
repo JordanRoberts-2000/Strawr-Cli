@@ -10,23 +10,27 @@ use super::helpers::input_detection::InputType;
 impl ImgCommand {
     pub fn execute(&self, ctx: &AppContext) -> Result<(), ImgError> {
         if let Some(subcommand) = &self.subcommands {
-            return subcommand.execute(ctx);
-        }
+            subcommand.execute(ctx)?;
+        } else if let Some(input) = &self.input {
+            let input_type = self.detect_input_type(&input)?;
+            log::debug!("Input was type: {:?}", input_type);
 
-        let input_type = self.detect_input_type()?;
-        log::debug!("Input was type: {:?}", input_type);
-
-        match &input_type {
-            InputType::Directory => self.handle_directory()?,
-            InputType::File => {
-                let mut img = Img::open(&self.input)?;
-                let output = self.process_image(&mut img, &ctx)?;
-                // img.save_to(&output)?;
-            }
-            InputType::Url => {
-                let mut img = Img::download(&self.input)?;
-                let output = self.process_image(&mut img, &ctx)?;
-                // img.save_to(&output)?;
+            match &input_type {
+                InputType::Directory => self.handle_directory()?,
+                InputType::File => {
+                    let mut img = Img::open(&input)?;
+                    match self.process_image(&mut img, &ctx)? {
+                        Some(output) => img.save_to(output),
+                        None => img.save(),
+                    };
+                }
+                InputType::Url => {
+                    let mut img = Img::download(&input)?;
+                    match self.process_image(&mut img, &ctx)? {
+                        Some(output) => img.save_to(output),
+                        None => img.save(),
+                    };
+                }
             }
         }
 

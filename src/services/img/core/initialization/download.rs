@@ -5,6 +5,7 @@ use reqwest::blocking;
 use url::Url;
 
 use crate::services::img::{
+    constants::DEFAULT_FILENAME,
     core::ImgSrc,
     error::{ImgError, Result},
     Img,
@@ -49,15 +50,14 @@ impl Img {
             Some(ext) => ext,
             None => return Err(ImgError::ExtensionInvalid),
         };
-        let filename = format!("image.{}", ext);
-        let target = cwd.join(filename);
+        let file_name = format!("{}.{}", DEFAULT_FILENAME, ext);
+        let target = cwd.join(&file_name);
 
         Ok(Self {
             img,
-            src: ImgSrc::Remote {
-                url: parsed_url,
-                target,
-            },
+            src: ImgSrc::Remote { url: parsed_url },
+            target_path: target,
+            file_name,
             height,
             width,
             aspect_ratio: width as f32 / height as f32,

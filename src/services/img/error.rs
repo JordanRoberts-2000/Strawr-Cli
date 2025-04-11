@@ -68,7 +68,7 @@ pub enum ImgError {
     #[error("Blurhash failed to encode img, err: {0}")]
     BlurHash(blurhash::Error),
 
-    #[error("Output path does not have a file name: {0:?}")]
+    #[error("Path does not have a file name: {0:?}")]
     MissingFileName(PathBuf),
 
     #[error("failed to parse url '{url}', {source}")]

@@ -12,17 +12,17 @@ pub enum InputType {
 }
 
 impl ImgCommand {
-    pub fn detect_input_type(&self) -> Result<InputType, ImgError> {
-        if let Ok(url) = Url::parse(&self.input) {
+    pub fn detect_input_type(&self, input: &String) -> Result<InputType, ImgError> {
+        if let Ok(url) = Url::parse(input) {
             if url.has_host() {
                 return Ok(InputType::Url);
             }
         }
 
-        let path = Path::new(&self.input);
+        let path = Path::new(input);
 
         if !path.exists() {
-            return Err(ImgError::InputNotFound(self.input.clone()));
+            return Err(ImgError::InputNotFound(input.clone()));
         }
 
         if path.is_dir() {

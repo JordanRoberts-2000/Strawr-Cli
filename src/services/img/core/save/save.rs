@@ -5,17 +5,17 @@ use crate::utils;
 impl Img {
     pub fn save(&self) -> Result<()> {
         match &self.src {
-            ImgSrc::Local { path, target } => {
-                self.save_to(&target)?;
-                if path != target {
+            ImgSrc::Local { path } => {
+                self.save_to(&self.target_path)?;
+                if *path != self.target_path {
                     utils::trash(&path).map_err(|e| ImgError::Io {
                         context: format!("failed to delete '{:?}'", path),
                         source: e,
                     })?;
                 }
             }
-            ImgSrc::Remote { target, .. } => {
-                self.save_to(&target)?;
+            ImgSrc::Remote { .. } => {
+                self.save_to(&self.target_path)?;
             }
         }
 
