@@ -39,7 +39,6 @@ impl Img {
             img,
             src: ImgSrc::Bytes { id: id.clone() },
             target_path: target,
-            file_name,
             height,
             width,
             aspect_ratio: width as f32 / height as f32,
@@ -65,9 +64,9 @@ mod tests {
         assert_eq!(img.aspect_ratio, img.width as f32 / img.height as f32);
 
         assert!(
-            img.file_name.ends_with(".png"),
+            img.file_name().unwrap().ends_with(".png"),
             "Expected file_name to end with .png, got: {}",
-            img.file_name
+            img.file_name().unwrap()
         );
 
         assert!(
@@ -80,6 +79,40 @@ mod tests {
             image::ImageFormat::Png,
             "Image format should be PNG"
         );
+    }
+
+    #[test]
+    fn test_img_from_valid_bytes_multiple_formats() {
+        use image::ImageFormat;
+
+        let test_cases = vec![
+            ("test.png", ImageFormat::Png),
+            ("test.jpg", ImageFormat::Jpeg),
+            ("test.webp", ImageFormat::WebP),
+        ];
+
+        for (filename, expected_format) in test_cases {
+            let path = format!("tests/assets/{}", filename);
+            let bytes = fs::read(&path).expect(&format!("Image file {} should exist", filename));
+
+            let img = Img::from_bytes(bytes).expect("Image should be loaded from bytes");
+
+            assert!(
+                img.file_name()
+                    .unwrap()
+                    .ends_with(expected_format.extensions_str()[0]),
+                "File name should end with .{} for {}, got: {}",
+                expected_format.extensions_str()[0],
+                filename,
+                img.file_name().unwrap()
+            );
+
+            assert_eq!(
+                img.format, expected_format,
+                "Image format mismatch for {}",
+                filename
+            );
+        }
     }
 
     #[test]

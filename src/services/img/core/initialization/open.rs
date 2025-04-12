@@ -26,19 +26,12 @@ impl Img {
         let size_bytes = bytes.len();
         let format = guess_format(&bytes).map_err(|_| ImgError::GuessFormat)?;
 
-        let file_name = path
-            .file_name()
-            .and_then(|f| f.to_str())
-            .map(|s| s.to_string())
-            .ok_or_else(|| ImgError::MissingFileName(path.to_path_buf()))?;
-
         Ok(Self {
             img,
             src: ImgSrc::Local {
                 path: path.to_path_buf(),
             },
             target_path: path.to_path_buf(),
-            file_name,
             height,
             width,
             aspect_ratio: width as f32 / height as f32,
@@ -61,12 +54,16 @@ mod tests {
         let img = Img::open(&path).expect("Image should open successfully");
 
         assert_eq!(img.target_path, path);
-        match img.src {
-            ImgSrc::Local { path: src_path } => assert_eq!(src_path, img.target_path),
+        match &img.src {
+            ImgSrc::Local { path: src_path } => assert_eq!(src_path, &img.target_path),
             _ => panic!("Expected ImgSrc::Local"),
         }
 
-        assert_eq!(img.file_name, "test.png", "Filename should match");
+        assert_eq!(
+            img.file_name().unwrap(),
+            "test.png",
+            "Filename should match"
+        );
 
         assert_eq!(img.format, ImageFormat::Png, "Image format should be PNG");
 
@@ -77,6 +74,36 @@ mod tests {
         let expected_ratio = img.width as f32 / img.height as f32;
         let delta = (img.aspect_ratio - expected_ratio).abs();
         assert!(delta < 0.01, "Aspect ratio delta too large: {}", delta);
+    }
+
+    #[test]
+    fn test_img_open_multiple_formats() {
+        use image::ImageFormat;
+        use std::path::PathBuf;
+
+        let test_cases = vec![
+            ("test.png", ImageFormat::Png),
+            ("test.jpg", ImageFormat::Jpeg),
+            ("test.webp", ImageFormat::WebP),
+        ];
+
+        for (filename, expected_format) in test_cases {
+            let path = PathBuf::from(format!("tests/assets/{}", filename));
+            let img = Img::open(&path).expect(&format!("Should open {}", filename));
+
+            assert_eq!(
+                img.file_name().unwrap(),
+                filename,
+                "Filename should match for {}",
+                filename
+            );
+
+            assert_eq!(
+                img.format, expected_format,
+                "Image format should be correct for {}",
+                filename
+            );
+        }
     }
 
     #[test]

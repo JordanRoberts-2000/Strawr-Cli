@@ -16,7 +16,7 @@ impl Img {
             })?;
         }
 
-        let file_name = &self.file_name;
+        let file_name = self.file_name()?;
         // check if filename exists, if so add 'filename(x)';
         let full_path = folder_path.join(file_name);
 

@@ -11,7 +11,6 @@ pub struct Img {
     img: image::DynamicImage,
     src: ImgSrc,
     pub target_path: PathBuf,
-    pub file_name: String,
     pub height: u32,
     pub width: u32,
     pub aspect_ratio: f32,

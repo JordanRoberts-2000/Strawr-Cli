@@ -70,7 +70,6 @@ impl Img {
             img,
             src: ImgSrc::Remote { url: parsed_url },
             target_path: target,
-            file_name,
             height,
             width,
             aspect_ratio: width as f32 / height as f32,
@@ -110,6 +109,41 @@ mod tests {
             image::ImageFormat::Png,
             "Image format should be PNG"
         );
+    }
+
+    #[test]
+    fn test_img_download_multiple_formats() {
+        use image::ImageFormat;
+
+        let formats = vec![
+            ("test.png", "image/png", ImageFormat::Png),
+            ("test.webp", "image/webp", ImageFormat::WebP),
+            ("test.jpg", "image/jpeg", ImageFormat::Jpeg),
+        ];
+
+        for (filename, content_type, expected_format) in formats {
+            let image_bytes =
+                fs::read(format!("tests/assets/{}", filename)).expect("Failed to read test image");
+
+            let mut server = Server::new();
+
+            let route = format!("/{}", filename);
+            let _mock = server
+                .mock("GET", route.as_str())
+                .with_status(200)
+                .with_header("Content-Type", content_type)
+                .with_body(image_bytes)
+                .create();
+
+            let url = format!("{}{}", server.url(), route);
+            let img = Img::download(&url).expect("Should download from mock server");
+
+            assert_eq!(
+                img.format, expected_format,
+                "Image format for {} should be correct",
+                filename
+            );
+        }
     }
 
     #[test]

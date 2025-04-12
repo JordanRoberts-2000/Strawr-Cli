@@ -1,18 +1,18 @@
 use crate::services::img::Img;
 
 impl Img {
-    pub fn with_file_name<T: AsRef<str>>(&mut self, file_name: T) -> &mut Self {
-        let new_file_name = file_name.as_ref().to_string();
-        self.file_name = new_file_name.clone();
+    // pub fn with_file_name<T: AsRef<str>>(&mut self, file_name: T) -> &mut Self {
+    //     let new_file_name = file_name.as_ref().to_string();
+    //     self.file_name = new_file_name.clone();
 
-        let parent = self
-            .target_path
-            .parent()
-            .unwrap_or_else(|| std::path::Path::new(""));
-        self.target_path = parent.join(&new_file_name);
+    //     let parent = self
+    //         .target_path
+    //         .parent()
+    //         .unwrap_or_else(|| std::path::Path::new(""));
+    //     self.target_path = parent.join(&new_file_name);
 
-        self
-    }
+    //     self
+    // }
 }
 
 // #[cfg(test)]
