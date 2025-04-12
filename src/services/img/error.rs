@@ -76,4 +76,11 @@ pub enum ImgError {
         url: String,
         source: url::ParseError,
     },
+
+    #[error("'{url}' response returned status code '{status_code}'")]
+    FailedRequest {
+        url: String,
+        status_code: u16,
+        message: String,
+    },
 }

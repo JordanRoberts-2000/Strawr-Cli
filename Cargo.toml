@@ -21,6 +21,7 @@ inquire = "0.7.5"
 keyring = { version = "3.6.2", features = ["apple-native", "windows-native", "sync-secret-service"] }
 libvips = "1.7.0"
 log = "0.4.26"
+mockito = "1.7.0"
 mozjpeg = "0.10.13"
 natord = "1.0.9"
 opener = "0.7.2"

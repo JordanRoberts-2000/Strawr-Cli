@@ -25,6 +25,19 @@ impl Img {
             url: raw.to_string(),
         })?;
 
+        if !response.status().is_success() {
+            let status_code = response.status().as_u16();
+            let message = response
+                .text()
+                .unwrap_or_else(|_| "response couldn't be read".to_string());
+
+            return Err(ImgError::FailedRequest {
+                message,
+                status_code,
+                url: raw.to_string(),
+            });
+        }
+
         let bytes = response.bytes().map_err(|e| ImgError::ResponseReadFailed {
             source: e,
             url: raw.to_string(),
@@ -64,5 +77,95 @@ impl Img {
             format,
             size_bytes,
         })
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+    use crate::services::img::error::ImgError;
+    use mockito::Server;
+    use std::fs;
+    use url::Url;
+
+    #[test]
+    fn test_img_download_with_mockito() {
+        let image_bytes = fs::read("tests/assets/test.png").expect("Failed to read test image");
+
+        let mut server = Server::new();
+
+        let _mock = server
+            .mock("GET", "/test.png")
+            .with_status(200)
+            .with_header("Content-Type", "image/png")
+            .with_body(image_bytes)
+            .create();
+
+        let url = format!("{}/test.png", server.url());
+
+        let img = Img::download(&url).expect("Should download from mock server");
+
+        assert_eq!(img.format, image::ImageFormat::Png);
+    }
+
+    #[test]
+    fn test_img_download_accepts_various_params() {
+        let image_bytes = fs::read("tests/assets/test.png").unwrap();
+        let mut server = Server::new();
+
+        let _mock = server
+            .mock("GET", "/test.png")
+            .with_status(200)
+            .with_header("Content-Type", "image/png")
+            .with_body(image_bytes)
+            .create();
+
+        let string_url = format!("{}/test.png", server.url());
+        let str_url: &str = &string_url;
+        let url_obj = Url::parse(&string_url).unwrap();
+
+        // String
+        Img::download(string_url.clone()).expect("String URL should work");
+
+        // &str
+        Img::download(str_url).expect("&str URL should work");
+
+        // Url object
+        Img::download(url_obj).expect("Url object should work");
+    }
+
+    #[test]
+    fn test_img_download_invalid_url_should_fail() {
+        let bad_url = "ht^tp://[::invalid-url"; // clearly invalid
+
+        let result = Img::download(bad_url);
+        match result {
+            Err(ImgError::UrlParseFailed { url, .. }) => {
+                assert_eq!(url, bad_url);
+            }
+            _ => panic!("Expected UrlParseFailed error"),
+        }
+    }
+
+    #[test]
+    fn test_img_download_404_should_fail() {
+        let server = Server::new();
+
+        // No mock for this route = 404
+        let url = format!("{}/not-found.png", server.url());
+        let result = Img::download(&url);
+
+        match result {
+            Err(ImgError::FailedRequest {
+                url: err_url,
+                status_code,
+                ..
+            }) => {
+                assert_eq!(err_url, url);
+                assert_eq!(status_code, 501);
+            }
+            Err(e) => panic!("Expected DownloadFailed error, got: {:#?}", e),
+            Ok(_) => panic!("Expected DownloadFailed error but got Ok"),
+        }
     }
 }
