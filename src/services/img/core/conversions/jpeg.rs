@@ -48,31 +48,7 @@ mod tests {
     use std::fs;
 
     #[test]
-    fn test_img_jpeg_conversion() {
-        let bytes = fs::read("tests/assets/test.png").expect("test image should exist");
-        let mut img = Img::from_bytes(bytes).expect("Image should be loaded from bytes");
-
-        assert_ne!(
-            img.format,
-            ImageFormat::Jpeg,
-            "Image should not start as JPEG"
-        );
-
-        img.jpeg(80).expect("JPEG conversion should succeed");
-
-        assert_eq!(img.format, ImageFormat::Jpeg, "Image format should be JPEG");
-
-        assert!(
-            img.file_name().unwrap().ends_with(".jpg"),
-            "Expected file_name to end with .jpg, got: {}",
-            img.file_name().unwrap()
-        );
-    }
-
-    #[test]
     fn test_img_to_jpeg_from_all_formats() {
-        use image::ImageFormat;
-
         let test_cases = vec![
             ("test.png", ImageFormat::Png),
             ("test.webp", ImageFormat::WebP),

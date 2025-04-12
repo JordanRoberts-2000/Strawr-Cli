@@ -41,27 +41,7 @@ mod tests {
     use std::fs;
 
     #[test]
-    fn test_img_png_conversion() {
-        let bytes = fs::read("tests/assets/test.webp").expect("test.webp should exist");
-        let mut img = Img::from_bytes(bytes).expect("Image should be loaded from bytes");
-
-        assert_eq!(img.format, ImageFormat::WebP, "Image should start as WebP");
-
-        img.png().expect("PNG conversion should succeed");
-
-        assert_eq!(img.format, ImageFormat::Png, "Image format should be PNG");
-
-        assert!(
-            img.file_name().unwrap().ends_with(".png"),
-            "Expected file_name to end with .png, got: {}",
-            img.file_name().unwrap()
-        );
-    }
-
-    #[test]
     fn test_img_to_png_from_all_formats() {
-        use image::ImageFormat;
-
         let test_cases = vec![
             ("test.png", ImageFormat::Png),
             ("test.webp", ImageFormat::WebP),
