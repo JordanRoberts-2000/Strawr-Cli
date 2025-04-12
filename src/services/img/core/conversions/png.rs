@@ -33,3 +33,73 @@ impl Img {
         Ok(self)
     }
 }
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+    use image::ImageFormat;
+    use std::fs;
+
+    #[test]
+    fn test_img_png_conversion() {
+        let bytes = fs::read("tests/assets/test.webp").expect("test.webp should exist");
+        let mut img = Img::from_bytes(bytes).expect("Image should be loaded from bytes");
+
+        assert_eq!(img.format, ImageFormat::WebP, "Image should start as WebP");
+
+        img.png().expect("PNG conversion should succeed");
+
+        assert_eq!(img.format, ImageFormat::Png, "Image format should be PNG");
+
+        assert!(
+            img.file_name().unwrap().ends_with(".png"),
+            "Expected file_name to end with .png, got: {}",
+            img.file_name().unwrap()
+        );
+    }
+
+    #[test]
+    fn test_img_to_png_from_all_formats() {
+        use image::ImageFormat;
+
+        let test_cases = vec![
+            ("test.png", ImageFormat::Png),
+            ("test.webp", ImageFormat::WebP),
+            ("test.jpg", ImageFormat::Jpeg),
+        ];
+
+        for (filename, original_format) in test_cases {
+            let path = format!("tests/assets/{}", filename);
+            let bytes = fs::read(&path).expect(&format!("Image file {} should exist", filename));
+
+            let mut img = Img::from_bytes(bytes).expect(&format!("Should load {}", filename));
+
+            assert_eq!(
+                img.format, original_format,
+                "Expected original format to match for {}",
+                filename
+            );
+
+            let result = img.png();
+            assert!(
+                result.is_ok(),
+                "PNG conversion should succeed for {}",
+                filename
+            );
+
+            assert_eq!(
+                img.format,
+                ImageFormat::Png,
+                "Format should be PNG after conversion for {}",
+                filename
+            );
+
+            assert!(
+                img.file_name().unwrap().ends_with(".png"),
+                "File name should end with .png for {}. Got: {}",
+                filename,
+                img.file_name().unwrap()
+            );
+        }
+    }
+}
