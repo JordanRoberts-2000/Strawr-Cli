@@ -40,3 +40,77 @@ impl Img {
         Ok(self)
     }
 }
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+    use image::ImageFormat;
+    use std::fs;
+
+    #[test]
+    fn test_img_jpeg_conversion() {
+        let bytes = fs::read("tests/assets/test.png").expect("test image should exist");
+        let mut img = Img::from_bytes(bytes).expect("Image should be loaded from bytes");
+
+        assert_ne!(
+            img.format,
+            ImageFormat::Jpeg,
+            "Image should not start as JPEG"
+        );
+
+        img.jpeg(80).expect("JPEG conversion should succeed");
+
+        assert_eq!(img.format, ImageFormat::Jpeg, "Image format should be JPEG");
+
+        assert!(
+            img.file_name().unwrap().ends_with(".jpg"),
+            "Expected file_name to end with .jpg, got: {}",
+            img.file_name().unwrap()
+        );
+    }
+
+    #[test]
+    fn test_img_to_jpeg_from_all_formats() {
+        use image::ImageFormat;
+
+        let test_cases = vec![
+            ("test.png", ImageFormat::Png),
+            ("test.webp", ImageFormat::WebP),
+            ("test.jpg", ImageFormat::Jpeg),
+        ];
+
+        for (filename, original_format) in test_cases {
+            let path = format!("tests/assets/{}", filename);
+            let bytes = fs::read(&path).expect(&format!("Image file {} should exist", filename));
+
+            let mut img = Img::from_bytes(bytes).expect(&format!("Should load {}", filename));
+
+            assert_eq!(
+                img.format, original_format,
+                "Expected format to match original for {}",
+                filename
+            );
+
+            let result = img.jpeg(80);
+            assert!(
+                result.is_ok(),
+                "JPEG conversion should succeed for {}",
+                filename
+            );
+
+            assert_eq!(
+                img.format,
+                ImageFormat::Jpeg,
+                "Format should be JPEG after conversion for {}",
+                filename
+            );
+
+            assert!(
+                img.file_name().unwrap().ends_with(".jpg"),
+                "File name should end with .jpg for {}. Got: {}",
+                filename,
+                img.file_name().unwrap()
+            );
+        }
+    }
+}
