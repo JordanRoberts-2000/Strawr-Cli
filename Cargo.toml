@@ -39,6 +39,7 @@ thiserror = "2.0.12"
 toml = "0.8.20"
 trash = "5.2.2"
 url = "2.5.4"
+uuid = { version = "1.16.0", features = ["v4"] }
 validator = { version = "0.20.0", features = ["derive"] }
 walkdir = "2.5.0"
 webp = "0.3.0"

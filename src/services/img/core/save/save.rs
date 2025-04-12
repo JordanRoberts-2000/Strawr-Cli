@@ -14,7 +14,7 @@ impl Img {
                     })?;
                 }
             }
-            ImgSrc::Remote { .. } => {
+            _ => {
                 self.save_to(&self.target_path)?;
             }
         }

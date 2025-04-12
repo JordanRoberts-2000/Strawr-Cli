@@ -105,7 +105,11 @@ mod tests {
 
         let img = Img::download(&url).expect("Should download from mock server");
 
-        assert_eq!(img.format, image::ImageFormat::Png);
+        assert_eq!(
+            img.format,
+            image::ImageFormat::Png,
+            "Image format should be PNG"
+        );
     }
 
     #[test]

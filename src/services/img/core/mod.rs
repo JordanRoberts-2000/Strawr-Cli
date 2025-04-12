@@ -22,4 +22,5 @@ pub struct Img {
 pub enum ImgSrc {
     Local { path: PathBuf },
     Remote { url: url::Url },
+    Bytes { id: String },
 }
