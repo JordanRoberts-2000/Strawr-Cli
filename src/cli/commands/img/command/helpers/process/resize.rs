@@ -9,9 +9,21 @@ impl ImgCommand {
             None => ctx.config.img.max_size,
         };
 
+        let current_width = img.width;
+        let current_height = img.height;
+
         if let Some(size) = max_size {
-            img.resize(size, size);
-            log::info!("Image given max size {size}");
+            if current_width > size || current_height > size {
+                img.max_size(size);
+                log::info!("Image resized with max size {size}");
+            } else {
+                log::debug!(
+                    "Skipping resize: image already within max size ({}x{}) ≤ {}",
+                    current_width,
+                    current_height,
+                    size
+                );
+            }
         }
     }
 }

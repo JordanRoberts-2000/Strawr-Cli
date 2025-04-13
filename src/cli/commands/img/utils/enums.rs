@@ -6,6 +6,7 @@ use image::ImageFormat;
 #[serde(rename_all = "lowercase")]
 pub enum ValidImageFormat {
     #[serde(alias = "jpg")]
+    #[clap(alias = "jpg")]
     Jpeg,
     Webp,
     Png,
