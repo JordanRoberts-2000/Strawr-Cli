@@ -16,17 +16,17 @@ impl ImgCommand {
             log::debug!("Input was type: {:?}", input_type);
 
             match &input_type {
-                InputType::Directory => self.handle_directory()?,
+                InputType::Directory => self.handle_directory(&input, ctx)?,
                 InputType::File => {
                     let mut img = Img::open(&input)?;
-                    match self.process_image(&mut img, &ctx)? {
+                    match self.process_image(&mut img, ctx)? {
                         Some(output) => img.save_to(output),
                         None => img.save(),
                     }?;
                 }
                 InputType::Url => {
                     let mut img = Img::download(&input)?;
-                    match self.process_image(&mut img, &ctx)? {
+                    match self.process_image(&mut img, ctx)? {
                         Some(output) => img.save_to(output),
                         None => img.save(),
                     }?;

@@ -28,14 +28,6 @@ pub struct Get {
     pub hash: bool,
 
     #[arg(
-        help = "Retrieve the format of the image",
-        short,
-        long,
-        action = clap::ArgAction::SetTrue
-    )]
-    pub format: bool,
-
-    #[arg(
         help = "Retrieve the dominant color or color profile of the image",
         short,
         long,
