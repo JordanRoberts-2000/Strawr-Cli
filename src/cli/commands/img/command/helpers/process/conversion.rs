@@ -25,11 +25,11 @@ impl ImgCommand {
             match format {
                 ImageFormat::Jpeg => {
                     img.jpeg(quality)?;
-                    log::trace!("Jpeg conversion with quality '{quality}' successful");
+                    log::info!("Jpeg conversion applied with quality '{quality}'");
                 }
                 ImageFormat::Png => {
                     img.png()?;
-                    log::trace!("Png conversion successful");
+                    log::info!("Png conversion applied");
                 }
                 ImageFormat::WebP => {
                     let is_lossy = matches!(
@@ -38,10 +38,10 @@ impl ImgCommand {
                     );
                     if is_lossy || quality != 100 {
                         img.webp_lossy(quality)?;
-                        log::trace!("Lossy Webp conversion with quality '{quality}' successful");
+                        log::info!("Lossy Webp conversion applied with quality '{quality}'");
                     } else {
                         img.webp()?;
-                        log::trace!("Lossless Webp conversion successful");
+                        log::info!("Lossless Webp conversion applied");
                     }
                 }
                 _ => {

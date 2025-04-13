@@ -8,8 +8,10 @@ use super::helpers::input_detection::InputType;
 impl ImgCommand {
     pub fn execute(&self, ctx: &AppContext) -> Result<(), ImgError> {
         if let Some(subcommand) = &self.subcommands {
-            subcommand.execute(ctx)?;
-        } else if let Some(input) = &self.input {
+            return subcommand.execute(ctx);
+        }
+
+        if let Some(input) = &self.input {
             let input_type = self.detect_input_type(&input)?;
             log::debug!("Input was type: {:?}", input_type);
 
