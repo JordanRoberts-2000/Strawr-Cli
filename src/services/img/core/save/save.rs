@@ -1,5 +1,3 @@
-use std::path::Path;
-
 use crate::services::img::ImgError;
 use crate::services::img::{core::ImgSrc, error::Result, Img};
 use crate::utils;
@@ -15,53 +13,76 @@ impl Img {
             }
         }
 
-        let parent = self.target_path.parent().unwrap_or_else(|| Path::new("."));
-        self.save_to(&parent)?;
+        self.atomic_save(&self.target_path)?;
 
         Ok(())
     }
 }
 
-#[test]
-fn test_img_save_replaces_original_file() {
+#[cfg(test)]
+mod tests {
+    use super::*;
     use std::fs;
     use std::path::PathBuf;
 
-    // Setup
-    let output_dir = PathBuf::from("tests/tmp_save");
-    let source_path = PathBuf::from("tests/tmp_save/input.png");
-    let target_path = PathBuf::from("tests/tmp_save/output.png");
+    #[test]
+    fn test_img_save_replaces_original_file() {
+        let output_dir = PathBuf::from("tests/tmp_save");
+        let source_path = output_dir.join("input.png");
+        let target_path = output_dir.join("output.png");
 
-    // Ensure clean state
-    if output_dir.exists() {
-        fs::remove_dir_all(&output_dir).expect("Failed to clear test output folder");
+        // Setup clean state
+        let _ = fs::remove_dir_all(&output_dir);
+        fs::create_dir_all(&output_dir).unwrap();
+        fs::copy("tests/assets/test.png", &source_path).unwrap();
+
+        // Load and redirect
+        let mut img = Img::open(&source_path).unwrap();
+        img.target_path = target_path.clone();
+
+        img.save().expect("Save should succeed");
+
+        assert!(
+            !source_path.exists(),
+            "Original file should be deleted when target differs"
+        );
+
+        assert!(target_path.exists(), "Image should be saved to target path");
+
+        let _ = fs::remove_dir_all(&output_dir);
     }
-    fs::create_dir_all(&output_dir).expect("Failed to create tmp dir");
 
-    // Copy image to source
-    fs::copy("tests/assets/test.png", &source_path).expect("Failed to copy test image");
+    #[test]
+    fn test_img_save_preserves_original_file_if_same_path() {
+        let output_dir = PathBuf::from("tests/tmp_save_same");
+        let source_path = output_dir.join("same.png");
 
-    // Load image from source
-    let mut img = Img::open(&source_path).expect("Should open image");
+        // Setup clean state
+        let _ = fs::remove_dir_all(&output_dir);
+        fs::create_dir_all(&output_dir).unwrap();
+        fs::copy("tests/assets/test.png", &source_path).unwrap();
 
-    // Change the target path
-    img.target_path = target_path.clone();
+        let img = Img::open(&source_path).unwrap();
+        let metadata_before = fs::metadata(&source_path).unwrap();
+        let modified_time_before = metadata_before.modified().unwrap();
 
-    // Save it (this should delete the input file and write to the target)
-    img.save().expect("Save should succeed");
+        // Save to the same path (should not delete)
+        img.save().expect("Save should succeed");
 
-    // Assert that original was deleted
-    assert!(
-        !source_path.exists(),
-        "Original source file should be removed"
-    );
+        // File should still exist
+        assert!(
+            source_path.exists(),
+            "File should still exist if path matches"
+        );
 
-    // Assert that the image was saved at the new location
-    assert!(
-        target_path.exists(),
-        "Target path should contain the saved image"
-    );
+        let metadata_after = fs::metadata(&source_path).unwrap();
+        let modified_time_after = metadata_after.modified().unwrap();
 
-    // Clean up
-    fs::remove_dir_all(&output_dir).expect("Failed to clear test output folder");
+        assert!(
+            modified_time_after >= modified_time_before,
+            "File should be updated or at least still present"
+        );
+
+        let _ = fs::remove_dir_all(&output_dir);
+    }
 }
