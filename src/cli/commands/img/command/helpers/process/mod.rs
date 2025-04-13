@@ -1,5 +1,3 @@
-use std::path::Path;
-
 use crate::{
     cli::commands::img::{ImgCommand, ImgError},
     services::img::Img,
@@ -8,6 +6,7 @@ use crate::{
 
 pub mod blur;
 pub mod conversion;
+pub mod file_name;
 pub mod output;
 pub mod resize;
 
@@ -23,17 +22,9 @@ impl ImgCommand {
 
         self.apply_conversion(img, ctx)?;
 
-        let output = match &self.output {
-            Some(Some(path)) => Some(path.clone()),
-            Some(None) => Some(
-                img.target_path
-                    .parent()
-                    .unwrap_or_else(|| Path::new("."))
-                    .to_string_lossy()
-                    .to_string(),
-            ),
-            None => None,
-        };
+        self.apply_file_name(img)?;
+
+        let output = self.handle_output(img)?;
 
         Ok(output)
     }

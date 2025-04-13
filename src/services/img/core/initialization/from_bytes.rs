@@ -1,4 +1,4 @@
-use std::env;
+use std::path::PathBuf;
 
 use image::{guess_format, GenericImageView};
 use uuid::Uuid;
@@ -23,16 +23,13 @@ impl Img {
 
         let (width, height) = img.dimensions();
 
-        let cwd = env::current_dir().map_err(|e| ImgError::Io {
-            context: "Failed to get current working directory".into(),
-            source: e,
-        })?;
-
         let ext = match format.extensions_str().first() {
             Some(ext) => ext,
             None => return Err(ImgError::ExtensionInvalid),
         };
         let file_name = format!("{}.{}", id, ext);
+
+        let cwd = PathBuf::from(".");
         let target = cwd.join(&file_name);
 
         Ok(Self {

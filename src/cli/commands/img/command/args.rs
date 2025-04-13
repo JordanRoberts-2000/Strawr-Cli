@@ -37,4 +37,13 @@ pub struct ImgCommand {
 
     #[arg(long, help = "Image to use lossless compression when possible", num_args = 0..=1)]
     pub blur: Option<Option<u8>>,
+
+    #[arg(short, long, help = "Configure image quality")]
+    pub rename: Option<String>,
+
+    #[arg(long, help = "Configure image quality")]
+    pub suffix: Option<String>,
+
+    #[arg(long, help = "Configure image quality")]
+    pub prefix: Option<String>,
 }
