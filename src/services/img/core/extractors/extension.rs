@@ -1,13 +1,13 @@
-use crate::services::img::Img;
+use crate::services::img::{Img, ImgError};
 use image::ImageFormat;
 
 impl Img {
-    pub fn extention(&self) -> Option<&'static str> {
+    pub fn extention(&self) -> Result<&'static str, ImgError> {
         match self.format {
-            ImageFormat::Jpeg => Some("jpg"),
-            ImageFormat::WebP => Some("webp"),
-            ImageFormat::Png => Some("png"),
-            _ => None,
+            ImageFormat::Jpeg => Ok("jpg"),
+            ImageFormat::WebP => Ok("webp"),
+            ImageFormat::Png => Ok("png"),
+            _ => Err(ImgError::ExtensionInvalid),
         }
     }
 }

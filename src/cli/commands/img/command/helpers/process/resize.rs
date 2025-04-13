@@ -5,8 +5,6 @@ impl ImgCommand {
         if let Some(size) = &self.size {
             let resize_to: u32 = size.into();
             img.resize(resize_to, resize_to);
-        } else if let Some(size) = self.max.or(ctx.config.img.max_size) {
-            img.resize(size, size);
         } else if self.placeholder.unwrap_or(false) {
             img.resize(
                 ctx.config.img.placeholder_size,
@@ -14,6 +12,8 @@ impl ImgCommand {
             );
         } else if self.thumbnail.unwrap_or(false) {
             img.resize(ctx.config.img.thumbnail_size, ctx.config.img.thumbnail_size);
+        } else if let Some(size) = self.max.or(ctx.config.img.max_size) {
+            img.resize(size, size);
         }
     }
 }

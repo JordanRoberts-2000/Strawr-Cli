@@ -1,5 +1,3 @@
-use std::path::PathBuf;
-
 use crate::cli::commands::img::ImgError;
 use crate::services::img::Img;
 use crate::state::AppContext;
@@ -22,14 +20,14 @@ impl ImgCommand {
                     match self.process_image(&mut img, &ctx)? {
                         Some(output) => img.save_to(output),
                         None => img.save(),
-                    };
+                    }?;
                 }
                 InputType::Url => {
                     let mut img = Img::download(&input)?;
                     match self.process_image(&mut img, &ctx)? {
                         Some(output) => img.save_to(output),
                         None => img.save(),
-                    };
+                    }?;
                 }
             }
         }

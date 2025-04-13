@@ -1,51 +1,59 @@
-use crate::services::img::Img;
+use std::path::Path;
+
+use crate::services::img::{Img, ImgError};
 
 impl Img {
-    // pub fn with_file_name<T: AsRef<str>>(&mut self, file_name: T) -> &mut Self {
-    //     let new_file_name = file_name.as_ref().to_string();
-    //     self.file_name = new_file_name.clone();
+    pub fn with_file_name<T: AsRef<Path>>(&mut self, file_name: T) -> Result<&mut Self, ImgError> {
+        let new_file_name = file_name.as_ref();
+        let parent = self.target_path.parent().unwrap_or_else(|| Path::new("."));
 
-    //     let parent = self
-    //         .target_path
-    //         .parent()
-    //         .unwrap_or_else(|| std::path::Path::new(""));
-    //     self.target_path = parent.join(&new_file_name);
+        let ext = self
+            .format
+            .extensions_str()
+            .first()
+            .ok_or(ImgError::ExtensionInvalid)?;
 
-    //     self
-    // }
+        self.target_path = parent.join(new_file_name).with_extension(ext);
+
+        Ok(self)
+    }
 }
 
-// #[cfg(test)]
-// mod tests {
-//     use crate::services::img::core::ImgSrc;
+#[cfg(test)]
+mod tests {
+    use super::*;
+    use std::fs;
+    use std::path::Path;
 
-//     use super::*;
-//     use image::{DynamicImage, ImageFormat, RgbaImage};
-//     use std::path::PathBuf;
+    #[test]
+    fn test_img_with_file_name_updates_target_path() {
+        let bytes = fs::read("tests/assets/test.png").expect("test image should exist");
+        let mut img = Img::from_bytes(bytes).expect("Image should be loaded from bytes");
 
-//     fn dummy_img() -> Img {
-//         Img {
-//             img: DynamicImage::ImageRgba8(RgbaImage::new(100, 100)),
-//             src: ImgSrc::Local {
-//                 path: PathBuf::from("original.png"),
-//             },
-//             target_path: PathBuf::from("some/folder/original.png"),
-//             file_name: "original.png".to_string(),
-//             height: 100,
-//             width: 100,
-//             aspect_ratio: 1.0,
-//             format: ImageFormat::Png,
-//             size_bytes: 1024,
-//         }
-//     }
+        let old_parent = img.target_path.parent().unwrap().to_path_buf();
+        let new_name = "renamed-image.webp"; // should be corrected to .png
 
-//     #[test]
-//     fn with_file_name() {
-//         let mut img = dummy_img();
+        img.with_file_name(new_name)
+            .expect("with_file_name should succeed");
 
-//         img.with_file_name("new_name");
+        let expected_ext = img.format.extensions_str()[0];
+        let expected_file_name = format!(
+            "{}.{}",
+            Path::new(new_name).file_stem().unwrap().to_string_lossy(),
+            expected_ext
+        );
 
-//         assert_eq!(img.file_name, "new_name.png");
-//         assert_eq!(img.target_path, PathBuf::from("some/folder/new_name.png"));
-//     }
-// }
+        let expected_path = old_parent.join(&expected_file_name);
+
+        assert_eq!(
+            img.target_path, expected_path,
+            "Target path should be updated with correct extension"
+        );
+
+        assert_eq!(
+            img.target_path.file_name().unwrap().to_string_lossy(),
+            expected_file_name,
+            "File name should be updated correctly"
+        );
+    }
+}

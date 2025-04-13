@@ -7,7 +7,7 @@ use image::ImageFormat;
 pub enum ValidImageFormat {
     #[serde(alias = "jpg")]
     Jpeg,
-    WebP,
+    Webp,
     Png,
     Original,
 }
@@ -25,7 +25,7 @@ impl TryFrom<ValidImageFormat> for ImageFormat {
         match value {
             ValidImageFormat::Jpeg => Ok(ImageFormat::Jpeg),
             ValidImageFormat::Png => Ok(ImageFormat::Png),
-            ValidImageFormat::WebP => Ok(ImageFormat::WebP),
+            ValidImageFormat::Webp => Ok(ImageFormat::WebP),
             ValidImageFormat::Original => Err(ImageFormatConversionError::NoConcreteFormat),
         }
     }
@@ -38,7 +38,7 @@ impl TryFrom<&ValidImageFormat> for ImageFormat {
         match value {
             ValidImageFormat::Jpeg => Ok(ImageFormat::Jpeg),
             ValidImageFormat::Png => Ok(ImageFormat::Png),
-            ValidImageFormat::WebP => Ok(ImageFormat::WebP),
+            ValidImageFormat::Webp => Ok(ImageFormat::WebP),
             ValidImageFormat::Original => Err(ImageFormatConversionError::NoConcreteFormat),
         }
     }

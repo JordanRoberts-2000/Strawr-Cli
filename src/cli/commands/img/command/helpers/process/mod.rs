@@ -1,4 +1,4 @@
-use std::path::PathBuf;
+use std::path::Path;
 
 use crate::{
     cli::commands::img::{ImgCommand, ImgError},
@@ -16,25 +16,25 @@ impl ImgCommand {
         &self,
         img: &mut Img,
         ctx: &AppContext,
-    ) -> Result<Option<PathBuf>, ImgError> {
+    ) -> Result<Option<String>, ImgError> {
         self.apply_blur(img, ctx);
 
         self.apply_resize(img, ctx);
 
         self.apply_conversion(img, ctx)?;
 
-        // let output = if let Some(output) = &self.output {
-        //     match output {
-        //         Some(path) => Some(path.clone()),
-        //         None => {
-        //             let cwd = std::env::current_dir().map_err(|e| ImgError::)?;
-        //             Some(cwd)
-        //         }
-        //     }
-        // } else {
-        //     None
-        // };
+        let output = match &self.output {
+            Some(Some(path)) => Some(path.clone()),
+            Some(None) => Some(
+                img.target_path
+                    .parent()
+                    .unwrap_or_else(|| Path::new("."))
+                    .to_string_lossy()
+                    .to_string(),
+            ),
+            None => None,
+        };
 
-        Ok(None)
+        Ok(output)
     }
 }
