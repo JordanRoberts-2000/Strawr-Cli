@@ -6,7 +6,7 @@ pub mod spinner;
 pub mod trash;
 
 pub use clipboard::clipboard;
-pub use keychain::keychain;
+pub use keychain::{keychain, Keychain};
 pub use select::select;
 pub use spinner::spinner;
 pub use trash::trash;
