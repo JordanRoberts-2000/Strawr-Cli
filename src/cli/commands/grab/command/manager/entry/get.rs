@@ -1,7 +1,7 @@
 use crate::{
     cli::commands::grab::{GrabError, GrabManager},
     services::crypto::{decrypt, ENCRYPTION_PREFIX},
-    utils::{self, Keychain},
+    utils::{self, Keyring},
 };
 
 impl GrabManager {
@@ -13,7 +13,7 @@ impl GrabManager {
 
         let final_value = if val.starts_with(ENCRYPTION_PREFIX) {
             log::trace!("Value requires decryption");
-            let password = utils::keychain(Keychain::Password)?;
+            let password = Keyring::Password.retrieve()?;
             decrypt(val, &password)?
         } else {
             val.clone()

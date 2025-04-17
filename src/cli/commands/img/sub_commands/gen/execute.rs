@@ -3,7 +3,7 @@ use crate::{
     cli::commands::img::{sub_commands::gen::manager::GenManager, ImgError},
     services::{ai, img::Img},
     state::AppContext,
-    utils::{self, Keychain},
+    utils::Keyring,
 };
 
 impl Gen {
@@ -11,12 +11,10 @@ impl Gen {
         let mut manager = GenManager::new(ctx, &self);
         manager.handle_args();
 
-        let api_key = utils::keychain(Keychain::OpenAiKey)?;
-
+        let api_key = Keyring::OpenAiKey.retrieve()?;
         let url = ai::sync::image(&api_key, &self.description).generate()?;
 
         Img::download(&url.to_string())?.save()?;
-
         Ok(())
     }
 }

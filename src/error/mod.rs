@@ -2,7 +2,7 @@ pub use parse::ParseError;
 use thiserror::Error;
 
 use crate::{
-    cli::commands::{grab::GrabError, img::ImgError},
+    cli::commands::{grab::GrabError, img::ImgError, temp::TempError},
     config::error::ConfigError,
     state::error::StateError,
 };
@@ -25,4 +25,6 @@ pub enum Error {
     Grab(#[from] GrabError),
     #[error("[Error]: {0}")]
     Img(#[from] ImgError),
+    #[error("[Error]: {0}")]
+    Temp(#[from] TempError),
 }

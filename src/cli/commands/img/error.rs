@@ -1,6 +1,6 @@
 use crate::{
     services::{ai, img},
-    utils::{clipboard::ClipboardError, keychain::KeyChainError},
+    utils::{clipboard::ClipboardError, keyring::KeyringError},
 };
 use thiserror::Error;
 
@@ -15,7 +15,7 @@ pub enum ImgError {
     #[error("Internal error occured: {0}")]
     AiService(#[from] ai::AiError),
     #[error("Internal error occured: {0}")]
-    Keychain(#[from] KeyChainError),
+    Keyring(#[from] KeyringError),
     #[error("Internal error occured: {0}")]
     Clipboard(#[from] ClipboardError),
     #[error("Internal error occured: {0}")]

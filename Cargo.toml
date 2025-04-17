@@ -43,3 +43,4 @@ uuid = { version = "1.16.0", features = ["v4"] }
 validator = { version = "0.20.0", features = ["derive"] }
 walkdir = "2.5.0"
 webp = "0.3.0"
+which = "7.0.3"

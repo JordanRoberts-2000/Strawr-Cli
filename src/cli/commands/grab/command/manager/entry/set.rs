@@ -2,7 +2,7 @@ use crate::{
     cli::commands::grab::{GrabError, GrabManager},
     error::ParseError,
     services::crypto,
-    utils::{self, Keychain},
+    utils::Keyring,
 };
 use std::fs;
 
@@ -16,7 +16,7 @@ impl GrabManager {
         log::trace!("attempting to set key '{}' to '{}'", key, value);
 
         let entry_value = if *encrypt {
-            let password = utils::keychain(Keychain::Password)?;
+            let password = Keyring::Password.retrieve()?;
             crypto::encrypt(value, &password)?
         } else {
             value.clone()

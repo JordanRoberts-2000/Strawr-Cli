@@ -21,11 +21,14 @@ pub fn run_cli(cli: Cli) -> Result<()> {
     match cli.commands {
         Commands::Grab(cmd) => cmd.execute(&ctx)?,
         Commands::Img(cmd) => cmd.execute(&ctx)?,
-        // Commands::Temp => todo!(),
-        // Commands::Playground => todo!(),
+        Commands::Temp(cmd) => cmd.execute(&ctx)?,
+        Commands::Open => todo!(),
+        Commands::Playground => todo!(),
         Commands::Template => todo!(),
-        Commands::Font => todo!(),
+
         Commands::Backup => todo!(),
+        Commands::Config => todo!(),
+        Commands::Uninstall => todo!(),
     };
 
     let duration = start_time.elapsed();
