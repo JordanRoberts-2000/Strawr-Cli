@@ -14,6 +14,8 @@ pub mod state;
 pub mod utils;
 
 pub fn run_cli(cli: Cli) -> Result<()> {
+    println!("EGG");
+    log::info!("HELLO");
     logger::initialize(cli.debug);
     let ctx = AppContext::initialize(&cli.debug)?;
     let start_time = Instant::now();
@@ -22,9 +24,8 @@ pub fn run_cli(cli: Cli) -> Result<()> {
         Commands::Grab(cmd) => cmd.execute(&ctx)?,
         Commands::Img(cmd) => cmd.execute(&ctx)?,
         Commands::Temp(cmd) => cmd.execute(&ctx)?,
-        Commands::Open => todo!(),
         Commands::Playground => todo!(),
-        Commands::Template => todo!(),
+        Commands::Template(cmd) => cmd.execute(&ctx),
 
         Commands::Backup => todo!(),
         Commands::Config => todo!(),

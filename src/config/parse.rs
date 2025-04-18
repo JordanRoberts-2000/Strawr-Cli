@@ -9,6 +9,7 @@ pub const INITIAL_CONFIG_CONTENT: &str = include_str!("initial_config.toml");
 impl Config {
     pub fn parse(storage_dir: &PathBuf) -> Result<Config, ConfigError> {
         let config_path = storage_dir.join("config.toml");
+        log::trace!("Config path: {:?}", config_path);
 
         if !config_path.exists() {
             fs::write(&config_path, INITIAL_CONFIG_CONTENT).map_err(|e| ConfigError::Io {

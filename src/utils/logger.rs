@@ -17,14 +17,6 @@ pub fn initialize(debug: bool) {
 
     builder.format(|buf, record: &Record| {
         let mut message = format!("[{:?}]", record.level());
-
-        #[cfg(debug_assertions)]
-        if record.level() == Level::Error {
-            if let (Some(file), Some(line)) = (record.file(), record.line()) {
-                message.push_str(&format!(" - {}:{} -", file, line));
-            }
-        }
-
         message.push_str(&format!(" {}", record.args()));
 
         let colored_message = match record.level() {
