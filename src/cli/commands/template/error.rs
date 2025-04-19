@@ -7,4 +7,6 @@ pub enum TemplateError {
     },
     #[error("Attempted to create a variant of a non-existent template")]
     CreatingVariantWithoutDefault,
+    #[error("Attempted to create a variant of a non-existent template")]
+    FailedToReadTemplateDir(std::io::Error),
 }
