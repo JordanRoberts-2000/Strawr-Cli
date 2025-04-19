@@ -8,7 +8,7 @@ fn main() {
 
     if let Err(error) = run_cli(cli) {
         if debug {
-            eprintln!("Error: {:#?}", error);
+            eprintln!("{}", format!("Error: {:#?}", error).red());
         } else {
             eprintln!("{}", format!("{}", error).red());
         }

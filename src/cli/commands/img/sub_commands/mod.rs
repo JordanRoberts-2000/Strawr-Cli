@@ -9,16 +9,16 @@ pub mod gen;
 pub mod get;
 
 #[derive(clap::Subcommand, Debug)]
-pub enum ImgSubcommands {
+pub enum ImgSubcommand {
     Get(Get),
     Gen(Gen),
 }
 
-impl ImgSubcommands {
+impl ImgSubcommand {
     pub fn execute(&self, ctx: &AppContext) -> Result<(), ImgError> {
         match self {
-            ImgSubcommands::Gen(cmd) => cmd.execute(ctx)?,
-            ImgSubcommands::Get(cmd) => cmd.execute(ctx)?,
+            ImgSubcommand::Gen(cmd) => cmd.execute(ctx)?,
+            ImgSubcommand::Get(cmd) => cmd.execute(ctx)?,
         }
 
         Ok(())

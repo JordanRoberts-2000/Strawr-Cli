@@ -1,9 +1,12 @@
-use clap::{Args, Parser};
+use super::sub_commands::TemplateSubcommands;
 
-#[derive(Parser, Debug)]
+#[derive(clap::Parser, Debug)]
 pub struct TemplateCommand {
     #[arg()]
     pub template: Option<String>,
+
+    #[command(subcommand)]
+    pub subcommand: Option<TemplateSubcommands>,
 
     #[arg(long, short)]
     pub variant: Option<String>,

@@ -1,5 +1,5 @@
 use crate::cli::commands::img::{
-    sub_commands::ImgSubcommands,
+    sub_commands::ImgSubcommand,
     utils::enums::{Size, ValidImageFormat},
 };
 
@@ -7,7 +7,7 @@ use crate::cli::commands::img::{
 #[command(subcommand_negates_reqs = true)]
 pub struct ImgCommand {
     #[command(subcommand)]
-    pub subcommands: Option<ImgSubcommands>,
+    pub subcommand: Option<ImgSubcommand>,
 
     #[arg(help = "Path to an image file, a folder of images, or an image URL")]
     pub input: Option<String>,

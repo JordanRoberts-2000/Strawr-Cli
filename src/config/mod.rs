@@ -2,7 +2,7 @@ use serde::Deserialize;
 use validator::Validate;
 
 use crate::{
-    cli::commands::{grab::GrabConfig, img::ImgConfig},
+    cli::commands::{grab::GrabConfig, img::ImgConfig, template::TemplateConfig},
     utils::Editor,
 };
 
@@ -15,6 +15,5 @@ pub struct Config {
     pub grab: GrabConfig,
     #[validate(nested)]
     pub img: ImgConfig,
-    // #[validate(nested)]
-    // pub open: OpenConfig,
+    pub template: TemplateConfig,
 }

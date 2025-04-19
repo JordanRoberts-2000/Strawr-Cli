@@ -4,15 +4,14 @@ use log::{Level, LevelFilter, Record};
 use std::{env, io::Write};
 
 pub fn initialize(debug: bool) {
-    if !debug {
-        return;
-    }
     let mut builder = Builder::new();
 
-    if env::var("RUST_LOG").is_err() {
+    if let Ok(rust_log) = env::var("RUST_LOG") {
+        builder.parse_filters(&rust_log);
+    } else if debug {
         builder.filter_level(LevelFilter::Debug);
     } else {
-        builder.parse_env("RUST_LOG");
+        builder.filter_level(LevelFilter::Warn);
     }
 
     builder.format(|buf, record: &Record| {

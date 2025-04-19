@@ -1,4 +1,7 @@
-pub mod args;
-pub mod execute;
+pub mod command;
+pub mod config;
+pub mod error;
 
-pub use args::TemplateCommand;
+pub use command::args::TemplateCommand;
+pub use config::TemplateConfig;
+pub use error::TemplateError;

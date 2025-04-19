@@ -7,7 +7,7 @@ use super::helpers::input_detection::InputType;
 
 impl ImgCommand {
     pub fn execute(&self, ctx: &AppContext) -> Result<(), ImgError> {
-        if let Some(subcommand) = &self.subcommands {
+        if let Some(subcommand) = &self.subcommand {
             return subcommand.execute(ctx);
         }
 
