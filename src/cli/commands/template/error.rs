@@ -5,4 +5,6 @@ pub enum TemplateError {
         context: String,
         source: std::io::Error,
     },
+    #[error("Attempted to create a variant of a non-existent template")]
+    CreatingVariantWithoutDefault,
 }
