@@ -8,10 +8,7 @@ use super::{
 
 impl TemplateCommand {
     pub fn execute(&self, ctx: &AppContext) -> Result<(), TemplateError> {
-        let mut manager = TemplateManager::new(ctx);
-
-        manager.init_storage()?;
-        manager.load_templates()?;
+        let manager = TemplateManager::new(ctx)?;
 
         if self.template.is_none() && self.subcommand.is_none() {
             return handle_no_input();

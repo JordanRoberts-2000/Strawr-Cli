@@ -5,6 +5,10 @@ pub enum TemplateError {
         context: String,
         source: std::io::Error,
     },
+    #[error("Cannot create template as it already exists")]
+    TemplateAlreadyExists,
+    #[error("Cannot create template variant as it already exists")]
+    VariantAlreadyExists,
     #[error("Attempted to create a variant of a non-existent template")]
     CreatingVariantWithoutDefault,
     #[error("Attempted to create a variant of a non-existent template")]

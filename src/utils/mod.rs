@@ -1,5 +1,6 @@
 pub mod clipboard;
 pub mod editor;
+pub mod fs;
 pub mod keyring;
 pub mod logger;
 pub mod select;
