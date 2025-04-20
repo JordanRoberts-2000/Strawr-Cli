@@ -3,14 +3,17 @@ use std::path::PathBuf;
 use crate::{
     cli::commands::template::{TemplateConfig, TemplateError},
     state::AppContext,
-    utils::fs::list_subfolders,
+    utils::{fs::list_subfolders, Editor},
 };
 
 pub mod create;
+pub mod inject;
+pub mod open;
 
 pub struct TemplateManager {
     pub templates_path: PathBuf,
     pub config: TemplateConfig,
+    pub editor: Editor,
     pub templates: Vec<String>,
 }
 
@@ -32,6 +35,7 @@ impl TemplateManager {
         Ok(Self {
             templates_path,
             config: ctx.config.template.clone(),
+            editor: ctx.config.default_editor.clone(),
             templates,
         })
     }

@@ -2,7 +2,7 @@ use crate::{cli::commands::template::TemplateError, state::AppContext};
 
 use super::{
     args::TemplateCommand,
-    helpers::{handle_no_input, inject_template_files, parse_input},
+    helpers::{handle_no_input, parse_input},
     manager::TemplateManager,
 };
 
@@ -20,7 +20,7 @@ impl TemplateCommand {
 
         if let Some(template) = &self.template {
             let (template, variant) = parse_input(template, &self.variant)?;
-            inject_template_files(&template, &variant)?;
+            manager.inject_template_files(&template, &variant)?;
         }
 
         Ok(())
