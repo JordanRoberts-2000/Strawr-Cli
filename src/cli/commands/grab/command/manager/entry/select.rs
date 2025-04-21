@@ -1,6 +1,6 @@
 use crate::{
     cli::commands::grab::{GrabError, GrabManager},
-    utils,
+    utils::input,
 };
 
 impl GrabManager {
@@ -10,7 +10,7 @@ impl GrabManager {
         }
 
         let keys: Vec<&str> = self.data_map.keys().map(|k| k.as_str()).collect();
-        let key = utils::select(keys, "Select key:").prompt()?;
+        let key = input::select(&keys, "Select key:").prompt()?;
 
         Ok(key.to_string())
     }

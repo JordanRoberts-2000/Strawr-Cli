@@ -1,17 +1,13 @@
 use crate::{cli::commands::template::TemplateError, state::AppContext};
 
-use super::{
-    args::TemplateCommand,
-    helpers::{handle_no_input, parse_input},
-    manager::TemplateManager,
-};
+use super::{args::TemplateCommand, helpers::parse_input, manager::TemplateManager};
 
 impl TemplateCommand {
     pub fn execute(&self, ctx: &AppContext) -> Result<(), TemplateError> {
         let manager = TemplateManager::new(ctx)?;
 
         if self.template.is_none() && self.subcommand.is_none() {
-            return handle_no_input();
+            return manager.handle_no_input();
         }
 
         if let Some(subcommand) = &self.subcommand {

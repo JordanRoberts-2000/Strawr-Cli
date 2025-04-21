@@ -19,6 +19,13 @@ pub fn list_subfolders<P: AsRef<Path>>(path: P) -> Result<Vec<String>, io::Error
     Ok(folder_names)
 }
 
+pub fn is_dir_empty<P: AsRef<Path>>(path: P) -> io::Result<bool> {
+    let path = path.as_ref();
+
+    let mut entries = fs::read_dir(path)?;
+    Ok(entries.next().is_none())
+}
+
 pub fn copy_dir_contents(src: &Path, dst: &Path) -> std::io::Result<()> {
     if src.is_dir() {
         // Create directories that don't exist

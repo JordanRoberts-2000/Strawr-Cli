@@ -21,4 +21,8 @@ pub enum TemplateError {
     FailedToReadTemplateDir(std::io::Error),
     #[error("Editor failed to open")]
     EditorFailed(#[from] EditorError),
+    #[error("Failed to select")]
+    SelectFailed(#[from] inquire::InquireError),
+    #[error("No templates set")]
+    NoTemplates,
 }
