@@ -2,6 +2,8 @@ use super::commands::{
     grab::GrabCommand, img::ImgCommand, temp::TempCommand, template::TemplateCommand,
 };
 
+pub mod backup;
+pub mod config;
 pub mod grab;
 pub mod img;
 pub mod temp;
@@ -13,8 +15,6 @@ pub enum Commands {
     Img(ImgCommand),
     #[command(about = "Create temporary environments")]
     Temp(TempCommand),
-    #[command(about = "Use playground environment")]
-    Playground,
     #[command(about = "Set and get encrypted data")]
     Grab(GrabCommand),
     #[command(about = "Create or manipulate templates for your projects")]

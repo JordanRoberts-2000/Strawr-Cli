@@ -1,5 +1,5 @@
-use inquire::{error::InquireError, Confirm};
+use inquire::Confirm;
 
-pub fn confirm_action(prompt: &str) -> Result<bool, InquireError> {
-    Confirm::new(prompt).with_default(false).prompt()
+pub fn confirm_action(prompt: &str) -> Confirm {
+    Confirm::new(prompt).with_default(false)
 }

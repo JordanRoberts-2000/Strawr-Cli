@@ -22,7 +22,6 @@ pub fn run_cli(cli: Cli) -> Result<()> {
         Commands::Grab(cmd) => cmd.execute(&ctx)?,
         Commands::Img(cmd) => cmd.execute(&ctx)?,
         Commands::Temp(cmd) => cmd.execute(&ctx)?,
-        Commands::Playground => todo!(),
         Commands::Template(cmd) => cmd.execute(&ctx)?,
 
         Commands::Backup => todo!(),

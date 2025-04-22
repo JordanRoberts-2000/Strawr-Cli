@@ -3,7 +3,7 @@ use std::path::PathBuf;
 use crate::{
     cli::commands::template::{TemplateConfig, TemplateError},
     state::AppContext,
-    utils::{fs::list_subfolders, Editor},
+    utils::{fs::subfolders, Editor},
 };
 
 pub mod create;
@@ -31,7 +31,7 @@ impl TemplateManager {
         }
 
         let templates =
-            list_subfolders(&templates_path).map_err(TemplateError::FailedToReadTemplateDir)?;
+            subfolders(&templates_path).map_err(TemplateError::FailedToReadTemplateDir)?;
 
         Ok(Self {
             templates_path,

@@ -2,7 +2,7 @@ use std::fs;
 
 use crate::{
     cli::commands::template::{command::manager::TemplateManager, TemplateError},
-    utils::fs::list_subfolders,
+    utils::fs::subfolders,
 };
 
 impl TemplateManager {
@@ -19,8 +19,8 @@ impl TemplateManager {
                     return Err(TemplateError::CreatingVariantWithoutDefault);
                 }
 
-                let current_variants = list_subfolders(&template_path)
-                    .map_err(TemplateError::FailedToReadTemplateDir)?;
+                let current_variants =
+                    subfolders(&template_path).map_err(TemplateError::FailedToReadTemplateDir)?;
 
                 if current_variants.contains(variant_name) {
                     return Err(TemplateError::VariantAlreadyExists);
