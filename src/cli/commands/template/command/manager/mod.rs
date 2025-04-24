@@ -1,25 +1,19 @@
 use std::path::PathBuf;
 
-use crate::{
-    cli::commands::template::{TemplateConfig, TemplateError},
-    state::AppContext,
-    utils::{fs::subfolders, Editor},
-};
+use crate::{cli::commands::template::TemplateError, state::AppContext};
 
 pub mod create;
 pub mod inject;
 pub mod no_input;
 pub mod open;
 
-pub struct TemplateManager {
+pub struct TemplateManager<'a> {
+    pub ctx: &'a AppContext,
     pub templates_path: PathBuf,
-    pub config: TemplateConfig,
-    pub editor: Editor,
-    pub templates: Vec<String>,
 }
 
-impl TemplateManager {
-    pub fn new(ctx: &AppContext) -> Result<Self, TemplateError> {
+impl<'a> TemplateManager<'a> {
+    pub fn new(ctx: &'a AppContext) -> Result<Self, TemplateError> {
         let templates_path = ctx.storage_dir.join("templates");
 
         if !templates_path.exists() {
@@ -30,14 +24,9 @@ impl TemplateManager {
             log::info!("Created templates folder at {:?}", templates_path);
         }
 
-        let templates =
-            subfolders(&templates_path).map_err(TemplateError::FailedToReadTemplateDir)?;
-
         Ok(Self {
+            ctx,
             templates_path,
-            config: ctx.config.template.clone(),
-            editor: ctx.config.default_editor.clone(),
-            templates,
         })
     }
 }

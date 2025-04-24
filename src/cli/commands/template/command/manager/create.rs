@@ -5,17 +5,19 @@ use crate::{
     utils::fs::subfolders,
 };
 
-impl TemplateManager {
+impl<'a> TemplateManager<'a> {
     pub fn create_template(
         &self,
         template: &str,
         variant: &Option<String>,
     ) -> Result<(), TemplateError> {
         let template_path = self.templates_path.join(template);
+        let existing_templates =
+            subfolders(&template_path).map_err(TemplateError::FailedToReadTemplateDir)?;
 
         match variant {
             Some(variant_name) => {
-                if !self.templates.contains(&template.to_string()) {
+                if !existing_templates.contains(&template.to_string()) {
                     return Err(TemplateError::CreatingVariantWithoutDefault);
                 }
 
@@ -27,21 +29,29 @@ impl TemplateManager {
                 }
 
                 let variant_path = template_path.join(variant_name);
-                fs::create_dir(&variant_path).map_err(|e| TemplateError::Io {
-                    context: format!("Failed to create variant folder '{:?}'", variant_path),
-                    source: e,
-                })?;
 
-                log::info!(
-                    "Created variant '{}' for template '{}'",
-                    variant_name,
-                    template
-                );
+                // fs::create_dir(&variant_path).map_err(|e| TemplateError::Io {
+                //     context: format!(
+                //         "Failed to create variant folder '{}'",
+                //         variant_path.display()
+                //     ),
+                //     source: e,
+                // })?;
 
-                self.editor.open(&variant_path)?;
+                // log::info!(
+                //     "Created variant '{}' for template '{}'",
+                //     variant_name,
+                //     template
+                // );
+
+                fs::create_dir(&variant_path)
+                    .with_context::<TemplateError>("failed to create..", &variant_path)?;
+                log::info!("Created variant '{variant_name}' for template '{template}'");
+
+                self.ctx.config.default_editor.open(&variant_path)?;
             }
             None => {
-                if self.templates.contains(&template.to_string()) {
+                if existing_templates.contains(&template.to_string()) {
                     return Err(TemplateError::TemplateAlreadyExists);
                 }
 
@@ -56,7 +66,7 @@ impl TemplateManager {
 
                 log::info!("Created new template '{}'", template);
 
-                self.editor.open(&default_path)?;
+                self.ctx.config.default_editor.open(&default_path)?;
             }
         }
 

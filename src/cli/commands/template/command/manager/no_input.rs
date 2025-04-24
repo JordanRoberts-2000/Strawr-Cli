@@ -1,11 +1,14 @@
 use crate::{
     cli::commands::template::error::TemplateError,
-    utils::{fs::is_dir_empty, input},
+    utils::{
+        fs::{is_dir_empty, subfolders},
+        input,
+    },
 };
 
 use super::TemplateManager;
 
-impl TemplateManager {
+impl<'a> TemplateManager<'a> {
     pub fn handle_no_input(&self) -> Result<(), TemplateError> {
         log::trace!("No input detected");
 
@@ -15,7 +18,9 @@ impl TemplateManager {
         })?;
 
         if !empty_dir {
-            let template = input::select(&self.templates, "Select template:").prompt()?;
+            let subdirs =
+                subfolders(&self.templates_path).map_err(TemplateError::FailedToReadTemplateDir)?;
+            let template = input::select(&subdirs, "Select template:").prompt()?;
             // check if templates has any variants?
             // self.inject_template_files(template, variant)
             println!("{template}");

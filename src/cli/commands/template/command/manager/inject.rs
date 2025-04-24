@@ -3,7 +3,7 @@ use crate::{
     utils::fs::copy_dir_contents,
 };
 
-impl TemplateManager {
+impl<'a> TemplateManager<'a> {
     pub fn inject_template_files(
         &self,
         template: &str,

@@ -1,6 +1,6 @@
 use crate::cli::commands::template::{command::manager::TemplateManager, TemplateError};
 
-impl TemplateManager {
+impl<'a> TemplateManager<'a> {
     pub fn open_template(
         &self,
         template: &str,
@@ -13,7 +13,7 @@ impl TemplateManager {
             None => path = path.join("default"),
         };
 
-        self.editor.open(path)?;
+        self.ctx.config.default_editor.open(path)?;
 
         Ok(())
     }
