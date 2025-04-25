@@ -1,5 +1,6 @@
 use crate::{
     cli::commands::template::{command::manager::TemplateManager, TemplateError},
+    error::io::IoError,
     utils::fs::copy_dir_contents,
 };
 
@@ -25,15 +26,10 @@ impl<'a> TemplateManager<'a> {
             };
         }
 
-        let current_dir = std::env::current_dir().map_err(|e| TemplateError::Io {
-            source: e,
-            context: "Failed to get current dir".to_string(),
-        })?;
+        let current_dir = std::env::current_dir().map_err(IoError::GetCurrentDir)?;
 
-        copy_dir_contents(&source_path, &current_dir).map_err(|e| TemplateError::Io {
-            source: e,
-            context: "Failed to copy dirs contents".to_string(),
-        })?;
+        copy_dir_contents(&source_path, &current_dir)
+            .map_err(|e| IoError::CopyDirContents(e, source_path.clone(), current_dir.clone()))?;
 
         Ok(())
     }

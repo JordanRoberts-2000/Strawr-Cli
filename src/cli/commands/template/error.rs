@@ -1,15 +1,9 @@
-use std::path::PathBuf;
-
-use crate::utils::editor::EditorError;
+use crate::{error::io::IoError, utils::editor::EditorError};
 
 #[derive(thiserror::Error, Debug)]
 pub enum TemplateError {
-    #[error("Failed to {context} at '{path}': {source}")]
-    Io {
-        context: String,
-        path: PathBuf,
-        source: std::io::Error,
-    },
+    #[error(transparent)]
+    Io(#[from] IoError),
 
     #[error("Template '{template}' does not exist")]
     TemplateNotFound { template: String },
@@ -27,7 +21,7 @@ pub enum TemplateError {
     CreatingVariantWithoutDefault,
 
     #[error("Attempted to create a variant of a non-existent template")]
-    FailedToReadTemplateDir(std::io::Error),
+    NoExistingTemplate(std::io::Error),
 
     #[error("Editor failed to open")]
     EditorFailed(#[from] EditorError),

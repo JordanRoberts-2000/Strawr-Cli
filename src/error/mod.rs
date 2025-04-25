@@ -1,32 +1,30 @@
-pub use parse::ParseError;
-use thiserror::Error;
-
 use crate::{
     cli::commands::{grab::GrabError, img::ImgError, temp::TempError, template::TemplateError},
     config::error::ConfigError,
     state::error::StateError,
 };
 
-pub type Result<T> = std::result::Result<T, Error>;
-
+pub mod io;
 pub mod parse;
 pub mod utils;
 
-#[derive(Error, Debug)]
-pub enum Error {
-    // #[error(transparent)]
-    #[error("[Error] {0}")]
+pub use io::IoError;
+pub use parse::ParseError;
+
+#[derive(thiserror::Error, Debug)]
+pub enum CliError {
+    #[error(transparent)]
     State(#[from] StateError),
-    #[error("[Error] {0}")]
+    #[error(transparent)]
     Config(#[from] ConfigError),
 
     // Commands
-    #[error("[Error]: {0}")]
+    #[error(transparent)]
     Grab(#[from] GrabError),
-    #[error("[Error]: {0}")]
+    #[error(transparent)]
     Img(#[from] ImgError),
-    #[error("[Error]: {0}")]
+    #[error(transparent)]
     Temp(#[from] TempError),
-    #[error("[Error]: {0}")]
+    #[error(transparent)]
     Template(#[from] TemplateError),
 }

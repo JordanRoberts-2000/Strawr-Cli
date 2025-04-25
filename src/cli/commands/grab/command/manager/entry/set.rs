@@ -1,6 +1,6 @@
 use crate::{
     cli::commands::grab::{GrabError, GrabManager},
-    error::ParseError,
+    error::{IoError, ParseError},
     services::crypto,
     utils::Keyring,
 };
@@ -37,10 +37,8 @@ impl GrabManager {
                 title: "updated data".to_string(),
             }
         })?;
-        fs::write(&self.json_file_path, updated_json).map_err(|e| GrabError::Io {
-            source: e,
-            context: format!("Failed to write to '{:?}'", self.json_file_path),
-        })?;
+        fs::write(&self.json_file_path, updated_json)
+            .map_err(|e| IoError::WriteFile(e, self.json_file_path.clone()))?;
         log::debug!("Updated data.json file");
 
         if entry_already_exists {

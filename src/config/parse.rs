@@ -1,4 +1,7 @@
-use crate::{config::error::ConfigError, error::ParseError};
+use crate::{
+    config::error::ConfigError,
+    error::{IoError, ParseError},
+};
 use std::{fs, path::PathBuf};
 use validator::Validate;
 
@@ -12,17 +15,13 @@ impl Config {
         log::trace!("Config path: {:?}", config_path);
 
         if !config_path.exists() {
-            fs::write(&config_path, INITIAL_CONFIG_CONTENT).map_err(|e| ConfigError::Io {
-                source: e,
-                context: "config.toml could not be initialized".to_string(),
-            })?;
+            fs::write(&config_path, INITIAL_CONFIG_CONTENT)
+                .map_err(|e| IoError::WriteFile(e, config_path.clone()))?;
             log::debug!("Created config.toml at {:?}", config_path);
         }
 
-        let config_contents = fs::read_to_string(&config_path).map_err(|e| ConfigError::Io {
-            source: e,
-            context: format!("Failed to read config file '{:?}'", config_path),
-        })?;
+        let config_contents = fs::read_to_string(&config_path)
+            .map_err(|e| IoError::ReadFile(e, config_path.clone()))?;
 
         let config: Config = toml::from_str(&config_contents).map_err(|e| ParseError::Toml {
             source: e,

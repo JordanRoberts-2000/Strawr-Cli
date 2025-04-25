@@ -1,7 +1,7 @@
 use thiserror::Error;
 
 use crate::{
-    error::ParseError,
+    error::{IoError, ParseError},
     services::crypto,
     utils::{clipboard::ClipboardError, keyring::KeyringError},
 };
@@ -16,11 +16,8 @@ pub enum GrabError {
     FailedToRetrieveKey(#[from] inquire::InquireError),
     #[error("Failed to parse: {0}")]
     Parse(#[from] ParseError),
-    #[error("io error: {context}")]
-    Io {
-        context: String,
-        source: std::io::Error,
-    },
+    #[error(transparent)]
+    Io(#[from] IoError),
     #[error("Internal error occured: {0}")]
     Crypto(#[from] crypto::CryptoError),
     #[error("Internal error occured: {0}")]

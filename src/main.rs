@@ -10,7 +10,7 @@ fn main() {
         if debug {
             eprintln!("{}", format!("Error: {:#?}", error).red());
         } else {
-            eprintln!("{}", format!("{}", error).red());
+            eprintln!("{}", format!("Error: {}", error).red());
         }
         std::process::exit(1);
     }

@@ -1,7 +1,7 @@
 use std::time::Instant;
 
 use cli::{Cli, Commands};
-use error::Result;
+use error::CliError;
 use state::AppContext;
 use utils::logger;
 
@@ -13,7 +13,7 @@ pub mod services;
 pub mod state;
 pub mod utils;
 
-pub fn run_cli(cli: Cli) -> Result<()> {
+pub fn run_cli(cli: Cli) -> Result<(), CliError> {
     logger::initialize(cli.debug);
     let ctx = AppContext::initialize(&cli.debug)?;
     let start_time = Instant::now();

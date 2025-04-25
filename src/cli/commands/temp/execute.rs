@@ -2,7 +2,7 @@ use std::{env, fs};
 
 use uuid::Uuid;
 
-use crate::state::AppContext;
+use crate::{error::IoError, state::AppContext};
 
 use super::{args::TempCommand, error::TempError};
 
@@ -15,7 +15,8 @@ impl TempCommand {
 
         let temp_dir_path = temp_dir_path.join("temporary");
 
-        fs::create_dir_all(&temp_dir_path).map_err(TempError::TempDirCreation)?;
+        fs::create_dir_all(&temp_dir_path)
+            .map_err(|e| IoError::CreateDir(e, temp_dir_path.clone()))?;
 
         log::info!("Created temp dir at: {}", temp_dir_path.display());
 

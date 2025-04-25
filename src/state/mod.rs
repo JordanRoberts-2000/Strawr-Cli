@@ -1,6 +1,6 @@
 use std::path::PathBuf;
 
-use crate::{config::Config, error::Result};
+use crate::{config::Config, error::CliError};
 
 pub mod error;
 pub mod get_storage_dir;
@@ -21,7 +21,7 @@ impl AppContext {
         }
     }
 
-    pub fn initialize(debug: &bool) -> Result<AppContext> {
+    pub fn initialize(debug: &bool) -> Result<AppContext, CliError> {
         let storage_dir = AppContext::get_storage_dir()?;
         let config = Config::parse(&storage_dir)?;
 

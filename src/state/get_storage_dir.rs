@@ -1,6 +1,9 @@
 use std::{env, fs, path::PathBuf};
 
-use crate::constants::{CONFIG_FOLDER_NAME, CONFIG_HOME_ENV, DEV_CONFIG_FOLDER_PATH};
+use crate::{
+    constants::{CONFIG_FOLDER_NAME, CONFIG_HOME_ENV, DEV_CONFIG_FOLDER_PATH},
+    error::IoError,
+};
 
 use super::{error::StateError, AppContext};
 
@@ -11,10 +14,8 @@ impl AppContext {
 
             let custom_dir = PathBuf::from(custom);
             if !custom_dir.exists() {
-                fs::create_dir_all(&custom_dir).map_err(|e| StateError::Io {
-                    source: e,
-                    context: format!("Failed to create STRAWR_HOME directory '{:?}'", custom_dir),
-                })?;
+                fs::create_dir_all(&custom_dir)
+                    .map_err(|e| IoError::CreateDir(e, custom_dir.clone()))?;
                 log::debug!("Created dirs for STRAWR_HOME path successfully");
             }
             custom_dir
@@ -33,10 +34,8 @@ impl AppContext {
         };
 
         if !storage_dir.exists() {
-            fs::create_dir_all(&storage_dir).map_err(|e| StateError::Io {
-                source: e,
-                context: format!("Failed to create storage directory '{:?}'", storage_dir),
-            })?;
+            fs::create_dir_all(&storage_dir)
+                .map_err(|e| IoError::CreateDir(e, storage_dir.clone()))?;
             log::info!("Created storage directory '{:?}' successfully", storage_dir);
         }
 

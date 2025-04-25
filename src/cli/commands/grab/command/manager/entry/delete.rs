@@ -2,7 +2,7 @@ use std::fs;
 
 use crate::{
     cli::commands::grab::{GrabError, GrabManager},
-    error::ParseError,
+    error::{IoError, ParseError},
 };
 
 impl GrabManager {
@@ -18,10 +18,8 @@ impl GrabManager {
                 }
             })?;
 
-            fs::write(&self.json_file_path, updated_json).map_err(|e| GrabError::Io {
-                source: e,
-                context: format!("Failed to write to '{:?}'", self.json_file_path),
-            })?;
+            fs::write(&self.json_file_path, updated_json)
+                .map_err(|e| IoError::WriteFile(e, self.json_file_path.clone()))?;
 
             log::debug!("Key '{}' removed from data.json", key);
             println!("Key '{}' removed successfully", key);
