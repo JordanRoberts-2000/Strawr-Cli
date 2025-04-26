@@ -18,7 +18,7 @@ impl CreateSubcommand {
         let (template, variant) = parse_input(&self.template, &self.variant)?;
         log::trace!("Input parsed - template: '{template}', variant: '{variant:?}'");
 
-        manager.create_template(&template, &variant)?;
+        manager.create_template(&template, variant.as_deref())?;
 
         Ok(())
     }

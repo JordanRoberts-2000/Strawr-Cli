@@ -1,7 +1,7 @@
 use std::fs;
 
 use crate::{
-    cli::commands::template::{command::manager::TemplateManager, TemplateError},
+    cli::commands::template::{command::manager::TemplateManager, TemplateError, DEFAULT_FOLDER},
     error::io::IoError,
     utils::fs::subfolders,
 };
@@ -10,7 +10,7 @@ impl<'a> TemplateManager<'a> {
     pub fn create_template(
         &self,
         template: &str,
-        variant: &Option<String>,
+        variant: Option<&str>,
     ) -> Result<(), TemplateError> {
         let template_path = self.templates_path.join(template);
         let existing_templates =
@@ -25,7 +25,7 @@ impl<'a> TemplateManager<'a> {
                 let current_variants =
                     subfolders(&template_path).map_err(TemplateError::NoExistingTemplate)?;
 
-                if current_variants.contains(variant_name) {
+                if current_variants.contains(&variant_name.to_string()) {
                     return Err(TemplateError::VariantAlreadyExists);
                 }
 
@@ -42,7 +42,7 @@ impl<'a> TemplateManager<'a> {
                     return Err(TemplateError::TemplateAlreadyExists);
                 }
 
-                let default_path = template_path.join("default");
+                let default_path = template_path.join(DEFAULT_FOLDER);
 
                 fs::create_dir_all(&default_path)
                     .map_err(|e| IoError::CreateDir(e, default_path.clone()))?;
