@@ -20,11 +20,11 @@ pub enum CliError {
 
     // Commands
     #[error(transparent)]
-    Grab(#[from] GrabError),
+    GrabCommand(#[from] GrabError),
     #[error(transparent)]
-    Img(#[from] ImgError),
+    ImgCommand(#[from] ImgError),
     #[error(transparent)]
-    Temp(#[from] TempError),
+    TempCommand(#[from] TempError),
     #[error(transparent)]
-    Template(#[from] TemplateError),
+    TemplateCommand(#[from] TemplateError),
 }

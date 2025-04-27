@@ -1,3 +1,5 @@
+use crate::{error::CliError, state::AppContext, utils::input::UserInput};
+
 use super::commands::{
     grab::GrabCommand, img::ImgCommand, temp::TempCommand, template::TemplateCommand,
 };
@@ -10,7 +12,7 @@ pub mod temp;
 pub mod template;
 
 #[derive(clap::Subcommand, Debug)]
-pub enum Commands {
+pub enum Command {
     #[command(about = "Modify image files")]
     Img(ImgCommand),
     #[command(about = "Create temporary environments")]
@@ -26,4 +28,21 @@ pub enum Commands {
     Config,
     #[command(about = "Uninstalls cli tool and deletes its saved data")]
     Uninstall,
+}
+
+impl Command {
+    pub fn execute(&self, ctx: &AppContext, input: &UserInput) -> Result<(), CliError> {
+        match self {
+            Command::Grab(cmd) => cmd.execute(ctx, input)?,
+            Command::Img(cmd) => cmd.execute(ctx)?,
+            Command::Temp(cmd) => cmd.execute(ctx)?,
+            Command::Template(cmd) => cmd.execute(ctx, input)?,
+
+            Command::Backup => todo!(),
+            Command::Config => todo!(),
+            Command::Uninstall => todo!(),
+        }
+
+        Ok(())
+    }
 }

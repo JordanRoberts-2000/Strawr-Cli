@@ -1,12 +1,15 @@
 use std::fs;
 
 use crate::{
-    cli::commands::template::{command::manager::TemplateManager, TemplateError, DEFAULT_FOLDER},
+    cli::commands::template::{
+        command::{execute::TemplateInput, manager::TemplateManager},
+        TemplateError, DEFAULT_FOLDER,
+    },
     error::io::IoError,
     utils::fs::subfolders,
 };
 
-impl<'a> TemplateManager<'a> {
+impl<'a, T: TemplateInput> TemplateManager<'a, T> {
     pub fn create_template(
         &self,
         template: &str,

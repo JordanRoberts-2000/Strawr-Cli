@@ -1,9 +1,15 @@
-use crate::{error::io::IoError, utils::editor::EditorError};
+use crate::{
+    error::io::IoError,
+    utils::{editor::EditorError, input::InputError},
+};
 
 #[derive(thiserror::Error, Debug)]
 pub enum TemplateError {
     #[error(transparent)]
     Io(#[from] IoError),
+
+    #[error(transparent)]
+    Input(#[from] InputError),
 
     #[error("Template '{template}' does not exist")]
     TemplateNotFound { template: String },

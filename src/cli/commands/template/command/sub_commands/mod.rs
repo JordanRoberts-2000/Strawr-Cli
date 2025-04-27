@@ -3,7 +3,7 @@ use edit::EditSubcommand;
 
 use crate::cli::commands::template::TemplateError;
 
-use super::manager::TemplateManager;
+use super::{execute::TemplateInput, manager::TemplateManager};
 
 pub mod create;
 pub mod edit;
@@ -17,7 +17,10 @@ pub enum TemplateSubcommands {
 }
 
 impl TemplateSubcommands {
-    pub fn execute(&self, manager: &TemplateManager) -> Result<(), TemplateError> {
+    pub fn execute<'a, T: TemplateInput>(
+        &self,
+        manager: &TemplateManager<'a, T>,
+    ) -> Result<(), TemplateError> {
         match self {
             Self::Create(cmd) => cmd.execute(manager)?,
             Self::Edit(cmd) => cmd.execute(manager)?,

@@ -1,5 +1,11 @@
-pub mod confirm;
-pub mod select;
+mod confirm;
+mod error;
+mod select;
+mod text;
 
-pub use confirm::confirm_action;
-pub use select::select;
+pub use confirm::ConfirmInput;
+pub use error::InputError;
+pub use select::{standard::SelectInput, without_filter::SelectWithoutFilterInput};
+pub use text::TextInput;
+
+pub struct UserInput;

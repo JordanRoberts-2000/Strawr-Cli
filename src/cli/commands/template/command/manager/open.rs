@@ -1,6 +1,9 @@
-use crate::cli::commands::template::{command::manager::TemplateManager, TemplateError};
+use crate::cli::commands::template::{
+    command::{execute::TemplateInput, manager::TemplateManager},
+    TemplateError,
+};
 
-impl<'a> TemplateManager<'a> {
+impl<'a, T: TemplateInput> TemplateManager<'a, T> {
     pub fn open_template(
         &self,
         template: &str,

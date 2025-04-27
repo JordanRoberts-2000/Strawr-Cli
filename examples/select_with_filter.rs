@@ -1,4 +1,4 @@
-use strawr::utils::input::{SelectInput, UserInput};
+use strawr::utils::input::{SelectWithoutFilterInput, UserInput};
 
 fn main() {
     let fruits = vec![
@@ -11,7 +11,7 @@ fn main() {
     ];
 
     let input = UserInput;
-    match input.select(&fruits, "Choose a fruit:\n") {
+    match input.select_without_filter(&fruits, "Choose a fruit:\n") {
         Ok(input) => println!("{input}"),
         Err(e) => eprintln!("Error: {e}"),
     };
