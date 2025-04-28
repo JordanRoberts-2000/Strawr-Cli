@@ -6,4 +6,6 @@ pub enum InputError {
     Canceled,
     #[error("inquire error: {0}")]
     PromptError(#[from] InquireError),
+    #[error("invalid input: {0}")]
+    InvalidInput(String),
 }
