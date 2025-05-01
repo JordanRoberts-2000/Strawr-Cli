@@ -1,13 +1,11 @@
 use crate::{
-    config::error::ConfigError,
+    config::{error::ConfigError, INITIAL_CONFIG_CONTENT},
     error::{IoError, ParseError},
 };
 use std::{fs, path::PathBuf};
 use validator::Validate;
 
 use super::Config;
-
-pub const INITIAL_CONFIG_CONTENT: &str = include_str!("initial_config.toml");
 
 impl Config {
     pub fn parse(storage_dir: &PathBuf) -> Result<Config, ConfigError> {

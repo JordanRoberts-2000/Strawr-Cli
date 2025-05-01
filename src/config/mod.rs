@@ -6,8 +6,11 @@ use crate::{
     utils::Editor,
 };
 
+pub mod default;
 pub mod error;
 pub mod parse;
+
+pub const INITIAL_CONFIG_CONTENT: &str = include_str!("initial_config.toml");
 
 #[derive(Debug, Deserialize, Validate)]
 pub struct Config {
