@@ -1,12 +1,10 @@
 use crate::{
-    cli::commands::template::{command::execute::TemplateInput, error::TemplateError},
-    error::io::IoError,
-    utils::fs::is_dir_empty,
+    cli::commands::template::error::TemplateError, error::io::IoError, utils::fs::is_dir_empty,
 };
 
 use super::TemplateManager;
 
-impl<'a, T: TemplateInput> TemplateManager<'a, T> {
+impl<'a> TemplateManager<'a> {
     pub fn handle_no_input(&self) -> Result<(), TemplateError> {
         let is_empty = is_dir_empty(&self.templates_path)
             .map_err(|e| IoError::ReadDir(e, self.templates_path.clone()))?;
@@ -22,10 +20,11 @@ impl<'a, T: TemplateInput> TemplateManager<'a, T> {
 
     pub fn handle_no_templates(&self) -> Result<(), TemplateError> {
         if self
+            .ctx
             .input
             .confirm("No templates currently exist, would you like to create one?")?
         {
-            let template = self.input.text("Enter template name:")?;
+            let template = self.ctx.input.text("Enter template name:")?;
 
             self.create_template(&template, None)?;
             log::trace!("Created template '{template}' successfully");

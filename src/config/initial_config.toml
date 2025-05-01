@@ -1,13 +1,24 @@
+default_editor = "vscode" # "vscode", "zed", "nano", "vim"
+
 [grab]
 encrypt_values_by_default = true
 
 [img]
-default_format = "original" # "webp", "jpeg", "png", "avif", "original"
-default_avif_speed = 6 # 1 - 10
-default_avif_compression = "lossless" # "lossless", "lossy"
+default_format = "webp" # "webp", "jpeg", "png", "original"
 default_webp_compression = "lossless" # "lossless", "lossy"
-default_quality = 100 # 1 - 100
-# max_size = 1024 # - optional
+default_webp_quality = 100 # 1 - 100
+default_jpg_quality = 100 # 1 - 100
+thumbnail_size = 64
+blur_intensity = 8
+placeholder_size = 64
+placeholder_blur_intensity = 6
+max_size=1024 # optional
+[img.get]
+default_color_output="hex" # hex, rgb
+[img.gen]
+default_ai_model = "dalle2"
+default_img_size = "lg"
 
-[open]
-editor = "vscode" # "vscode", "nano", "vim", "path"
+[template]
+frontend_folder_title = "client"
+backend_folder_title = "server"

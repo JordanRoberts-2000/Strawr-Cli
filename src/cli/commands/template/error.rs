@@ -17,17 +17,11 @@ pub enum TemplateError {
     #[error("Variant '{variant}' does not exist for '{template}'")]
     VariantNotFound { template: String, variant: String },
 
-    #[error("Cannot create template as it already exists")]
-    TemplateAlreadyExists,
+    #[error("Cannot create template '{template}' as it already exists")]
+    TemplateAlreadyExists { template: String },
 
-    #[error("Cannot create template variant as it already exists")]
-    VariantAlreadyExists,
-
-    #[error("Attempted to create a variant of a non-existent template")]
-    CreatingVariantWithoutDefault,
-
-    #[error("Attempted to create a variant of a non-existent template")]
-    NoExistingTemplate(std::io::Error),
+    #[error("Cannot create template variant '{variant}' as it already exists")]
+    VariantAlreadyExists { variant: String },
 
     #[error("Editor failed to open")]
     EditorFailed(#[from] EditorError),

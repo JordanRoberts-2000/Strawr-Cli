@@ -1,5 +1,5 @@
 use crate::cli::commands::template::{
-    command::{execute::TemplateInput, helpers::parse_input, manager::TemplateManager},
+    command::{helpers::parse_input, manager::TemplateManager},
     TemplateError,
 };
 
@@ -14,10 +14,7 @@ pub struct EditSubcommand {
 }
 
 impl EditSubcommand {
-    pub fn execute<'a, T: TemplateInput>(
-        &self,
-        manager: &TemplateManager<'a, T>,
-    ) -> Result<(), TemplateError> {
+    pub fn execute(&self, manager: &TemplateManager) -> Result<(), TemplateError> {
         let (template, variant) = parse_input(&self.template, &self.variant)?;
         log::trace!("Input parsed - template: '{template}', variant: '{variant:?}'");
 

@@ -5,7 +5,7 @@ use crate::{
     error::{IoError, ParseError},
 };
 
-impl GrabManager {
+impl<'a> GrabManager<'a> {
     pub fn delete_entry(&mut self, key: &String) -> Result<(), GrabError> {
         log::trace!("Attempting to delete key '{}'", key);
 

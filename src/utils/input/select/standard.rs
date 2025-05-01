@@ -1,5 +1,3 @@
-use std::fmt::Display;
-
 use inquire::{InquireError, Select};
 
 use crate::utils::input::{Input, TestInput, UserInput};
@@ -7,17 +5,12 @@ use crate::utils::input::{Input, TestInput, UserInput};
 use super::{build_render_config, InputError};
 
 pub trait SelectInput {
-    fn select<T>(&self, options: &Vec<T>, msg: &str) -> Result<String, InputError>
-    where
-        T: Display + Clone;
+    fn select(&self, options: &[String], msg: &str) -> Result<String, InputError>;
 }
 
 impl SelectInput for UserInput {
-    fn select<T>(&self, options: &Vec<T>, msg: &str) -> Result<String, InputError>
-    where
-        T: Display + Clone,
-    {
-        let prompt = Select::new(msg, options.clone())
+    fn select(&self, options: &[String], msg: &str) -> Result<String, InputError> {
+        let prompt = Select::new(msg, options.to_vec())
             .without_help_message()
             .with_page_size(4)
             .with_render_config(build_render_config())
@@ -34,10 +27,7 @@ impl SelectInput for UserInput {
 }
 
 impl SelectInput for TestInput {
-    fn select<T>(&self, _options: &Vec<T>, _msg: &str) -> Result<String, InputError>
-    where
-        T: Display + Clone,
-    {
+    fn select(&self, _options: &[String], _msg: &str) -> Result<String, InputError> {
         let input = self
             .inputs
             .borrow_mut()
@@ -61,7 +51,10 @@ mod tests {
         let test_inputs = vec![Input::Select("selected_option".to_string())];
         let test_input = TestInput::new(test_inputs);
 
-        let options = vec!["Option1", "Option2", "Option3"];
+        let options: Vec<String> = vec!["Option1", "Option2", "Option3"]
+            .iter()
+            .map(|s| s.to_string())
+            .collect();
 
         // Act
         let result = test_input.select(&options, "Select an option");

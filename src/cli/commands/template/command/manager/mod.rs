@@ -2,22 +2,19 @@ use std::path::PathBuf;
 
 use crate::{cli::commands::template::TemplateError, error::io::IoError, state::AppContext};
 
-use super::execute::TemplateInput;
-
 pub mod create;
 pub mod inject;
 pub mod no_input;
 pub mod open;
 pub mod select;
 
-pub struct TemplateManager<'a, T: TemplateInput> {
+pub struct TemplateManager<'a> {
     pub ctx: &'a AppContext,
-    pub input: &'a T,
     pub templates_path: PathBuf,
 }
 
-impl<'a, T: TemplateInput> TemplateManager<'a, T> {
-    pub fn new(ctx: &'a AppContext, input: &'a T) -> Result<Self, TemplateError> {
+impl<'a> TemplateManager<'a> {
+    pub fn new(ctx: &'a AppContext) -> Result<Self, TemplateError> {
         let templates_path = ctx.storage_dir.join("templates");
 
         if !templates_path.exists() {
@@ -28,7 +25,6 @@ impl<'a, T: TemplateInput> TemplateManager<'a, T> {
 
         Ok(Self {
             ctx,
-            input,
             templates_path,
         })
     }

@@ -17,6 +17,9 @@ pub enum Input {
     SelectWithoutFilter(String),
 }
 
+pub trait CliInput: ConfirmInput + TextInput + SelectInput {}
+impl<T: ConfirmInput + TextInput + SelectInput> CliInput for T {}
+
 pub struct UserInput;
 
 pub struct TestInput {

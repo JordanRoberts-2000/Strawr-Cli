@@ -6,7 +6,7 @@ use crate::{
 };
 use std::fs;
 
-impl GrabManager {
+impl<'a> GrabManager<'a> {
     pub fn set_entry(
         &mut self,
         key: &String,

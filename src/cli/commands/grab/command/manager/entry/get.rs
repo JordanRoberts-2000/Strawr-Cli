@@ -4,7 +4,7 @@ use crate::{
     utils::{self, Keyring},
 };
 
-impl GrabManager {
+impl<'a> GrabManager<'a> {
     pub fn get_entry(&self, key: &String) -> Result<(), GrabError> {
         let val = match self.data_map.get(key) {
             Some(val) => val,

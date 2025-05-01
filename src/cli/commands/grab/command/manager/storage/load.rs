@@ -5,7 +5,7 @@ use crate::{
     error::{IoError, ParseError},
 };
 
-impl GrabManager {
+impl<'a> GrabManager<'a> {
     pub fn load_json_data(&mut self) -> Result<(), GrabError> {
         let path = &self.json_file_path;
 

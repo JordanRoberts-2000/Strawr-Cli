@@ -1,14 +1,17 @@
 use strawr::utils::input::{SelectInput, UserInput};
 
 fn main() {
-    let fruits = vec![
+    let fruits: Vec<String> = vec![
         "apple",
         "peach",
         "pears",
         "plums",
         "bananas",
         "strawberries",
-    ];
+    ]
+    .iter()
+    .map(|s| s.to_string())
+    .collect();
 
     let input = UserInput;
     match input.select(&fruits, "Choose a fruit:\n") {

@@ -1,13 +1,10 @@
 use crate::{
-    cli::commands::template::{
-        command::{execute::TemplateInput, manager::TemplateManager},
-        TemplateError,
-    },
+    cli::commands::template::{command::manager::TemplateManager, TemplateError},
     error::io::IoError,
     utils::fs::copy_dir_contents,
 };
 
-impl<'a, T: TemplateInput> TemplateManager<'a, T> {
+impl<'a> TemplateManager<'a> {
     pub fn inject_template_files(
         &self,
         template: &str,

@@ -8,7 +8,7 @@ use crate::{
     state::AppContext,
 };
 
-impl GrabManager {
+impl<'a> GrabManager<'a> {
     pub fn init_storage(&mut self, ctx: &AppContext) -> Result<(), GrabError> {
         let grab_folder_path = ctx.storage_dir.join("grab");
         self.json_file_path = grab_folder_path.join("data.json");

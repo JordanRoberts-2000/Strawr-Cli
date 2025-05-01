@@ -1,16 +1,14 @@
 use std::fs;
 
 use crate::{
-    cli::commands::template::{
-        command::execute::TemplateInput, error::TemplateError, DEFAULT_FOLDER,
-    },
+    cli::commands::template::{error::TemplateError, DEFAULT_FOLDER},
     error::io::IoError,
     utils::fs::subfolders,
 };
 
 use super::TemplateManager;
 
-impl<'a, T: TemplateInput> TemplateManager<'a, T> {
+impl<'a> TemplateManager<'a> {
     pub fn select_variant(&self, template: &String) -> Result<Option<String>, TemplateError> {
         let template_path = self.templates_path.join(template);
 
@@ -36,7 +34,7 @@ impl<'a, T: TemplateInput> TemplateManager<'a, T> {
         if variants.len() >= 2 {
             log::debug!("Multiple variants found, prompting user to select");
 
-            let selected_variant = self.input.select(&variants, "Select variant:")?;
+            let selected_variant = self.ctx.input.select(&variants, "Select variant:")?;
             log::debug!("User selected variant: '{}'", selected_variant);
 
             Ok(Some(selected_variant))
@@ -50,7 +48,7 @@ impl<'a, T: TemplateInput> TemplateManager<'a, T> {
         let templates = subfolders(&self.templates_path)
             .map_err(|e| IoError::ReadDir(e, self.templates_path.clone()))?;
 
-        let selected_template = self.input.select(&templates, "Select template:")?;
+        let selected_template = self.ctx.input.select(&templates, "Select template:")?;
         log::debug!("User selected template: '{}'", selected_template);
 
         Ok(selected_template)

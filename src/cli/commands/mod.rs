@@ -1,4 +1,4 @@
-use crate::{error::CliError, state::AppContext, utils::input::UserInput};
+use crate::{error::CliError, state::AppContext};
 
 use super::commands::{
     grab::GrabCommand, img::ImgCommand, temp::TempCommand, template::TemplateCommand,
@@ -31,12 +31,12 @@ pub enum Command {
 }
 
 impl Command {
-    pub fn execute(&self, ctx: &AppContext, input: &UserInput) -> Result<(), CliError> {
+    pub fn execute(&self, ctx: &AppContext) -> Result<(), CliError> {
         match self {
-            Command::Grab(cmd) => cmd.execute(ctx, input)?,
+            Command::Grab(cmd) => cmd.execute(ctx)?,
             Command::Img(cmd) => cmd.execute(ctx)?,
             Command::Temp(cmd) => cmd.execute(ctx)?,
-            Command::Template(cmd) => cmd.execute(ctx, input)?,
+            Command::Template(cmd) => cmd.execute(ctx)?,
 
             Command::Backup => todo!(),
             Command::Config => todo!(),
