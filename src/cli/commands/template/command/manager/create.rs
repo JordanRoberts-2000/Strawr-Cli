@@ -34,7 +34,7 @@ impl<'a> TemplateManager<'a> {
             .map_err(|e| IoError::CreateDir(e, default_path.clone()))?;
         log::info!("Created new template '{}'", template);
 
-        self.ctx.config.default_editor.open(&default_path)?;
+        self.ctx.editor.open(self.editor, &default_path)?;
 
         Ok(())
     }
@@ -59,7 +59,7 @@ impl<'a> TemplateManager<'a> {
         fs::create_dir(&variant_path).map_err(|e| IoError::CreateDir(e, variant_path.clone()))?;
         log::info!("Created variant '{variant}' for template '{template}'");
 
-        self.ctx.config.default_editor.open(&variant_path)?;
+        self.ctx.editor.open(self.editor, &variant_path)?;
 
         Ok(())
     }

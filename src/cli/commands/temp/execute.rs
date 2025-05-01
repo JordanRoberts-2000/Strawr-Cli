@@ -20,7 +20,7 @@ impl TempCommand {
 
         log::info!("Created temp dir at: {}", temp_dir_path.display());
 
-        editor.open(&temp_dir_path)?;
+        ctx.editor.open(editor, &temp_dir_path)?;
 
         Ok(())
     }

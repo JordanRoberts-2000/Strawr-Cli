@@ -6,7 +6,9 @@ impl TemplateCommand {
     pub fn execute(&self, ctx: &AppContext) -> Result<(), TemplateError> {
         log::debug!("Executing Template Command");
 
-        let manager = TemplateManager::new(ctx)?;
+        let editor = self.editor.as_ref().unwrap_or(&ctx.config.default_editor);
+
+        let manager = TemplateManager::new(ctx, editor)?;
         log::trace!("TemplateManager initialized");
 
         if self.template.is_none() && self.subcommand.is_none() {

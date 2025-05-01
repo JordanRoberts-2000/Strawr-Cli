@@ -11,12 +11,27 @@ pub enum Editor {
     Vim,
 }
 
-impl Editor {
-    pub fn open<P: AsRef<Path>>(&self, path: P) -> Result<(), EditorError> {
-        let path = path.as_ref();
-        log::info!("Opening {:?} in {:?}", self, path);
+pub trait EditorLauncher: Send + Sync {
+    fn open(&self, editor: &Editor, path: &Path) -> Result<(), EditorError>;
+}
 
-        let cmd = match self {
+pub struct CliEditor;
+
+pub struct TestEditorLauncher {
+    should_fail: bool,
+}
+
+impl TestEditorLauncher {
+    pub fn new(should_fail: bool) -> Self {
+        Self { should_fail }
+    }
+}
+
+impl EditorLauncher for CliEditor {
+    fn open(&self, editor: &Editor, path: &Path) -> Result<(), EditorError> {
+        log::info!("Opening {:?} in {:?}", editor, path);
+
+        let cmd = match editor {
             Editor::VsCode => "code",
             Editor::Zed => "zed",
             Editor::Vim => "vim",
@@ -26,7 +41,7 @@ impl Editor {
             return Err(EditorError::NotFound(cmd.to_string()));
         }
 
-        let status = match self {
+        let status = match editor {
             Editor::VsCode => Command::new("code").arg(path).arg("-n").status(),
             Editor::Zed => Command::new("zed").arg(path).status(),
             Editor::Vim => Command::new("vim").arg(path).status(),
@@ -39,6 +54,19 @@ impl Editor {
             }
             Ok(s) => Err(EditorError::NonZeroExit(s.code())),
             Err(e) => Err(EditorError::LaunchFailed(e)),
+        }
+    }
+}
+
+impl EditorLauncher for TestEditorLauncher {
+    fn open(&self, _editor: &Editor, _path: &Path) -> Result<(), EditorError> {
+        if self.should_fail {
+            Err(EditorError::LaunchFailed(std::io::Error::new(
+                std::io::ErrorKind::Other,
+                "simulated failure",
+            )))
+        } else {
+            Ok(())
         }
     }
 }

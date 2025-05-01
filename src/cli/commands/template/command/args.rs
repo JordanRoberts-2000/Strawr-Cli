@@ -1,3 +1,5 @@
+use crate::utils::Editor;
+
 use super::sub_commands::TemplateSubcommands;
 
 #[derive(clap::Parser, Debug)]
@@ -16,4 +18,7 @@ pub struct TemplateCommand {
 
     #[arg(long, short)]
     pub frontend: Option<String>,
+
+    #[arg(short, long, value_enum, ignore_case = true)]
+    pub editor: Option<Editor>,
 }

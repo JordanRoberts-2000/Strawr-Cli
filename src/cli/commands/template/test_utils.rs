@@ -4,7 +4,11 @@ pub mod test_utils {
         cli::commands::template::command::manager::TemplateManager,
         config::Config,
         state::AppContext,
-        utils::input::{Input, TestInput},
+        utils::{
+            editor::TestEditorLauncher,
+            input::{Input, TestInput},
+            Editor,
+        },
     };
 
     pub fn create_test_manager(inputs: Vec<Input>) -> TemplateManager<'static> {
@@ -13,12 +17,14 @@ pub mod test_utils {
 
         let ctx = Box::leak(Box::new(AppContext {
             input: Box::new(TestInput::new(inputs)),
+            editor: Box::new(TestEditorLauncher::new(false)),
             storage_dir: storage_dir.clone(),
             debug: true,
             config: Config::default(),
         }));
 
-        let manager = TemplateManager::new(ctx).expect("Failed to create TemplateManager");
+        let manager =
+            TemplateManager::new(ctx, &Editor::VsCode).expect("Failed to create TemplateManager");
 
         manager
     }

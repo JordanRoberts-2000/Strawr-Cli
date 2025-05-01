@@ -13,7 +13,7 @@ impl<'a> TemplateManager<'a> {
             None => path = path.join("default"),
         };
 
-        self.ctx.config.default_editor.open(path)?;
+        self.ctx.editor.open(self.editor, &path)?;
 
         Ok(())
     }
