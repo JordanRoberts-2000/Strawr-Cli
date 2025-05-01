@@ -1,9 +1,10 @@
-use crate::error::IoError;
+use crate::{constants::CONFIG_HOME_ENV, error::IoError};
 
 #[derive(thiserror::Error, Debug)]
 pub enum StateError {
     #[error(transparent)]
     Io(#[from] IoError),
-    #[error("Home directory could not be found. Please set the {env_var} environment variable.")]
-    HomeDirNotFound { env_var: &'static str },
+
+    #[error("Home directory could not be found. Please set the '{CONFIG_HOME_ENV}' environment variable.")]
+    HomeDirNotFound,
 }

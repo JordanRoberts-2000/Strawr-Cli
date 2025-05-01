@@ -3,7 +3,7 @@ use std::path::PathBuf;
 use crate::{config::Config, error::CliError};
 
 pub mod error;
-pub mod get_storage_dir;
+pub mod storage_dir;
 
 #[derive(Debug)]
 pub struct AppContext {
