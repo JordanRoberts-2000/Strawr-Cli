@@ -16,7 +16,7 @@ pub mod test_utils {
         let storage_dir = temp.path().to_path_buf();
 
         let ctx = Box::leak(Box::new(AppContext {
-            input: Box::new(TestInput::new(inputs)),
+            input: Box::new(TestInput::from(inputs)),
             editor: Box::new(TestEditorLauncher::new(false)),
             storage_dir: storage_dir.clone(),
             debug: true,

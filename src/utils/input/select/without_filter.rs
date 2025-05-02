@@ -28,12 +28,12 @@ impl SelectWithoutFilterInput for UserInput {
 }
 
 impl SelectWithoutFilterInput for TestInput {
-    fn select_without_filter(&self, _options: &[String], _msg: &str) -> Result<String, InputError> {
+    fn select_without_filter(&self, _options: &[String], msg: &str) -> Result<String, InputError> {
         let input = self
             .inputs
             .borrow_mut()
-            .pop()
-            .expect("Ran out of test inputs");
+            .pop_front()
+            .expect(format!("Ran out of test inputs for '{msg}'").as_str());
 
         match input {
             Input::Select(value) => Ok(value),
@@ -50,7 +50,7 @@ mod tests {
     fn test_select_without_filter_input_returns_expected_value() {
         // Setup
         let test_inputs = vec![Input::SelectWithoutFilter("selected_option".to_string())];
-        let test_input = TestInput::new(test_inputs);
+        let test_input = TestInput::from(test_inputs);
 
         let options: Vec<String> = vec!["Option1", "Option2", "Option3"]
             .iter()

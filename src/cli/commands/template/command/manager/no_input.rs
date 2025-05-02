@@ -21,11 +21,13 @@ impl<'a> TemplateManager<'a> {
     }
 
     pub fn handle_no_templates(&self) -> Result<(), TemplateError> {
+        println!("HEre");
         if self
             .ctx
             .input
             .confirm("No templates currently exist, would you like to create one?")?
         {
+            println!("THere");
             let template = self.ctx.input.text("Enter template name:")?;
 
             self.create_template(&template, None)?;

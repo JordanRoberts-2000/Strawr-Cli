@@ -21,7 +21,7 @@ impl<'a> TemplateManager<'a> {
         let templates_path = ctx.storage_dir.join("templates");
 
         if !templates_path.exists() {
-            std::fs::create_dir(&templates_path)
+            std::fs::create_dir_all(&templates_path)
                 .map_err(|e| IoError::CreateDir(e, templates_path.clone()))?;
             log::info!("Created templates folder at {:?}", templates_path);
         }

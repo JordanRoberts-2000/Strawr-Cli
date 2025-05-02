@@ -3,7 +3,7 @@ mod error;
 mod select;
 mod text;
 
-use std::cell::RefCell;
+use std::{cell::RefCell, collections::VecDeque};
 
 pub use confirm::ConfirmInput;
 pub use error::InputError;
@@ -23,13 +23,19 @@ impl<T: ConfirmInput + TextInput + SelectInput> CliInput for T {}
 pub struct UserInput;
 
 pub struct TestInput {
-    pub inputs: RefCell<Vec<Input>>,
+    pub inputs: RefCell<VecDeque<Input>>,
 }
 
 impl TestInput {
-    pub fn new(inputs: Vec<Input>) -> Self {
+    pub fn new() -> Self {
         Self {
-            inputs: RefCell::new(inputs),
+            inputs: RefCell::new(VecDeque::new()),
+        }
+    }
+
+    pub fn from(inputs: Vec<Input>) -> Self {
+        Self {
+            inputs: RefCell::new(VecDeque::from(inputs)),
         }
     }
 }

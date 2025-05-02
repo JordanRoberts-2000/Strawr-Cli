@@ -21,12 +21,12 @@ impl ConfirmInput for UserInput {
 }
 
 impl ConfirmInput for TestInput {
-    fn confirm(&self, _msg: &str) -> Result<bool, InputError> {
+    fn confirm(&self, msg: &str) -> Result<bool, InputError> {
         let input = self
             .inputs
             .borrow_mut()
-            .pop()
-            .expect("Ran out of test inputs");
+            .pop_front()
+            .expect(format!("Ran out of test inputs for '{msg}'").as_str());
 
         match input {
             Input::Confirm(v) => Ok(v),
@@ -42,7 +42,7 @@ mod tests {
     #[test]
     fn test_confirm_yes() {
         let test_inputs = vec![Input::Confirm(true)];
-        let test_input = TestInput::new(test_inputs);
+        let test_input = TestInput::from(test_inputs);
 
         let result = test_input.confirm("Are you sure?");
         assert_eq!(result.unwrap(), true);
@@ -51,7 +51,7 @@ mod tests {
     #[test]
     fn test_confirm_no() {
         let test_inputs = vec![Input::Confirm(false)];
-        let test_input = TestInput::new(test_inputs);
+        let test_input = TestInput::from(test_inputs);
 
         let result = test_input.confirm("Proceed?");
         assert_eq!(result.unwrap(), false);
