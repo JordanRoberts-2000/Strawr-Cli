@@ -9,15 +9,12 @@ impl TemplateCommand {
         let editor = self.editor.as_ref().unwrap_or(&ctx.config.default_editor);
 
         let manager = TemplateManager::new(ctx, editor)?;
-        log::trace!("TemplateManager initialized");
 
         if self.template.is_none() && self.subcommand.is_none() {
-            log::debug!("No template or subcommand provided, handling empty input");
             return manager.handle_no_input();
         }
 
         if let Some(subcommand) = &self.subcommand {
-            log::debug!("Executing subcommand: {:?}", subcommand);
             return subcommand.execute(&manager);
         }
 

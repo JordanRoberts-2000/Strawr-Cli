@@ -6,6 +6,8 @@ use super::TemplateManager;
 
 impl<'a> TemplateManager<'a> {
     pub fn handle_no_input(&self) -> Result<(), TemplateError> {
+        log::debug!("No template or subcommand provided, handling empty input");
+
         let is_empty = is_dir_empty(&self.templates_path)
             .map_err(|e| IoError::ReadDir(e, self.templates_path.clone()))?;
 
