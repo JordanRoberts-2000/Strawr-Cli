@@ -17,10 +17,10 @@ pub enum TemplateSubcommands {
 }
 
 impl TemplateSubcommands {
-    pub fn execute(&self, manager: &TemplateManager) -> Result<(), TemplateError> {
+    pub fn execute(&self) -> Result<(), TemplateError> {
         match self {
-            Self::Create(cmd) => cmd.execute(manager)?,
-            Self::Edit(cmd) => cmd.execute(manager)?,
+            Self::Create(cmd) => todo!(),
+            Self::Edit(cmd) => todo!(),
             Self::Rename => println!("execute rename"),
             Self::Delete => println!("execute delete"),
         };

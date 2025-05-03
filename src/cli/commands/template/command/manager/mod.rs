@@ -6,7 +6,6 @@ use crate::{
 
 pub mod create;
 pub mod inject;
-pub mod no_input;
 pub mod open;
 pub mod select;
 

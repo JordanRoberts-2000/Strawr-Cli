@@ -1,24 +1,29 @@
-use crate::utils::Editor;
+use std::path::PathBuf;
 
-use super::sub_commands::TemplateSubcommands;
+use crate::utils::{validation::existing_dir, Editor};
+
+use super::{helpers::parse_template, sub_commands::TemplateSubcommands, TemplateInput};
 
 #[derive(clap::Parser, Debug)]
 pub struct TemplateCommand {
-    #[arg()]
-    pub template: Option<String>,
-
     #[command(subcommand)]
     pub subcommand: Option<TemplateSubcommands>,
 
-    #[arg(long, short)]
-    pub variant: Option<String>,
+    #[arg(value_parser = parse_template)]
+    pub template: Option<TemplateInput>,
 
-    #[arg(long, short)]
-    pub backend: Option<String>,
+    #[arg(short, long, num_args = 0..=1, requires = "template")]
+    pub variant: Option<Option<String>>,
 
-    #[arg(long, short)]
-    pub frontend: Option<String>,
+    #[arg(long, short, value_parser = parse_template, conflicts_with_all = ["variant", "template"])]
+    pub backend: Option<TemplateInput>,
 
-    #[arg(short, long, value_enum, ignore_case = true)]
+    #[arg(long, short, value_parser = parse_template, conflicts_with_all = ["variant", "template"])]
+    pub frontend: Option<TemplateInput>,
+
+    #[arg(long, short, default_value = ".", value_parser = existing_dir)]
+    pub output: PathBuf,
+
+    #[arg(short, long, ignore_case = true)]
     pub editor: Option<Editor>,
 }

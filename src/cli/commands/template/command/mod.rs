@@ -3,3 +3,5 @@ pub mod execute;
 pub mod helpers;
 pub mod manager;
 pub mod sub_commands;
+
+pub type TemplateInput = (String, Option<String>);

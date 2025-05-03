@@ -33,14 +33,14 @@ pub enum Command {
 impl Command {
     pub fn execute(&self, ctx: &AppContext) -> Result<(), CliError> {
         match self {
-            Command::Grab(cmd) => cmd.execute(ctx)?,
-            Command::Img(cmd) => cmd.execute(ctx)?,
-            Command::Temp(cmd) => cmd.execute(ctx)?,
-            Command::Template(cmd) => cmd.execute(ctx)?,
+            Self::Grab(cmd) => cmd.execute(ctx)?,
+            Self::Img(cmd) => cmd.execute(ctx)?,
+            Self::Temp(cmd) => cmd.execute(ctx)?,
+            Self::Template(cmd) => cmd.execute(ctx)?,
 
-            Command::Backup => todo!(),
-            Command::Config => todo!(),
-            Command::Uninstall => todo!(),
+            Self::Backup => todo!(),
+            Self::Config => todo!(),
+            Self::Uninstall => todo!(),
         }
 
         Ok(())

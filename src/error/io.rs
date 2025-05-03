@@ -19,4 +19,13 @@ pub enum IoError {
 
     #[error("Failed to read file at `{1}`: {0}")]
     ReadFile(#[source] io::Error, PathBuf),
+
+    #[error("path does not exist: {0}")]
+    PathNotFound(PathBuf),
+
+    #[error("path is not a directory: {0}")]
+    NotADirectory(PathBuf),
+
+    #[error("path is not a file: {0}")]
+    NotAFile(PathBuf),
 }

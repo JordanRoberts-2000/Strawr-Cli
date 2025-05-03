@@ -7,6 +7,7 @@ pub mod logger;
 pub mod spinner;
 pub mod time;
 pub mod trash;
+pub mod validation;
 
 pub use clipboard::clipboard;
 pub use editor::Editor;
