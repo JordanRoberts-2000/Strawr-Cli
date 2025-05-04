@@ -5,12 +5,12 @@ impl TemplateCommand {
     pub fn execute(&self, ctx: &AppContext) -> Result<(), TemplateError> {
         log::debug!("Executing Template Command");
 
-        if let Some(subcommand) = &self.subcommand {
-            return subcommand.execute();
-        }
-
         let editor = self.editor.as_ref().unwrap_or(&ctx.config.default_editor);
         let manager = TemplateManager::new(ctx, editor)?;
+
+        if let Some(subcommand) = &self.subcommand {
+            return subcommand.execute(&manager);
+        }
 
         if let Some(template) = &self.template {
             return self.handle_template(&manager, template);

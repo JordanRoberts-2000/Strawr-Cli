@@ -1,5 +1,6 @@
 use create::CreateSubcommand;
 use edit::EditSubcommand;
+use strum_macros::VariantNames;
 
 use crate::cli::commands::template::TemplateError;
 
@@ -10,7 +11,8 @@ pub mod delete;
 pub mod edit;
 pub mod rename;
 
-#[derive(clap::Subcommand, Debug)]
+#[derive(clap::Subcommand, Debug, VariantNames)]
+#[strum(serialize_all = "lowercase")]
 pub enum TemplateSubcommands {
     Create(CreateSubcommand),
     Rename,
@@ -19,9 +21,9 @@ pub enum TemplateSubcommands {
 }
 
 impl TemplateSubcommands {
-    pub fn execute(&self) -> Result<(), TemplateError> {
+    pub fn execute(&self, manager: &TemplateManager) -> Result<(), TemplateError> {
         match self {
-            Self::Create(cmd) => todo!(),
+            Self::Create(cmd) => cmd.execute(manager)?,
             Self::Edit(cmd) => todo!(),
             Self::Rename => println!("execute rename"),
             Self::Delete => println!("execute delete"),

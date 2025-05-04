@@ -44,11 +44,11 @@ impl<'a> TemplateManager<'a> {
         }
     }
 
-    pub fn select_template(&self) -> Result<String, TemplateError> {
+    pub fn select_template(&self, msg: &str) -> Result<String, TemplateError> {
         let templates = subfolders(&self.templates_path)
             .map_err(|e| IoError::ReadDir(e, self.templates_path.clone()))?;
 
-        let selected_template = self.ctx.input.select(&templates, "Select template:")?;
+        let selected_template = self.ctx.input.select(&templates, msg)?;
         log::debug!("User selected template: '{}'", selected_template);
 
         Ok(selected_template)

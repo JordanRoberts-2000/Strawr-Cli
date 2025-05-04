@@ -26,7 +26,7 @@ impl TemplateCommand {
         &self,
         manager: &TemplateManager,
     ) -> Result<(), TemplateError> {
-        let template = manager.select_template()?;
+        let template = manager.select_template("Select a template:")?;
         let variant = manager.select_variant(&template)?;
 
         manager.inject_template_files(&template, &variant)?;
