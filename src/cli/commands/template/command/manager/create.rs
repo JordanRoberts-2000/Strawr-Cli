@@ -23,9 +23,7 @@ impl<'a> TemplateManager<'a> {
         let template_path = self.templates_path.join(template);
 
         if template_path.exists() {
-            return Err(TemplateError::TemplateAlreadyExists {
-                template: template.to_string(),
-            });
+            return Err(TemplateError::TemplateAlreadyExists(template.to_string()));
         }
 
         let default_path = template_path.join(DEFAULT_FOLDER);
@@ -43,17 +41,13 @@ impl<'a> TemplateManager<'a> {
         let template_path = self.templates_path.join(template);
 
         if !template_path.exists() {
-            return Err(TemplateError::TemplateNotFound {
-                template: template.to_string(),
-            });
+            return Err(TemplateError::TemplateNotFound(template.to_string()));
         }
 
         let variant_path = template_path.join(&variant);
 
         if variant_path.exists() {
-            return Err(TemplateError::VariantAlreadyExists {
-                variant: variant.to_string(),
-            });
+            return Err(TemplateError::VariantAlreadyExists(variant.to_string()));
         }
 
         fs::create_dir(&variant_path).map_err(|e| IoError::CreateDir(e, variant_path.clone()))?;

@@ -15,9 +15,7 @@ impl<'a> TemplateManager<'a> {
 
         if !source_path.exists() {
             return if variant.is_none() {
-                Err(TemplateError::TemplateNotFound {
-                    template: template.to_string(),
-                })
+                Err(TemplateError::TemplateNotFound(template.to_string()))
             } else {
                 Err(TemplateError::VariantNotFound {
                     template: template.to_string(),

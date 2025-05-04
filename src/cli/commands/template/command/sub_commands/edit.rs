@@ -1,7 +1,4 @@
-use crate::cli::commands::template::{
-    command::{helpers::parse_input, manager::TemplateManager},
-    TemplateError,
-};
+use crate::cli::commands::template::{command::manager::TemplateManager, TemplateError};
 
 #[derive(clap::Parser, Debug)]
 #[command()]
@@ -15,10 +12,10 @@ pub struct EditSubcommand {
 
 impl EditSubcommand {
     pub fn execute(&self, manager: &TemplateManager) -> Result<(), TemplateError> {
-        let (template, variant) = parse_input(&self.template, &self.variant)?;
-        log::trace!("Input parsed - template: '{template}', variant: '{variant:?}'");
+        // let (template, variant) = parse_input(&self.template, &self.variant)?;
+        // log::trace!("Input parsed - template: '{template}', variant: '{variant:?}'");
 
-        manager.open_template(&template, &variant)?;
+        // manager.open_template(&template, &variant)?;
 
         Ok(())
     }

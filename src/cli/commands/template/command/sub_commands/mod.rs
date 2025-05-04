@@ -6,7 +6,9 @@ use crate::cli::commands::template::TemplateError;
 use super::manager::TemplateManager;
 
 pub mod create;
+pub mod delete;
 pub mod edit;
+pub mod rename;
 
 #[derive(clap::Subcommand, Debug)]
 pub enum TemplateSubcommands {

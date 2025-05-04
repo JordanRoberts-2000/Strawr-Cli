@@ -1,25 +1,23 @@
 use crate::cli::commands::template::{
-    command::{helpers::parse_input, manager::TemplateManager},
+    command::{helpers::parse_template, manager::TemplateManager, TemplateInput},
     TemplateError,
 };
 
 #[derive(clap::Parser, Debug)]
 #[command()]
 pub struct CreateSubcommand {
-    #[arg()]
-    pub template: String,
+    #[arg(value_parser = parse_template)]
+    pub template: Option<TemplateInput>,
 
-    #[arg(long, short)]
-    pub variant: Option<String>,
+    #[arg(short, long, num_args = 0..=1, requires = "template")]
+    pub variant: Option<Option<String>>,
 }
 
 impl CreateSubcommand {
     pub fn execute(&self, manager: &TemplateManager) -> Result<(), TemplateError> {
-        let (template, variant) = parse_input(&self.template, &self.variant)?;
-        log::trace!("Input parsed - template: '{template}', variant: '{variant:?}'");
-
-        manager.create_template(&template, variant.as_deref())?;
-
+        // todo fix args
+        // create -> input.text
+        // create -v -> input.select then input.text
         Ok(())
     }
 }

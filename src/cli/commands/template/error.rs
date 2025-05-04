@@ -11,17 +11,17 @@ pub enum TemplateError {
     #[error(transparent)]
     Input(#[from] InputError),
 
-    #[error("Template '{template}' does not exist")]
-    TemplateNotFound { template: String },
+    #[error("Template '{0}' does not exist")]
+    TemplateNotFound(String),
 
     #[error("Variant '{variant}' does not exist for '{template}'")]
     VariantNotFound { template: String, variant: String },
 
-    #[error("Cannot create template '{template}' as it already exists")]
-    TemplateAlreadyExists { template: String },
+    #[error("Cannot create template '{0}' as it already exists")]
+    TemplateAlreadyExists(String),
 
-    #[error("Cannot create template variant '{variant}' as it already exists")]
-    VariantAlreadyExists { variant: String },
+    #[error("Cannot create template variant '{0}' as it already exists")]
+    VariantAlreadyExists(String),
 
     #[error("Editor failed to open")]
     EditorFailed(#[from] EditorError),
@@ -31,4 +31,7 @@ pub enum TemplateError {
 
     #[error("No templates set")]
     NoTemplates,
+
+    #[error("No variants exist for template '{0}'")]
+    NoVariants(String),
 }
