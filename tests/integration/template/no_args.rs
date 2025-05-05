@@ -77,7 +77,10 @@ fn test_template_command_with_no_args_empty_templates_user_accepts() {
         result.unwrap_err()
     );
 
-    let expected_path = storage_dir.join("templates").join("react").join("default");
+    let expected_path = storage_dir
+        .join("templates")
+        .join("react")
+        .join(DEFAULT_FOLDER);
     assert!(
         expected_path.exists() && expected_path.is_dir(),
         "Expected template path {:?} to be created, but it does not exist",
@@ -109,7 +112,10 @@ fn test_template_command_with_no_args_templates_exist() {
         editor: None,
     };
 
-    let template_path = storage_dir.join("templates").join("react").join("default");
+    let template_path = storage_dir
+        .join("templates")
+        .join("react")
+        .join(DEFAULT_FOLDER);
     fs::create_dir_all(&template_path).expect("Failed to create template directory structure");
 
     let tmp_current_dir = tempdir().expect("Failed to create temporary directory");

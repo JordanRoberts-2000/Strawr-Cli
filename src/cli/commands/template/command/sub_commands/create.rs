@@ -1,22 +1,13 @@
-use crate::{
-    cli::commands::template::{command::manager::TemplateManager, TemplateError},
-    utils::validation::{reserved, slug},
+use crate::cli::commands::template::{
+    command::{helpers::parse_template, manager::TemplateManager, utils::Template, TemplateInput},
+    TemplateError,
 };
-
-use super::TemplateSubcommands;
-
-fn validate_template(s: &str) -> Result<String, String> {
-    let valid_slug = slug(s)?;
-    reserved::<TemplateSubcommands>(&valid_slug.as_str())?;
-
-    Ok(valid_slug)
-}
 
 #[derive(clap::Parser, Debug)]
 #[command()]
 pub struct CreateSubcommand {
-    #[arg(value_name = "New Template Title", value_parser = validate_template)]
-    pub template: Option<String>,
+    #[arg(value_parser = parse_template, value_name = "New Template Title")]
+    pub template: Option<TemplateInput>,
 
     #[arg(short, long, action = clap::ArgAction::SetTrue, conflicts_with = "template")]
     pub variant: bool,
@@ -24,38 +15,26 @@ pub struct CreateSubcommand {
 
 impl CreateSubcommand {
     pub fn execute(&self, manager: &TemplateManager) -> Result<(), TemplateError> {
-        if let Some(template) = &self.template {
-            return manager.create_template(&template, None);
+        if let Some((template, variant)) = &self.template {
+            let template =
+                Template::new(&template, &manager.templates_path)?.create(&variant.as_deref())?;
+            manager.open_template(&template.path, &variant.as_deref())?;
+            return Ok(());
         }
 
         if self.variant {
-            return Self::handle_variant(&manager);
+            let template = manager.select_template("Select a template to add a variant to:")?;
+            let variant = manager.ctx.input.text("Variant title:")?;
+
+            template.create(&Some(&variant))?;
+            manager.open_template(&template.path, &Some(&variant))?;
+            return Ok(());
         }
 
-        Self::handle_no_input(&manager)
-    }
-
-    fn handle_variant(manager: &TemplateManager) -> Result<(), TemplateError> {
-        let template = manager.select_template("Select a template to add a variant to:")?;
-        let variant = manager.ctx.input.text("Variant title:")?;
-
-        let valid_slug = slug(&variant).map_err(TemplateError::Validation)?;
-
-        if valid_slug == "default" {
-            return Err(TemplateError::Validation(
-                "'default' is a reserved value".to_string(),
-            ));
-        }
-
-        manager.create_template(&template, Some(&valid_slug))?;
+        let input = manager.ctx.input.text("New Template title:")?;
+        let template = Template::new(&input, &manager.templates_path)?.create(&None)?;
+        manager.open_template(&template.path, &None)?;
 
         Ok(())
-    }
-
-    fn handle_no_input(manager: &TemplateManager) -> Result<(), TemplateError> {
-        let input = manager.ctx.input.text("New Template title:")?;
-        let template = validate_template(&input).map_err(TemplateError::Validation)?;
-
-        manager.create_template(&template, None)
     }
 }

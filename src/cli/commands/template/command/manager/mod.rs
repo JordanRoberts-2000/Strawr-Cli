@@ -4,7 +4,6 @@ use crate::{
     cli::commands::template::TemplateError, error::io::IoError, state::AppContext, utils::Editor,
 };
 
-pub mod create;
 pub mod inject;
 pub mod open;
 pub mod select;

@@ -30,7 +30,7 @@ pub enum TemplateError {
     SelectFailed(#[from] inquire::InquireError),
 
     #[error("No templates set")]
-    NoTemplates,
+    NoTemplatesExist,
 
     #[error("No variants exist for template '{0}'")]
     NoVariants(String),

@@ -1,7 +1,9 @@
 use std::path::PathBuf;
 
 use crate::{
-    cli::commands::template::{command::manager::TemplateManager, TemplateCommand, TemplateError},
+    cli::commands::template::{
+        command::manager::TemplateManager, TemplateCommand, TemplateError, DEFAULT_FOLDER,
+    },
     error::IoError,
     utils::fs::subfolders,
 };
@@ -37,7 +39,7 @@ impl TemplateCommand {
                 let mut subdirs = subfolders(template_path)
                     .map_err(|e| IoError::ReadDir(e, template_path.clone()))?;
 
-                subdirs.retain(|s| s != "default");
+                subdirs.retain(|s| s != DEFAULT_FOLDER);
 
                 if subdirs.is_empty() {
                     return Err(TemplateError::NoVariants(template.clone()));
