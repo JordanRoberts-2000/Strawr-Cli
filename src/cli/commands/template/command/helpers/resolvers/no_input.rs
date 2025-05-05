@@ -34,7 +34,7 @@ impl TemplateCommand {
         {
             let input = manager.ctx.input.text("Enter template name:")?;
             let template = Template::new(&input, &manager.templates_path)?.create(&None)?;
-            manager.open_template(&template.path, &None)?;
+            manager.open_template(&template, &None)?;
         }
 
         Ok(())

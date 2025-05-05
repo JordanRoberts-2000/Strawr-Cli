@@ -1,4 +1,7 @@
-use std::{path::Path, process::Command};
+use std::{
+    path::{Path, PathBuf},
+    process::Command,
+};
 
 #[derive(Debug, Clone, clap::ValueEnum, serde::Deserialize)]
 #[serde(rename_all = "lowercase")]
@@ -30,6 +33,10 @@ impl TestEditorLauncher {
 impl EditorLauncher for CliEditor {
     fn open(&self, editor: &Editor, path: &Path) -> Result<(), EditorError> {
         log::info!("Opening {:?} in {:?}", editor, path);
+
+        if !path.exists() {
+            return Err(EditorError::PathDoesntExist(path.to_path_buf()));
+        }
 
         let cmd = match editor {
             Editor::VsCode => "code",
@@ -81,4 +88,7 @@ pub enum EditorError {
 
     #[error("editor command not found in PATH: {0}")]
     NotFound(String),
+
+    #[error("Path provided does not exist '{}'", .0.display())]
+    PathDoesntExist(PathBuf),
 }

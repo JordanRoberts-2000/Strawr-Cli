@@ -1,3 +1,3 @@
-pub mod valid_template;
+pub mod template;
 
-pub use valid_template::Template;
+pub use template::Template;

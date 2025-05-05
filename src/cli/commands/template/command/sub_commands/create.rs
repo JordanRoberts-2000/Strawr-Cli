@@ -18,7 +18,7 @@ impl CreateSubcommand {
         if let Some((template, variant)) = &self.template {
             let template =
                 Template::new(&template, &manager.templates_path)?.create(&variant.as_deref())?;
-            manager.open_template(&template.path, &variant.as_deref())?;
+            manager.open_template(&template, &variant.as_deref())?;
             return Ok(());
         }
 
@@ -27,13 +27,13 @@ impl CreateSubcommand {
             let variant = manager.ctx.input.text("Variant title:")?;
 
             template.create(&Some(&variant))?;
-            manager.open_template(&template.path, &Some(&variant))?;
+            manager.open_template(&template, &Some(&variant))?;
             return Ok(());
         }
 
         let input = manager.ctx.input.text("New Template title:")?;
         let template = Template::new(&input, &manager.templates_path)?.create(&None)?;
-        manager.open_template(&template.path, &None)?;
+        manager.open_template(&template, &None)?;
 
         Ok(())
     }
