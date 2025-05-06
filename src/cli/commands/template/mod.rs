@@ -8,3 +8,4 @@ pub use config::TemplateConfig;
 pub use error::TemplateError;
 
 pub const DEFAULT_FOLDER: &str = "default";
+pub const TEMPLATES_FOLDER_NAME: &str = "templates";

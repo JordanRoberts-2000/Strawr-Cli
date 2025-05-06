@@ -9,6 +9,7 @@ pub mod constants;
 pub mod error;
 pub mod services;
 pub mod state;
+pub mod traits;
 pub mod utils;
 
 pub fn run_cli(cli: &Cli) -> Result<(), CliError> {

@@ -1,5 +1,5 @@
 use crate::cli::commands::template::{
-    command::{helpers::parse_template, manager::TemplateManager, utils::Template, TemplateInput},
+    command::{utils::parse_template, TemplateInput},
     TemplateError,
 };
 
@@ -14,26 +14,26 @@ pub struct CreateSubcommand {
 }
 
 impl CreateSubcommand {
-    pub fn execute(&self, manager: &TemplateManager) -> Result<(), TemplateError> {
-        if let Some((template, variant)) = &self.template {
-            let template =
-                Template::new(&template, &manager.templates_path)?.create(&variant.as_deref())?;
-            manager.open_template(&template, &variant.as_deref())?;
-            return Ok(());
-        }
+    pub fn execute(&self) -> Result<(), TemplateError> {
+        // if let Some((template, variant)) = &self.template {
+        //     let template =
+        //         Template::new(&template, &manager.templates_path)?.create(&variant.as_deref())?;
+        //     manager.open_template(&template, &variant.as_deref())?;
+        //     return Ok(());
+        // }
 
-        if self.variant {
-            let template = manager.select_template("Select a template to add a variant to:")?;
-            let variant = manager.ctx.input.text("Variant title:")?;
+        // if self.variant {
+        //     let template = manager.select_template("Select a template to add a variant to:")?;
+        //     let variant = manager.ctx.input.text("Variant title:")?;
 
-            template.create(&Some(&variant))?;
-            manager.open_template(&template, &Some(&variant))?;
-            return Ok(());
-        }
+        //     template.create(&Some(&variant))?;
+        //     manager.open_template(&template, &Some(&variant))?;
+        //     return Ok(());
+        // }
 
-        let input = manager.ctx.input.text("New Template title:")?;
-        let template = Template::new(&input, &manager.templates_path)?.create(&None)?;
-        manager.open_template(&template, &None)?;
+        // let input = manager.ctx.input.text("New Template title:")?;
+        // let template = Template::new(&input, &manager.templates_path)?.create(&None)?;
+        // manager.open_template(&template, &None)?;
 
         Ok(())
     }
