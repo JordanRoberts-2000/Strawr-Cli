@@ -1,4 +1,7 @@
-use super::{args::TemplateCommand, helpers::template_input::handle_template_input};
+use super::{
+    args::TemplateCommand,
+    helpers::{template_input::handle_template_input, templates_init::templates_folder_init},
+};
 use crate::{
     cli::commands::template::{
         command::context::TemplateContext, service::TemplateService, TemplateError,
@@ -8,11 +11,11 @@ use crate::{
 
 impl TemplateCommand {
     pub fn execute(&self, ctx: &AppContext) -> Result<(), TemplateError> {
+        templates_folder_init(&ctx.storage_dir)?;
+
         if let Some(subcommand) = &self.subcommand {
             return subcommand.execute(ctx);
         }
-
-        // todo need to create the templates/ folder if it doesnt exist
 
         let ctx = TemplateContext::new(self, ctx);
         let service = TemplateService::from(&ctx);
