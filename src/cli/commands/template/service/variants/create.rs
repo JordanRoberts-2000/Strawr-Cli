@@ -29,6 +29,6 @@ impl<'a> TemplateService<'a> {
         fs::create_dir_all(&variant_path)
             .map_err(|e| IoError::CreateDir(e, variant_path.clone()))?;
 
-        Ok(Variant::new(&variant, &variant_path))
+        Ok(Variant::new(&template, &variant, &variant_path))
     }
 }

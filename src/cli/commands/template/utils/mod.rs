@@ -33,13 +33,17 @@ impl Template {
 pub struct Variant {
     pub name: String,
     pub path: PathBuf,
+    pub template_name: String,
+    pub template_path: PathBuf,
 }
 
 impl Variant {
-    pub fn new(name: &str, path: &Path) -> Self {
+    pub fn new(template: &Template, name: &str, path: &Path) -> Self {
         Self {
             name: name.to_string(),
             path: path.to_path_buf(),
+            template_name: template.name.clone(),
+            template_path: template.path.clone(),
         }
     }
 }

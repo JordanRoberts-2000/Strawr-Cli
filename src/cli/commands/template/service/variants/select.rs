@@ -23,6 +23,6 @@ impl<'a> TemplateService<'a> {
         log::debug!("User selected variant: '{}'", input);
 
         let variant_path = template.path.join(&input);
-        Ok(Variant::new(&input, &variant_path))
+        Ok(Variant::new(&template, &input, &variant_path))
     }
 }

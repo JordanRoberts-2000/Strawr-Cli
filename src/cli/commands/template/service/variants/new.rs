@@ -1,7 +1,7 @@
 use crate::cli::commands::template::{
     service::TemplateService,
     utils::{Template, Variant},
-    TemplateError,
+    TemplateError, DEFAULT_FOLDER,
 };
 
 impl<'a> TemplateService<'a> {
@@ -19,6 +19,12 @@ impl<'a> TemplateService<'a> {
             });
         }
 
-        Ok(Variant::new(variant, &variant_path))
+        if variant == DEFAULT_FOLDER {
+            return Err(TemplateError::Validation(format!(
+                "'{DEFAULT_FOLDER}' can't be renamed"
+            )));
+        }
+
+        Ok(Variant::new(&template, variant, &variant_path))
     }
 }

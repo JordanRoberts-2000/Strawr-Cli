@@ -25,7 +25,7 @@ impl TemplateSubcommands {
         match self {
             Self::Create(cmd) => cmd.execute(ctx)?,
             Self::Edit(cmd) => cmd.execute(ctx)?,
-            Self::Rename(cmd) => cmd.execute()?,
+            Self::Rename(cmd) => cmd.execute(ctx)?,
             Self::Delete(cmd) => cmd.execute(ctx)?,
         };
 

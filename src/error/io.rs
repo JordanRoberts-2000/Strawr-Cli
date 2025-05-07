@@ -11,6 +11,9 @@ pub enum IoError {
     #[error("Failed to read directory at `{1}`: {0}")]
     ReadDir(#[source] io::Error, PathBuf),
 
+    #[error("Failed to rename directory from `{1}` to `{2}`: {0}")]
+    Rename(#[source] io::Error, PathBuf, PathBuf),
+
     #[error("Failed to retrieve the current working directory: {0}")]
     GetCurrentDir(std::io::Error),
 
