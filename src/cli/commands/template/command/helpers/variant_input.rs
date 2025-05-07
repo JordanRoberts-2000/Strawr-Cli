@@ -1,8 +1,6 @@
 use crate::cli::commands::template::{
-    command::{
-        service::TemplateService,
-        utils::{Template, Variant},
-    },
+    service::TemplateService,
+    utils::{Template, Variant},
     TemplateError,
 };
 

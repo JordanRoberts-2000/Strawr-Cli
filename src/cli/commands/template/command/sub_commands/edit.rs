@@ -1,6 +1,5 @@
 use crate::cli::commands::template::{
-    command::{utils::parse_template, TemplateInput},
-    TemplateError,
+    command::TemplateInput, utils::parse_template, TemplateError,
 };
 
 #[derive(clap::Parser, Debug)]

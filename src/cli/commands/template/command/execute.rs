@@ -1,8 +1,8 @@
-use super::{
-    args::TemplateCommand, helpers::template_input::handle_template_input, service::TemplateService,
-};
+use super::{args::TemplateCommand, helpers::template_input::handle_template_input};
 use crate::{
-    cli::commands::template::{command::context::TemplateContext, TemplateError},
+    cli::commands::template::{
+        command::context::TemplateContext, service::TemplateService, TemplateError,
+    },
     state::AppContext,
 };
 

@@ -1,6 +1,5 @@
 use crate::cli::commands::template::{
-    command::{context::TemplateContext, service::TemplateService},
-    TemplateCommand, TemplateError,
+    command::context::TemplateContext, service::TemplateService, TemplateCommand, TemplateError,
 };
 
 impl TemplateCommand {
@@ -14,7 +13,8 @@ impl TemplateCommand {
         if service.confirm(msg)? {
             let input = service.text("Enter template name:")?;
             let template = service.create_template(&input)?;
-            service.open_template(&template, &ctx.editor)?;
+
+            service.launch_editor(&ctx.editor, &template.default_variant_path)?;
         }
 
         Ok(())

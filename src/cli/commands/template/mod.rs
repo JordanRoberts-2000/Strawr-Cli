@@ -1,7 +1,8 @@
 pub mod command;
 pub mod config;
 pub mod error;
-pub mod test_utils;
+pub mod service;
+pub mod utils;
 
 pub use command::args::TemplateCommand;
 pub use config::TemplateConfig;

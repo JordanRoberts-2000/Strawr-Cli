@@ -1,8 +1,11 @@
 use std::path::PathBuf;
 
-use crate::utils::{validation::existing_dir, Editor};
+use crate::{
+    cli::commands::template::utils::parse_template,
+    utils::{validation::existing_dir, Editor},
+};
 
-use super::{sub_commands::TemplateSubcommands, utils::parse_template, TemplateInput};
+use super::{sub_commands::TemplateSubcommands, TemplateInput};
 
 #[derive(clap::Parser, Debug)]
 pub struct TemplateCommand {

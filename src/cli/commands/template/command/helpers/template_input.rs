@@ -1,5 +1,6 @@
 use crate::cli::commands::template::{
-    command::{context::TemplateContext, service::TemplateService, TemplateInput},
+    command::{context::TemplateContext, TemplateInput},
+    service::TemplateService,
     TemplateError,
 };
 

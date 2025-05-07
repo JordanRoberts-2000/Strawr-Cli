@@ -1,6 +1,5 @@
 use crate::cli::commands::template::{
-    command::{context::TemplateContext, service::TemplateService},
-    TemplateCommand, TemplateError,
+    command::context::TemplateContext, service::TemplateService, TemplateCommand, TemplateError,
 };
 
 pub mod choose_and_apply;

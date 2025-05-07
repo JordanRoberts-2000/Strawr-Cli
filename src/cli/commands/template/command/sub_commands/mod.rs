@@ -1,4 +1,5 @@
 use create::CreateSubcommand;
+use delete::DeleteSubcommand;
 use edit::EditSubcommand;
 use rename::RenameSubcommand;
 use strum_macros::VariantNames;
@@ -16,16 +17,16 @@ pub enum TemplateSubcommands {
     Create(CreateSubcommand),
     Rename(RenameSubcommand),
     Edit(EditSubcommand),
-    Delete,
+    Delete(DeleteSubcommand),
 }
 
 impl TemplateSubcommands {
     pub fn execute(&self, ctx: &AppContext) -> Result<(), TemplateError> {
         match self {
-            Self::Create(cmd) => cmd.execute()?,
+            Self::Create(cmd) => cmd.execute(ctx)?,
             Self::Edit(cmd) => cmd.execute()?,
             Self::Rename(cmd) => cmd.execute()?,
-            Self::Delete => println!("execute delete"),
+            Self::Delete(cmd) => cmd.execute(ctx)?,
         };
 
         Ok(())
