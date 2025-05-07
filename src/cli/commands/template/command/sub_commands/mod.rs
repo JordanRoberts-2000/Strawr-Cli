@@ -24,7 +24,7 @@ impl TemplateSubcommands {
     pub fn execute(&self, ctx: &AppContext) -> Result<(), TemplateError> {
         match self {
             Self::Create(cmd) => cmd.execute(ctx)?,
-            Self::Edit(cmd) => cmd.execute()?,
+            Self::Edit(cmd) => cmd.execute(ctx)?,
             Self::Rename(cmd) => cmd.execute()?,
             Self::Delete(cmd) => cmd.execute(ctx)?,
         };
