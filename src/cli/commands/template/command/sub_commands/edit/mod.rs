@@ -1,6 +1,10 @@
-pub mod args;
-pub mod context;
-pub mod execute;
-pub mod helpers;
+mod command;
+mod context;
+mod impls {
+    mod edit_from_input;
+    mod execute;
+    mod template_interactive;
+    mod variant_interactive;
+}
 
-pub use args::EditSubcommand;
+pub use {command::EditSubcommand, context::EditSubcommandContext};

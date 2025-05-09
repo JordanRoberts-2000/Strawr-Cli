@@ -1,7 +1,7 @@
 use crate::{
     cli::commands::img::{ImgCommand, ImgError},
+    context::AppContext,
     services::img::Img,
-    state::AppContext,
 };
 
 pub mod blur;

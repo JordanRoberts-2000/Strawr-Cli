@@ -2,8 +2,8 @@ use std::fs;
 
 use crate::{
     cli::commands::template::{
-        command::sub_commands::TemplateSubcommands, service::TemplateService, utils::Template,
-        TemplateError, DEFAULT_FOLDER,
+        constants::DEFAULT_FOLDER, utils::Template, TemplateError, TemplateService,
+        TemplateSubcommand,
     },
     error::IoError,
     utils::validation::{reserved, slug},
@@ -12,7 +12,7 @@ use crate::{
 impl<'a> TemplateService<'a> {
     pub fn create_template(&self, str: &str) -> Result<Template, TemplateError> {
         let template = slug(str).map_err(TemplateError::Validation)?;
-        reserved::<TemplateSubcommands>(&template).map_err(TemplateError::Validation)?;
+        reserved::<TemplateSubcommand>(&template).map_err(TemplateError::Validation)?;
 
         let template_path = self.templates_path.join(&template);
 

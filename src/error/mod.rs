@@ -1,30 +1,26 @@
-use crate::{
-    cli::commands::{grab::GrabError, img::ImgError, temp::TempError, template::TemplateError},
-    config::error::ConfigError,
-    state::error::StateError,
-};
+use crate::{commands::errors::*, config::ConfigError, context::ContextError};
 
-pub mod io;
-pub mod parse;
-pub mod utils;
+mod io;
+mod parse;
+pub(crate) mod utils;
 
-pub use io::IoError;
-pub use parse::ParseError;
+pub(crate) use io::IoError;
+pub(crate) use parse::ParseError;
 
 #[derive(thiserror::Error, Debug)]
 pub enum CliError {
     #[error(transparent)]
-    State(#[from] StateError),
+    State(#[from] ContextError),
     #[error(transparent)]
     Config(#[from] ConfigError),
 
     // Commands
-    #[error(transparent)]
-    GrabCommand(#[from] GrabError),
-    #[error(transparent)]
-    ImgCommand(#[from] ImgError),
-    #[error(transparent)]
-    TempCommand(#[from] TempError),
+    // #[error(transparent)]
+    // GrabCommand(#[from] GrabError),
+    // #[error(transparent)]
+    // ImgCommand(#[from] ImgError),
+    // #[error(transparent)]
+    // TempCommand(#[from] TempError),
     #[error(transparent)]
     TemplateCommand(#[from] TemplateError),
 }

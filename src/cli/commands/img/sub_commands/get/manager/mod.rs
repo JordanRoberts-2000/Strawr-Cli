@@ -2,8 +2,8 @@ use std::path::PathBuf;
 
 use crate::{
     cli::commands::img::{ImgConfig, ImgError},
+    context::AppContext,
     services::img::Img,
-    state::AppContext,
 };
 
 pub mod alt;

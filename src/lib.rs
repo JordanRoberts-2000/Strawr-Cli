@@ -1,20 +1,25 @@
-use cli::Cli;
-use error::CliError;
-use state::AppContext;
-use utils::{logger, time_execution};
+use self::utils::{logger, time_execution};
 
-pub mod cli;
-pub mod config;
-pub mod constants;
-pub mod error;
-pub mod services;
-pub mod state;
-pub mod traits;
-pub mod utils;
+mod cli;
+mod config;
+mod constants;
+mod context;
+mod error;
+mod services;
+mod traits;
+mod utils;
+
+pub(crate) use cli::commands::template;
+pub use {
+    cli::{cli::Cli, commands},
+    config::CliConfig,
+    context::CliContext,
+    error::CliError,
+};
 
 pub fn run_cli(cli: &Cli) -> Result<(), CliError> {
     logger::initialize(cli.debug);
-    let ctx = AppContext::initialize(&cli.debug)?;
+    let ctx = CliContext::initialize(&cli.debug)?;
 
     time_execution(|| cli.command.execute(&ctx))?;
 

@@ -1,6 +1,11 @@
-pub mod args;
-pub mod context;
-pub mod execute;
-pub mod helpers;
+mod command;
+mod context;
+mod impls {
+    mod create_from_input;
+    mod execute;
+    mod template_interactive;
+    mod variant_interactive;
+}
 
-pub use args::CreateSubcommand;
+pub use command::CreateSubcommand;
+use context::CreateSubcommandContext;

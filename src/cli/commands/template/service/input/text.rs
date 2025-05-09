@@ -1,4 +1,4 @@
-use crate::cli::commands::template::{service::TemplateService, TemplateError};
+use crate::template::{TemplateError, TemplateService};
 
 impl<'a> TemplateService<'a> {
     pub fn text(&self, msg: &str) -> Result<String, TemplateError> {

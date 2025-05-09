@@ -1,8 +1,8 @@
 use std::fs::remove_dir_all;
 
 use crate::{
-    cli::commands::template::{service::TemplateService, utils::Variant, TemplateError},
     error::IoError,
+    template::{utils::Variant, TemplateError, TemplateService},
 };
 
 impl<'a> TemplateService<'a> {

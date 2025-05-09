@@ -1,6 +1,6 @@
 use std::{collections::HashMap, path::PathBuf};
 
-use crate::state::AppContext;
+use crate::context::AppContext;
 
 pub mod entry;
 pub mod storage;

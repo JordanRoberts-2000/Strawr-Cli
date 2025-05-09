@@ -1,8 +1,8 @@
 use std::path::Path;
 
 use crate::{
-    cli::commands::template::{TemplateError, TEMPLATES_FOLDER_NAME},
     error::IoError,
+    template::{constants::TEMPLATES_FOLDER_NAME, TemplateError},
 };
 
 pub fn templates_folder_init(storage_dir: &Path) -> Result<(), TemplateError> {

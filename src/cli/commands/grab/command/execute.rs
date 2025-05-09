@@ -1,6 +1,6 @@
 use crate::{
     cli::commands::grab::{GrabError, GrabManager},
-    state::AppContext,
+    context::AppContext,
 };
 
 use super::args::GrabCommand;

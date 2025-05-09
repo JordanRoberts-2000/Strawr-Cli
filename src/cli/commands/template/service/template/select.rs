@@ -1,6 +1,6 @@
 use crate::{
-    cli::commands::template::{service::TemplateService, utils::Template, TemplateError},
     error::IoError,
+    template::{utils::Template, TemplateError, TemplateService},
     utils::fs::subfolders,
 };
 

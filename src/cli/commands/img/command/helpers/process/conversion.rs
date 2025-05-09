@@ -2,8 +2,8 @@ use image::ImageFormat;
 
 use crate::{
     cli::commands::img::{ImgCommand, ImgError},
+    context::AppContext,
     services::img::{CompressionType, Img},
-    state::AppContext,
 };
 
 impl ImgCommand {

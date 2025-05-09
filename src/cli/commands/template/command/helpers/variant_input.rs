@@ -1,7 +1,6 @@
-use crate::cli::commands::template::{
-    service::TemplateService,
+use crate::template::{
     utils::{Template, Variant},
-    TemplateError,
+    TemplateError, TemplateService,
 };
 
 pub fn resolve_variant(

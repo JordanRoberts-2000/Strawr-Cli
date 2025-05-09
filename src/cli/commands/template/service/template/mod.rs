@@ -1,7 +1,7 @@
-pub mod create;
-pub mod delete;
-pub mod has_templates;
-pub mod new;
-pub mod rename;
-pub mod select;
-pub mod select_all;
+mod create;
+mod delete;
+mod has_templates;
+mod new;
+mod rename;
+mod select;
+mod select_all;

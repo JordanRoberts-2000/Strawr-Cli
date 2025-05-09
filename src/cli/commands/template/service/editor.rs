@@ -1,6 +1,6 @@
 use std::path::Path;
 
-use crate::{cli::commands::template::TemplateError, utils::Editor};
+use crate::{template::TemplateError, utils::Editor};
 
 use super::TemplateService;
 

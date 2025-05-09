@@ -4,8 +4,8 @@ use serde_json::json;
 
 use crate::{
     cli::commands::grab::{GrabError, GrabManager},
+    context::AppContext,
     error::IoError,
-    state::AppContext,
 };
 
 impl<'a> GrabManager<'a> {

@@ -1,7 +1,7 @@
-use crate::cli::commands::template::{
-    service::TemplateService,
+use crate::template::{
+    constants::DEFAULT_FOLDER,
     utils::{Template, Variant},
-    TemplateError, DEFAULT_FOLDER,
+    TemplateError, TemplateService,
 };
 
 impl<'a> TemplateService<'a> {

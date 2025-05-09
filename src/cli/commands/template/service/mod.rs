@@ -5,11 +5,11 @@ use crate::{
     utils::{editor::EditorLauncher, input::CliInput},
 };
 
-pub mod editor;
-pub mod inject;
-pub mod input;
-pub mod template;
-pub mod variants;
+mod editor;
+mod inject;
+mod input;
+mod template;
+mod variants;
 
 pub struct TemplateService<'a> {
     pub input: &'a dyn CliInput,

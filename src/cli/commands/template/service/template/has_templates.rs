@@ -1,6 +1,6 @@
 use crate::{
-    cli::commands::template::{service::TemplateService, TemplateError},
     error::IoError,
+    template::{TemplateError, TemplateService},
     utils::fs::is_dir_empty,
 };
 

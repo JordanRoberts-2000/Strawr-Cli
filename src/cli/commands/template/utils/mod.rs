@@ -1,6 +1,6 @@
 use std::path::{Path, PathBuf};
 
-use super::{command::TemplateInput, DEFAULT_FOLDER};
+use crate::template::{constants::DEFAULT_FOLDER, types::TemplateInput};
 
 pub fn parse_template(s: &str) -> Result<TemplateInput, String> {
     if s.contains(':') {

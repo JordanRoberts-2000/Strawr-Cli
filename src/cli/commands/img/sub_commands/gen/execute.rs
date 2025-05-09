@@ -1,8 +1,8 @@
 use super::args::Gen;
 use crate::{
     cli::commands::img::{sub_commands::gen::manager::GenManager, ImgError},
+    context::AppContext,
     services::{ai, img::Img},
-    state::AppContext,
     utils::Keyring,
 };
 

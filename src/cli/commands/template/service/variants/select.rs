@@ -1,10 +1,10 @@
 use crate::{
-    cli::commands::template::{
-        service::TemplateService,
-        utils::{Template, Variant},
-        TemplateError, DEFAULT_FOLDER,
-    },
     error::IoError,
+    template::{
+        constants::DEFAULT_FOLDER,
+        utils::{Template, Variant},
+        TemplateError, TemplateService,
+    },
     utils::fs::subfolders,
 };
 

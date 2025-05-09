@@ -1,8 +1,4 @@
-use crate::cli::commands::template::{
-    command::{context::TemplateContext, TemplateInput},
-    service::TemplateService,
-    TemplateError,
-};
+use crate::template::{types::TemplateInput, TemplateContext, TemplateError, TemplateService};
 
 use super::variant_input::resolve_variant;
 

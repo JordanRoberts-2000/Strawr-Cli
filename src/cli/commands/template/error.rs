@@ -1,5 +1,5 @@
 use crate::{
-    error::io::IoError,
+    error::IoError,
     utils::{editor::EditorError, input::InputError},
 };
 

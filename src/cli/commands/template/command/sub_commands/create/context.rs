@@ -1,13 +1,13 @@
 use std::path::PathBuf;
 
 use crate::{
-    cli::commands::template::{service::TemplateService, TEMPLATES_FOLDER_NAME},
-    state::AppContext,
+    template::{constants::TEMPLATES_FOLDER_NAME, TemplateService},
     traits::ToService,
     utils::{editor::EditorLauncher, input::CliInput, Editor},
+    CliContext,
 };
 
-use super::CreateSubcommand;
+use super::command::CreateSubcommand;
 
 pub struct CreateSubcommandContext<'a> {
     pub templates_path: PathBuf,
@@ -17,11 +17,11 @@ pub struct CreateSubcommandContext<'a> {
 }
 
 impl<'a> CreateSubcommandContext<'a> {
-    pub fn new(args: &'a CreateSubcommand, ctx: &'a AppContext) -> Self {
+    pub fn new(args: &'a CreateSubcommand, ctx: &'a CliContext) -> Self {
         let templates_path = ctx.storage_dir.join(TEMPLATES_FOLDER_NAME);
         let editor = args.editor.as_ref().unwrap_or(&ctx.config.default_editor);
-        let editor_launcher = ctx.editor.as_ref();
-        let input = ctx.input.as_ref();
+        let editor_launcher = ctx.service.editor_launcher.as_ref();
+        let input = ctx.service.input.as_ref();
 
         Self {
             templates_path,

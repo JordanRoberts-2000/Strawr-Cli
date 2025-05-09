@@ -1,10 +1,9 @@
 use crate::{
-    cli::commands::template::{
-        service::TemplateService,
-        utils::{Template, Variant},
-        TemplateError,
-    },
     error::IoError,
+    template::{
+        utils::{Template, Variant},
+        TemplateError, TemplateService,
+    },
     utils::fs::subfolders,
 };
 

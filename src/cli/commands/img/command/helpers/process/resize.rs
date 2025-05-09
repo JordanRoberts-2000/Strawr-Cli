@@ -1,4 +1,4 @@
-use crate::{cli::commands::img::ImgCommand, services::img::Img, state::AppContext};
+use crate::{cli::commands::img::ImgCommand, context::AppContext, services::img::Img};
 
 impl ImgCommand {
     pub fn apply_resize(&self, img: &mut Img, ctx: &AppContext) {

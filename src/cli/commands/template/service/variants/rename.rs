@@ -1,10 +1,8 @@
 use std::fs::rename;
 
 use crate::{
-    cli::commands::template::{
-        service::TemplateService, utils::Variant, TemplateError, DEFAULT_FOLDER,
-    },
     error::IoError,
+    template::{constants::DEFAULT_FOLDER, utils::Variant, TemplateError, TemplateService},
     utils::validation::slug,
 };
 

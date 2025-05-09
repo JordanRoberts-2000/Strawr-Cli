@@ -4,8 +4,8 @@ use walkdir::WalkDir;
 
 use crate::{
     cli::commands::img::{ImgCommand, ImgError},
+    context::AppContext,
     services::img::Img,
-    state::AppContext,
 };
 
 use super::supported::is_supported_image;

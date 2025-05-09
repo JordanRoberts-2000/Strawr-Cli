@@ -1,6 +1,6 @@
 use clap::Parser;
 use colored::*;
-use strawr::{cli::Cli, run_cli};
+use strawr::{run_cli, Cli};
 
 fn main() {
     let cli = Cli::parse();

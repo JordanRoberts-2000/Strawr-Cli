@@ -1,11 +1,8 @@
 use std::fs::rename;
 
 use crate::{
-    cli::commands::template::{
-        command::sub_commands::TemplateSubcommands, service::TemplateService, utils::Template,
-        TemplateError,
-    },
     error::IoError,
+    template::{utils::Template, TemplateError, TemplateService, TemplateSubcommand},
     utils::validation::{reserved, slug},
 };
 
@@ -16,7 +13,7 @@ impl<'a> TemplateService<'a> {
         to: &str,
     ) -> Result<Template, TemplateError> {
         let valid_slug = slug(to).map_err(TemplateError::Validation)?;
-        reserved::<TemplateSubcommands>(&valid_slug).map_err(TemplateError::Validation)?;
+        reserved::<TemplateSubcommand>(&valid_slug).map_err(TemplateError::Validation)?;
 
         let new_template_path = self.templates_path.join(&valid_slug);
 

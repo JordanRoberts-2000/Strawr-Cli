@@ -1,4 +1,4 @@
-use crate::{cli::commands::img::ImgError, state::AppContext};
+use crate::{cli::commands::img::ImgError, context::AppContext};
 
 use super::{args::Get, manager::GetManager};
 

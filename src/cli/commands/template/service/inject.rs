@@ -1,11 +1,12 @@
 use std::path::Path;
 
 use crate::{
-    cli::commands::template::{
-        utils::{Template, Variant},
-        TemplateError, DEFAULT_FOLDER,
-    },
     error::IoError,
+    template::{
+        constants::DEFAULT_FOLDER,
+        utils::{Template, Variant},
+        TemplateError,
+    },
     utils::fs::{copy_dir_contents, is_dir_empty},
 };
 

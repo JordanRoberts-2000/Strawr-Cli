@@ -2,7 +2,7 @@ use std::{env, fs};
 
 use uuid::Uuid;
 
-use crate::{error::IoError, state::AppContext};
+use crate::{context::AppContext, error::IoError};
 
 use super::{args::TempCommand, error::TempError};
 

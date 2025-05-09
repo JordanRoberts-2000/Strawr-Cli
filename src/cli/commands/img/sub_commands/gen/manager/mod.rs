@@ -1,6 +1,6 @@
 use crate::{
+    context::AppContext,
     services::ai::sync::{ImageSize, Model},
-    state::AppContext,
 };
 
 use super::args::Gen;

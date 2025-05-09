@@ -1,18 +1,18 @@
 use std::fs;
 
 use crate::{
-    cli::commands::template::{
-        service::TemplateService,
-        utils::{Template, Variant},
-        TemplateError, DEFAULT_FOLDER,
-    },
     error::IoError,
-    utils::validation::slug,
+    template::{
+        constants::DEFAULT_FOLDER,
+        utils::{Template, Variant},
+        TemplateError, TemplateService,
+    },
+    utils::validation,
 };
 
 impl<'a> TemplateService<'a> {
     pub fn create_variant(&self, template: &Template, str: &str) -> Result<Variant, TemplateError> {
-        let variant = slug(&str).map_err(TemplateError::Validation)?;
+        let variant = validation::slug(&str).map_err(TemplateError::Validation)?;
 
         if variant == DEFAULT_FOLDER {
             return Err(TemplateError::Validation(format!(

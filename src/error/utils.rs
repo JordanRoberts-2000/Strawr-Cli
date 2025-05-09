@@ -1,7 +1,7 @@
 use std::borrow::Cow;
 use validator::{ValidationErrors, ValidationErrorsKind};
 
-pub fn format_validation_errors(errors: &ValidationErrors) -> String {
+pub(crate) fn format_validation_errors(errors: &ValidationErrors) -> String {
     let mut messages = Vec::new();
 
     for (field, field_errors) in errors.errors() {

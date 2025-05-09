@@ -1,6 +1,6 @@
 use crate::cli::commands::img::ImgError;
+use crate::context::AppContext;
 use crate::services::img::Img;
-use crate::state::AppContext;
 
 use super::args::ImgCommand;
 use super::helpers::input_detection::InputType;
