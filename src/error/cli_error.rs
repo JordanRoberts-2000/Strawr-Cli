@@ -6,6 +6,8 @@ pub enum CliError {
     Config(#[from] ConfigError),
     #[error(transparent)]
     Storage(#[from] StorageError),
+    #[error(transparent)]
+    EditorLaunchFailed(#[from] EditorLauncherError),
 
     // Commands
     // #[error(transparent)]

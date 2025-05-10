@@ -1,4 +1,4 @@
-use crate::services::prompt::{traits::TextPrompt, types::Input, PromptError, TestInput};
+use crate::services::prompt::{enums::Input, traits::TextPrompt, PromptError, TestInput};
 
 impl TextPrompt for TestInput {
     fn text(&self, msg: &str) -> Result<String, PromptError> {

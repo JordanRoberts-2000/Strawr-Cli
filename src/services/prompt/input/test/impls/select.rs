@@ -1,4 +1,4 @@
-use crate::services::prompt::{traits::SelectPrompt, types::Input, PromptError, TestInput};
+use crate::services::prompt::{enums::Input, traits::SelectPrompt, PromptError, TestInput};
 
 impl SelectPrompt for TestInput {
     fn select(&self, _options: &[String], msg: &str) -> Result<String, PromptError> {

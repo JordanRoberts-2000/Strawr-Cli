@@ -1,4 +1,4 @@
-use crate::services::prompt::{traits::SearchPrompt, types::Input, PromptError, TestInput};
+use crate::services::prompt::{enums::Input, traits::SearchPrompt, PromptError, TestInput};
 
 impl SearchPrompt for TestInput {
     fn search(&self, _options: &[String], msg: &str) -> Result<String, PromptError> {

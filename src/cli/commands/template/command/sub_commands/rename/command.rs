@@ -1,6 +1,6 @@
 use crate::{
+    services::editor_launcher::Editor,
     template::{types::TemplateInput, utils::parse_template},
-    utils::Editor,
 };
 
 #[derive(clap::Parser, Debug)]

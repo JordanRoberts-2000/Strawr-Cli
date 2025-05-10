@@ -11,7 +11,9 @@ impl EditSubcommand {
         ctx: &EditSubcommandContext,
     ) -> Result<(), TemplateError> {
         let template = manager.select_template("Template to edit:")?;
+
         ctx.service
             .launch_editor(&ctx.editor, &template.default_variant_path)
+            .map_err(TemplateError::EditorLauncher)
     }
 }

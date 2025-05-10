@@ -1,6 +1,6 @@
+mod enums;
 mod error;
 pub mod traits;
-mod types;
 mod input {
     pub(crate) mod cli {
         pub(crate) mod input;
@@ -22,7 +22,6 @@ mod input {
     }
 }
 
-pub(crate) use traits::CliInput;
 pub use {
-    error::PromptError, input::cli::input::UserInput, input::test::input::TestInput, types::Input,
+    enums::Input, error::PromptError, input::cli::input::UserInput, input::test::input::TestInput,
 };

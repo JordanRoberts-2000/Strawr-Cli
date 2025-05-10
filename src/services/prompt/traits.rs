@@ -1,6 +1,6 @@
 use super::PromptError;
 
-pub(crate) trait CliInput: ConfirmPrompt + TextPrompt + SelectPrompt + SearchPrompt {}
+pub trait CliInput: ConfirmPrompt + TextPrompt + SelectPrompt + SearchPrompt {}
 
 impl<T> CliInput for T where T: ConfirmPrompt + TextPrompt + SelectPrompt + SearchPrompt {}
 

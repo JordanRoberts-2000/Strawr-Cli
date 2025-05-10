@@ -1,12 +1,9 @@
 use std::path::Path;
 
-use crate::{
-    services::prompt::{CliInput, UserInput},
-    template::TemplateError,
-    utils::{
-        editor::{CliEditor, EditorLauncher},
-        Editor,
-    },
+use crate::services::{
+    editor_launcher::{traits::EditorLauncher, CliEditorLauncher, Editor},
+    errors::EditorLauncherError,
+    prompt::{traits::CliInput, UserInput},
 };
 
 pub struct CliService {
@@ -20,11 +17,11 @@ impl CliService {
     pub fn new() -> Self {
         Self {
             prompt: Box::new(UserInput),
-            editor_launcher: Box::new(CliEditor),
+            editor_launcher: Box::new(CliEditorLauncher),
         }
     }
 
-    pub fn launch_editor(&self, editor: &Editor, path: &Path) -> Result<(), TemplateError> {
+    pub fn launch_editor(&self, editor: &Editor, path: &Path) -> Result<(), EditorLauncherError> {
         self.editor_launcher.open(editor, &path)?;
 
         Ok(())

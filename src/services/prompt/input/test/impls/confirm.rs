@@ -1,4 +1,4 @@
-use crate::services::prompt::{traits::ConfirmPrompt, types::Input, PromptError, TestInput};
+use crate::services::prompt::{enums::Input, traits::ConfirmPrompt, PromptError, TestInput};
 
 impl ConfirmPrompt for TestInput {
     fn confirm(&self, msg: &str) -> Result<bool, PromptError> {

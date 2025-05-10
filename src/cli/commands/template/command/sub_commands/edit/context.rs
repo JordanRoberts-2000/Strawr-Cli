@@ -1,9 +1,9 @@
 use std::path::PathBuf;
 
 use crate::{
+    services::editor_launcher::Editor,
     template::{constants::TEMPLATES_FOLDER_NAME, TemplateManager},
     traits::ToManager,
-    utils::Editor,
     CliContext, CliService,
 };
 

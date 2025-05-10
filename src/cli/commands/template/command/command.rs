@@ -1,8 +1,9 @@
 use std::path::PathBuf;
 
 use crate::{
+    services::editor_launcher::Editor,
     template::{types::TemplateInput, utils::parse_template, TemplateSubcommand},
-    utils::{validation::existing_dir, Editor},
+    utils::validation::existing_dir,
 };
 
 #[derive(clap::Parser, Debug)]

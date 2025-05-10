@@ -1,4 +1,4 @@
-use crate::{error::IoError, services::errors::PromptError, utils::editor::EditorError};
+use crate::{error::IoError, services::errors::*};
 
 #[derive(thiserror::Error, Debug)]
 pub enum TemplateError {
@@ -7,6 +7,9 @@ pub enum TemplateError {
 
     #[error(transparent)]
     Prompt(#[from] PromptError),
+
+    #[error(transparent)]
+    EditorLauncher(#[from] EditorLauncherError),
 
     #[error("Template '{0}' does not exist")]
     TemplateNotFound(String),
@@ -19,9 +22,6 @@ pub enum TemplateError {
 
     #[error("Cannot create template variant '{0}' as it already exists")]
     VariantAlreadyExists(String),
-
-    #[error("Editor failed to open")]
-    EditorFailed(#[from] EditorError),
 
     #[error("Failed to select")]
     SelectFailed(#[from] inquire::InquireError),

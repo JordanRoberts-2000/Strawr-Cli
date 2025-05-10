@@ -1,4 +1,4 @@
-use crate::{template::TemplateConfig, utils::Editor};
+use crate::{services::editor_launcher::Editor, template::TemplateConfig};
 
 #[derive(Debug, serde::Deserialize, validator::Validate)]
 pub struct CliConfig {

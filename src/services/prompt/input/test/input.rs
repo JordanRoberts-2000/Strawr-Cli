@@ -1,6 +1,6 @@
 use std::{cell::RefCell, collections::VecDeque};
 
-use crate::services::prompt::types::Input;
+use crate::services::prompt::enums::Input;
 
 pub struct TestInput {
     pub inputs: RefCell<VecDeque<Input>>,

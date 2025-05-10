@@ -13,7 +13,8 @@ impl TemplateCommand {
             let template = manager.create_template(&input)?;
 
             ctx.service
-                .launch_editor(&ctx.editor, &template.default_variant_path)?;
+                .launch_editor(&ctx.editor, &template.default_variant_path)
+                .map_err(TemplateError::EditorLauncher)?;
         }
 
         Ok(())
