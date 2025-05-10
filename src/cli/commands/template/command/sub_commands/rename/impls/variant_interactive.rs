@@ -1,15 +1,19 @@
-use crate::template::{sub_commands::rename::RenameSubcommand, TemplateError, TemplateService};
+use crate::template::{
+    sub_commands::rename::{RenameSubcommand, RenameSubcommandContext},
+    TemplateError, TemplateManager,
+};
 
 impl RenameSubcommand {
     pub fn rename_variant_interactive(
         &self,
-        service: &TemplateService,
+        manager: &TemplateManager,
+        ctx: &RenameSubcommandContext,
     ) -> Result<(), TemplateError> {
-        let template = service.select_template("Select a template to see variants:")?;
-        let variant = service.select_variant(&template, "Select variant to edit:")?;
-        let input = service.text("Rename to:")?;
+        let template = manager.select_template("Select a template to see variants:")?;
+        let variant = manager.select_variant(&template, "Select variant to edit:")?;
+        let input = ctx.service.prompt.text("Rename to:")?;
 
-        service.rename_variant(&variant, &input)?;
+        manager.rename_variant(&variant, &input)?;
         Ok(())
     }
 }

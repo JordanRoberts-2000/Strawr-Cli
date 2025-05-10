@@ -5,7 +5,7 @@ impl Img {
     pub fn save(&self) -> Result<()> {
         if let ImgSrc::Local { path } = &self.src {
             if *path != self.target_path {
-                utils::trash(&path).map_err(|e| ImgError::Io {
+                utils::fs::trash(&path).map_err(|e| ImgError::Io {
                     context: format!("failed to delete '{:?}'", path),
                     source: e,
                 })?;

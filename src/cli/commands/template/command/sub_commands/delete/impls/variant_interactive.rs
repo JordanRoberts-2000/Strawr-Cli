@@ -1,12 +1,12 @@
-use crate::template::{sub_commands::delete::DeleteSubcommand, TemplateError, TemplateService};
+use crate::template::{sub_commands::delete::DeleteSubcommand, TemplateError, TemplateManager};
 
 impl DeleteSubcommand {
     pub fn delete_variant_interactive(
         &self,
-        service: &TemplateService,
+        manager: &TemplateManager,
     ) -> Result<(), TemplateError> {
-        let template = service.select_template("Select a template to see variants:")?;
-        let variant = service.select_variant(&template, "Select variant to delete:")?;
-        service.delete_variant(&variant)
+        let template = manager.select_template("Select a template to see variants:")?;
+        let variant = manager.select_variant(&template, "Select variant to delete:")?;
+        manager.delete_variant(&variant)
     }
 }

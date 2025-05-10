@@ -1,18 +1,18 @@
-use crate::template::{TemplateCommand, TemplateContext, TemplateError, TemplateService};
+use crate::template::{TemplateCommand, TemplateContext, TemplateError, TemplateManager};
 
 impl TemplateCommand {
     pub fn choose_and_apply_template(
         &self,
         ctx: &TemplateContext,
-        service: &TemplateService,
+        manager: &TemplateManager,
     ) -> Result<(), TemplateError> {
-        let template = service.select_template("Select a template:")?;
+        let template = manager.select_template("Select a template:")?;
 
-        if service.has_variants(&template)? {
-            let variant = service.select_all(&template, "Select variant:")?;
-            service.inject(&template, Some(&variant), &ctx.output)?;
+        if manager.has_variants(&template)? {
+            let variant = manager.select_all(&template, "Select variant:")?;
+            manager.inject(&template, Some(&variant), &ctx.output)?;
         } else {
-            service.inject(&template, None, &ctx.output)?;
+            manager.inject(&template, None, &ctx.output)?;
         }
 
         Ok(())

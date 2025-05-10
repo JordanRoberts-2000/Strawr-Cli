@@ -1,11 +1,11 @@
-use crate::template::{sub_commands::delete::DeleteSubcommand, TemplateError, TemplateService};
+use crate::template::{sub_commands::delete::DeleteSubcommand, TemplateError, TemplateManager};
 
 impl DeleteSubcommand {
     pub fn delete_template_interactive(
         &self,
-        service: &TemplateService,
+        manager: &TemplateManager,
     ) -> Result<(), TemplateError> {
-        let template = service.select_template("Template to delete:")?;
-        service.delete_template(&template)
+        let template = manager.select_template("Template to delete:")?;
+        manager.delete_template(&template)
     }
 }

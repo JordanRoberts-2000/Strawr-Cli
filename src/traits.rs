@@ -1,3 +1,3 @@
-pub trait ToService<'a, S> {
-    fn to_service(&'a self) -> S;
+pub trait ToManager<'a, S> {
+    fn to_manager(&'a self) -> S;
 }

@@ -1,18 +1,19 @@
-use crate::template::{TemplateCommand, TemplateContext, TemplateError, TemplateService};
+use crate::template::{TemplateCommand, TemplateContext, TemplateError, TemplateManager};
 
 impl TemplateCommand {
     pub fn handle_creating_initial_template(
         &self,
         ctx: &TemplateContext,
-        service: &TemplateService,
+        manager: &TemplateManager,
     ) -> Result<(), TemplateError> {
         let msg = "No templates currently exist, would you like to create one?";
 
-        if service.confirm(msg)? {
-            let input = service.text("Enter template name:")?;
-            let template = service.create_template(&input)?;
+        if ctx.service.prompt.confirm(msg)? {
+            let input = ctx.service.prompt.text("Enter template name:")?;
+            let template = manager.create_template(&input)?;
 
-            service.launch_editor(&ctx.editor, &template.default_variant_path)?;
+            ctx.service
+                .launch_editor(&ctx.editor, &template.default_variant_path)?;
         }
 
         Ok(())

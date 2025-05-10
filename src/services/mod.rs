@@ -1,5 +1,7 @@
+pub mod prompt;
 pub(crate) mod storage;
 
-pub(crate) mod errors {
+pub mod errors {
+    pub use super::prompt::PromptError;
     pub use super::storage::StorageError;
 }

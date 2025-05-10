@@ -28,11 +28,11 @@ mod command {
 }
 mod config;
 mod error;
-mod service;
+mod manager;
 pub(crate) mod utils;
 
 pub use self::{command::command::TemplateCommand, command::sub_commands, error::TemplateError};
 pub(crate) use self::{
     command::context::TemplateContext, command::sub_commands::TemplateSubcommand,
-    config::TemplateConfig, service::TemplateService,
+    config::TemplateConfig, manager::TemplateManager,
 };

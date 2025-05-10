@@ -1,10 +1,10 @@
 use crate::template::{
     utils::{Template, Variant},
-    TemplateError, TemplateService,
+    TemplateError, TemplateManager,
 };
 
 pub fn resolve_variant(
-    service: &TemplateService,
+    manager: &TemplateManager,
     template: &Template,
     variant: &Option<Option<String>>,
     raw_variant: &Option<String>,
@@ -16,11 +16,11 @@ pub fn resolve_variant(
         "':' detected in template input, but --variant was also provided. Using --variant and ignoring inline variant."
     );
             }
-            Ok(Some(service.new_variant(&template, &cli_variant)?))
+            Ok(Some(manager.new_variant(&template, &cli_variant)?))
         }
-        Some(None) => Ok(Some(service.select_variant(&template, "Select variant:")?)),
+        Some(None) => Ok(Some(manager.select_variant(&template, "Select variant:")?)),
         None => match raw_variant {
-            Some(v) => Ok(Some(service.new_variant(&template, &v)?)),
+            Some(v) => Ok(Some(manager.new_variant(&template, &v)?)),
             None => Ok(None),
         },
     }

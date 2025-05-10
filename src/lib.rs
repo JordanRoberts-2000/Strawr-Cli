@@ -10,12 +10,13 @@ mod services;
 mod traits;
 mod utils;
 
-pub(crate) use {cli::commands::template, core::*};
+pub(crate) use {cli::commands::template, context::CliService, core::*};
 pub use {
     cli::{cli::Cli, commands},
     config::CliConfig,
     context::CliContext,
     error::CliError,
+    services::prompt,
 };
 
 pub fn run_cli(cli: &Cli) -> Result<(), CliError> {

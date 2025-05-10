@@ -1,16 +1,17 @@
 use crate::cli::commands::template::{
     command::sub_commands::edit::{context::EditSubcommandContext, EditSubcommand},
-    service::TemplateService,
+    manager::TemplateManager,
     TemplateError,
 };
 
 impl EditSubcommand {
     pub fn edit_template_interactive(
         &self,
-        service: &TemplateService,
+        manager: &TemplateManager,
         ctx: &EditSubcommandContext,
     ) -> Result<(), TemplateError> {
-        let template = service.select_template("Template to edit:")?;
-        service.launch_editor(&ctx.editor, &template.default_variant_path)
+        let template = manager.select_template("Template to edit:")?;
+        ctx.service
+            .launch_editor(&ctx.editor, &template.default_variant_path)
     }
 }

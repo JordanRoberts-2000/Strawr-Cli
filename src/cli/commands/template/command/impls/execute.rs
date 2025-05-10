@@ -3,7 +3,7 @@ use super::super::helpers::{
 };
 
 use crate::{
-    template::{TemplateCommand, TemplateContext, TemplateError, TemplateService},
+    template::{TemplateCommand, TemplateContext, TemplateError, TemplateManager},
     CliContext,
 };
 
@@ -16,17 +16,17 @@ impl TemplateCommand {
         }
 
         let ctx = TemplateContext::new(self, ctx);
-        let service = TemplateService::from(&ctx);
+        let manager = TemplateManager::from(&ctx);
 
         if let Some(template) = &self.template {
-            return handle_template_input(&ctx, &service, template);
+            return handle_template_input(&ctx, &manager, template);
         }
 
         if self.backend.is_some() || self.frontend.is_some() {
-            return self.handle_stack_flags(&ctx, &service);
+            return self.handle_stack_flags(&ctx, &manager);
         }
 
-        self.handle_no_input(&ctx, &service)?;
+        self.handle_no_input(&ctx, &manager)?;
         Ok(())
     }
 }

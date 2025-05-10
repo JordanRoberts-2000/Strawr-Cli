@@ -1,4 +1,6 @@
-mod core;
+mod context;
 mod initialize;
+mod service;
 
-pub use core::CliContext;
+pub use context::CliContext;
+pub(crate) use service::CliService;

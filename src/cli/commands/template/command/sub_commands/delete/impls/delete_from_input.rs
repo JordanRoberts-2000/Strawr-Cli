@@ -1,22 +1,22 @@
 use crate::template::{
-    service::TemplateService, sub_commands::delete::DeleteSubcommand, TemplateError,
+    manager::TemplateManager, sub_commands::delete::DeleteSubcommand, TemplateError,
 };
 
 impl DeleteSubcommand {
     pub fn delete_from_input(
         &self,
-        service: &TemplateService,
+        manager: &TemplateManager,
         raw_template: &str,
         raw_variant: Option<&str>,
     ) -> Result<(), TemplateError> {
-        let template = service.new_template(raw_template)?;
+        let template = manager.new_template(raw_template)?;
 
         match raw_variant {
             Some(v) => {
-                let variant = service.new_variant(&template, &v)?;
-                service.delete_variant(&variant)?
+                let variant = manager.new_variant(&template, &v)?;
+                manager.delete_variant(&variant)?
             }
-            None => service.delete_template(&template)?,
+            None => manager.delete_template(&template)?,
         }
 
         Ok(())
