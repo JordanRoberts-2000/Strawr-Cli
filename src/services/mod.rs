@@ -1,3 +1,5 @@
-pub mod ai;
-pub mod crypto;
-pub mod img;
+pub(crate) mod storage;
+
+pub(crate) mod errors {
+    pub use super::storage::StorageError;
+}

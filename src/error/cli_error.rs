@@ -1,0 +1,19 @@
+use crate::{commands::errors::*, config::ConfigError, services::errors::*};
+
+#[derive(thiserror::Error, Debug)]
+pub enum CliError {
+    #[error(transparent)]
+    Config(#[from] ConfigError),
+    #[error(transparent)]
+    Storage(#[from] StorageError),
+
+    // Commands
+    // #[error(transparent)]
+    // GrabCommand(#[from] GrabError),
+    // #[error(transparent)]
+    // ImgCommand(#[from] ImgError),
+    // #[error(transparent)]
+    // TempCommand(#[from] TempError),
+    #[error(transparent)]
+    TemplateCommand(#[from] TemplateError),
+}

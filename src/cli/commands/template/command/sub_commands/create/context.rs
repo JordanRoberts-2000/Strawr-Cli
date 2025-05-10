@@ -21,7 +21,7 @@ impl<'a> CreateSubcommandContext<'a> {
         let templates_path = ctx.storage_dir.join(TEMPLATES_FOLDER_NAME);
         let editor = args.editor.as_ref().unwrap_or(&ctx.config.default_editor);
         let editor_launcher = ctx.service.editor_launcher.as_ref();
-        let input = ctx.service.input.as_ref();
+        let input = ctx.service.prompt.as_ref();
 
         Self {
             templates_path,

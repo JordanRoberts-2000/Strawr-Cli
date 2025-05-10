@@ -1,17 +1,18 @@
 use crate::{
+    services::storage::initialize_storage_dir,
     utils::{editor::CliEditor, input::UserInput},
     CliConfig, CliContext, CliError,
 };
 
-use super::{core::CliService, helpers::get_storage_dir};
+use super::core::CliService;
 
 impl CliContext {
     pub fn initialize(debug: &bool) -> Result<Self, CliError> {
-        let storage_dir = get_storage_dir()?;
+        let storage_dir = initialize_storage_dir()?;
         let config = CliConfig::parse(&storage_dir)?;
 
         let service = CliService {
-            input: Box::new(UserInput),
+            prompt: Box::new(UserInput),
             editor_launcher: Box::new(CliEditor),
         };
 

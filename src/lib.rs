@@ -4,12 +4,13 @@ mod cli;
 mod config;
 mod constants;
 mod context;
+mod core;
 mod error;
 mod services;
 mod traits;
 mod utils;
 
-pub(crate) use cli::commands::template;
+pub(crate) use {cli::commands::template, core::*};
 pub use {
     cli::{cli::Cli, commands},
     config::CliConfig,

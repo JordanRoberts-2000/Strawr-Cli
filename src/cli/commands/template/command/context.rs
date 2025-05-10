@@ -24,7 +24,7 @@ impl<'a> TemplateContext<'a> {
         let templates_path = ctx.storage_dir.join(TEMPLATES_FOLDER_NAME);
         let editor = args.editor.as_ref().unwrap_or(&ctx.config.default_editor);
         let editor_launcher = ctx.service.editor_launcher.as_ref();
-        let input = ctx.service.input.as_ref();
+        let input = ctx.service.prompt.as_ref();
         let template = &args.template;
         let variant = &args.variant;
         let output = &args.output;

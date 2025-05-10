@@ -13,6 +13,8 @@ pub struct CliContext {
 }
 
 pub struct CliService {
-    pub input: Box<dyn CliInput>,
+    pub prompt: Box<dyn CliInput>,
+    // pub clipboard: Box<dyn Clipboard>,
+    // pub keychain: Box<dyn Keychain>,
     pub editor_launcher: Box<dyn EditorLauncher>,
 }

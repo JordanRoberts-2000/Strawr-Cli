@@ -17,7 +17,7 @@ impl<'a> RenameSubcommandContext<'a> {
     pub fn new(ctx: &'a CliContext) -> Self {
         let templates_path = ctx.storage_dir.join(TEMPLATES_FOLDER_NAME);
         let editor_launcher = ctx.service.editor_launcher.as_ref();
-        let input = ctx.service.input.as_ref();
+        let input = ctx.service.prompt.as_ref();
 
         Self {
             templates_path,
