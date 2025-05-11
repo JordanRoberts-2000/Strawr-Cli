@@ -11,7 +11,7 @@ impl<'a> TemplateManager<'a> {
             "Are you sure you want to delete template '{}'",
             template.name
         );
-        if !self.service.prompt.confirm(&msg)? {
+        if !self.service.prompt().confirm(&msg)? {
             return Ok(());
         }
 

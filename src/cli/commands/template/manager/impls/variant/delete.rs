@@ -8,7 +8,7 @@ use crate::{
 impl<'a> TemplateManager<'a> {
     pub fn delete_variant(&self, variant: &Variant) -> Result<(), TemplateError> {
         let msg = format!("Are you sure you want to delete variant '{}'", variant.name);
-        if !self.service.prompt.confirm(&msg)? {
+        if !self.service.prompt().confirm(&msg)? {
             return Ok(());
         }
 

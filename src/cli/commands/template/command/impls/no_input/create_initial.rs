@@ -8,8 +8,8 @@ impl TemplateCommand {
     ) -> Result<(), TemplateError> {
         let msg = "No templates currently exist, would you like to create one?";
 
-        if ctx.service.prompt.confirm(msg)? {
-            let input = ctx.service.prompt.text("Enter template name:")?;
+        if ctx.service.prompt().confirm(msg)? {
+            let input = ctx.service.prompt().text("Enter template name:")?;
             let template = manager.create_template(&input)?;
 
             ctx.service

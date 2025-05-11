@@ -16,11 +16,11 @@ impl RenameSubcommand {
         match raw_variant {
             Some(v) => {
                 let variant = manager.new_variant(&template, &v)?;
-                let input = ctx.service.prompt.text("Rename to:")?;
+                let input = ctx.service.prompt().text("Rename to:")?;
                 manager.rename_variant(&variant, &input)?;
             }
             None => {
-                let input = ctx.service.prompt.text("Rename to:")?;
+                let input = ctx.service.prompt().text("Rename to:")?;
                 manager.rename_template(&template, &input)?;
             }
         };

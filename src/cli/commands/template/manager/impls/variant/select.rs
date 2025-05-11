@@ -19,7 +19,7 @@ impl<'a> TemplateManager<'a> {
             return Err(TemplateError::NoVariants(template.name.clone()))?;
         }
 
-        let input = self.service.prompt.search(&variants, msg)?;
+        let input = self.service.prompt().search(&variants, msg)?;
         log::debug!("User selected variant: '{}'", input);
 
         let variant_path = template.path.join(&input);

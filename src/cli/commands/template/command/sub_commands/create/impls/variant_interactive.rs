@@ -10,7 +10,7 @@ impl CreateSubcommand {
         ctx: &CreateSubcommandContext,
     ) -> Result<(), TemplateError> {
         let template = manager.select_template("Select a template to add a variant to:")?;
-        let input = ctx.service.prompt.text("Variant title:")?;
+        let input = ctx.service.prompt().text("Variant title:")?;
         let variant = manager.create_variant(&template, &input)?;
         ctx.service.launch_editor(&ctx.editor, &variant.path)?;
 

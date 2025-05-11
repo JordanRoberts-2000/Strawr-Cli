@@ -29,7 +29,7 @@ impl<'a> TemplateManager<'a> {
         if !output_empty {
             let msg =
                 "The output directory is not empty. Do you still want to inject template files?";
-            if !self.service.prompt.confirm(msg)? {
+            if !self.service.prompt().confirm(msg)? {
                 return Ok(());
             }
         }

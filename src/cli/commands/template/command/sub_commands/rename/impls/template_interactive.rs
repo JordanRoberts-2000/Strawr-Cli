@@ -10,7 +10,7 @@ impl RenameSubcommand {
         ctx: &RenameSubcommandContext,
     ) -> Result<(), TemplateError> {
         let template = manager.select_template("Template to edit:")?;
-        let input = ctx.service.prompt.text("Rename to:")?;
+        let input = ctx.service.prompt().text("Rename to:")?;
 
         manager.rename_template(&template, &input)?;
         Ok(())
