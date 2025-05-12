@@ -16,6 +16,7 @@ mod command {
         mod variant_input;
     }
     mod impls {
+        mod execute;
         mod stack_flags;
         mod no_input {
             mod choose_and_apply;
@@ -26,16 +27,12 @@ mod command {
     pub mod sub_commands;
 }
 mod config;
-pub(crate) mod controller;
 mod error;
 mod manager;
-pub(crate) mod models;
-pub(crate) mod service;
 pub(crate) mod utils;
-pub(crate) mod view;
 
 pub use self::{command::command::TemplateCommand, command::sub_commands, error::TemplateError};
 pub(crate) use self::{
     command::context::TemplateContext, command::sub_commands::TemplateSubcommand,
-    config::TemplateConfig, controller::TemplateController, manager::TemplateManager,
+    config::TemplateConfig, manager::TemplateManager,
 };

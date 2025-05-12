@@ -7,7 +7,6 @@ mod context;
 mod core;
 mod error;
 mod services;
-mod traits;
 mod utils;
 
 pub(crate) use {cli::commands::template, context::CliService, core::*};

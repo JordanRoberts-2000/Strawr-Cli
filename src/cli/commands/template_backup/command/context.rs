@@ -2,8 +2,11 @@ use std::path::PathBuf;
 
 use crate::{
     services::editor_launcher::Editor,
-    template::{constants::TEMPLATES_FOLDER_NAME, types::TemplateInput, TemplateCommand},
-    CliContext,
+    template::{
+        constants::TEMPLATES_FOLDER_NAME, types::TemplateInput, TemplateCommand, TemplateManager,
+    },
+    traits::ToManager,
+    CliContext, CliService,
 };
 
 pub struct TemplateContext<'a> {
@@ -12,10 +15,7 @@ pub struct TemplateContext<'a> {
     pub variant: &'a Option<Option<String>>,
     pub output: &'a PathBuf,
     pub editor: &'a Editor,
-    pub backend: &'a Option<TemplateInput>,
-    pub frontend: &'a Option<TemplateInput>,
-    pub backend_folder_title: &'a String,
-    pub frontend_folder_title: &'a String,
+    pub service: &'a CliService,
 }
 
 impl<'a> TemplateContext<'a> {
@@ -29,10 +29,13 @@ impl<'a> TemplateContext<'a> {
             output: &args.output,
             template: &args.template,
             variant: &args.variant,
-            backend: &args.backend,
-            frontend: &args.frontend,
-            backend_folder_title: &ctx.config.template.backend_folder_title,
-            frontend_folder_title: &ctx.config.template.frontend_folder_title,
+            service: &ctx.service,
         }
+    }
+}
+
+impl<'a> ToManager<'a, TemplateManager<'a>> for TemplateContext<'a> {
+    fn to_manager(&'a self) -> TemplateManager<'a> {
+        TemplateManager::new(&self.service, &self.templates_path)
     }
 }

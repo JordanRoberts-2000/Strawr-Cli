@@ -2,12 +2,8 @@ use std::path::PathBuf;
 
 use crate::{
     services::editor_launcher::Editor,
-    template::{
-        types::TemplateInput, utils::parse_template, TemplateController, TemplateError,
-        TemplateSubcommand,
-    },
+    template::{types::TemplateInput, utils::parse_template, TemplateSubcommand},
     utils::validation::existing_dir,
-    CliContext,
 };
 
 #[derive(clap::Parser, Debug)]
@@ -32,11 +28,4 @@ pub struct TemplateCommand {
 
     #[arg(short, long, ignore_case = true)]
     pub editor: Option<Editor>,
-}
-
-impl TemplateCommand {
-    pub fn execute(&self, ctx: &CliContext) -> Result<(), TemplateError> {
-        let controller = TemplateController::new(&ctx);
-        controller.execute(self, &ctx)
-    }
 }

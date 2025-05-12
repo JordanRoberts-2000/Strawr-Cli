@@ -3,6 +3,7 @@ use crate::{services::editor_launcher::Editor, template::TemplateConfig};
 #[derive(Debug, serde::Deserialize, validator::Validate)]
 pub struct CliConfig {
     pub default_editor: Editor,
+    pub mute: bool,
     // pub grab: GrabConfig,
     // #[validate(nested)]
     // pub img: ImgConfig,

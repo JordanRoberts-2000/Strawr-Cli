@@ -1,4 +1,5 @@
 pub(crate) mod editor_launcher;
+pub(crate) mod fs;
 pub mod prompt;
 pub(crate) mod storage;
 
