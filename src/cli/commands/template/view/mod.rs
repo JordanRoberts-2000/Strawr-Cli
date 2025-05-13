@@ -1,3 +1,4 @@
+use colored::*;
 use std::cell::OnceCell;
 
 use crate::prompt::{traits::CliInput, UserInput};
@@ -52,7 +53,7 @@ impl TemplateView {
         Ok(input)
     }
 
-    pub fn enter_template_name(&self) -> Result<bool, TemplateError> {
+    pub fn enter_template_name(&self) -> Result<String, TemplateError> {
         let msg = "Enter template name:";
         let input = self.prompt().text(msg)?;
 
@@ -78,5 +79,11 @@ impl TemplateView {
         let input = self.prompt().confirm(msg)?;
 
         Ok(input)
+    }
+
+    pub fn warn_variant_ignored(&self) {
+        let msg = format!("⚠️  You provided both inline and --variant; only --variant was used.")
+            .yellow();
+        println!("{msg}");
     }
 }

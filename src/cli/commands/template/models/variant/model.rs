@@ -1,4 +1,4 @@
-use std::path::{Path, PathBuf};
+use std::path::PathBuf;
 
 use crate::{
     template::{constants::DEFAULT_FOLDER, models::Template, TemplateError},
@@ -13,10 +13,11 @@ pub struct Variant {
 }
 
 impl Variant {
-    pub fn new(template: &Template, name: &str, path: &Path) -> Self {
+    pub fn new(template: &Template, name: &str) -> Self {
+        let path = template.path.join(&name);
         Self {
             name: name.to_string(),
-            path: path.to_path_buf(),
+            path,
             template_name: template.name.clone(),
             template_path: template.path.clone(),
         }

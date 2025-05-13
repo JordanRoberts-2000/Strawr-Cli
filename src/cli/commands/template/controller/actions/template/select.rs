@@ -1,0 +1,11 @@
+use crate::template::{models::Template, TemplateController, TemplateError};
+
+impl TemplateController {
+    pub fn select_template(&self) -> Result<Template, TemplateError> {
+        let templates = self.service.get_templates()?;
+        let input = self.view.select_template(&templates)?;
+        let template = Template::new(&input, &self.service.templates_path);
+
+        Ok(template)
+    }
+}

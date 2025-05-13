@@ -11,10 +11,11 @@ pub struct Template {
 }
 
 impl Template {
-    pub fn new(name: &str, path: &Path) -> Self {
+    pub fn new(name: &str, templates_path: &Path) -> Self {
+        let path = templates_path.join(&name);
         Self {
             name: name.to_string(),
-            path: path.to_path_buf(),
+            path,
         }
     }
 

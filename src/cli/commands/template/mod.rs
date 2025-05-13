@@ -5,37 +5,21 @@ pub(crate) mod constants {
 
 pub(crate) mod types {
     pub type TemplateInput = (String, Option<String>);
+    pub type VariantInput = Option<Option<String>>;
 }
 
-mod command {
-    pub mod command;
-    pub(crate) mod context;
-    mod helpers {
-        pub(super) mod template_input;
-        pub(super) mod templates_init;
-        mod variant_input;
-    }
-    mod impls {
-        mod stack_flags;
-        mod no_input {
-            mod choose_and_apply;
-            mod create_initial;
-            mod no_input;
-        }
-    }
-    pub mod sub_commands;
-}
+pub mod command;
 mod config;
+mod context;
 pub(crate) mod controller;
 mod error;
-mod manager;
 pub(crate) mod models;
 pub(crate) mod service;
 pub(crate) mod utils;
 pub(crate) mod view;
 
-pub use self::{command::command::TemplateCommand, command::sub_commands, error::TemplateError};
+pub use self::{command::sub_commands, command::TemplateCommand, error::TemplateError};
 pub(crate) use self::{
-    command::context::TemplateContext, command::sub_commands::TemplateSubcommand,
-    config::TemplateConfig, controller::TemplateController, manager::TemplateManager,
+    command::TemplateSubcommand, config::TemplateConfig, context::TemplateContext,
+    controller::TemplateController, service::TemplateService, view::TemplateView,
 };

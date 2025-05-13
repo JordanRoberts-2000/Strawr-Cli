@@ -1,23 +1,18 @@
-use crate::template::{
-    constants::DEFAULT_FOLDER, models::Template, service::TemplateService, TemplateError,
-};
+use crate::template::{models::Template, service::TemplateService, TemplateError};
 
 impl TemplateService {
     pub fn create_template(&self, str: &str) -> Result<Template, TemplateError> {
-        let template = Template::validate_name(str)?;
-        let template_path = self.templates_path.join(&template);
+        let valid_name = Template::validate_name(str)?;
+        let template = Template::new(&valid_name, &self.templates_path);
 
-        if template_path.exists() {
-            return Err(TemplateError::Validation(format!(
-                "Template '{}' already exists",
-                template
-            )));
+        if template.path.exists() {
+            return Err(TemplateError::TemplateAlreadyExists(
+                template.name.to_string(),
+            ));
         }
 
-        let default_path = template_path.join(DEFAULT_FOLDER);
+        self.fs.create_dir_all(&template.default_path())?;
 
-        self.fs.create_dir_all(&default_path)?;
-
-        Ok(Template::new(&template, &template_path))
+        Ok(template)
     }
 }

@@ -7,9 +7,15 @@ use crate::{
 
 pub struct CliFsRepository;
 
-pub trait FsRepository: CreateDir + DeleteDir + DirEmpty + SubDirs {}
+pub trait FsRepository:
+    CreateDir + DeleteDir + DirEmpty + SubDirs + CopyDirContents + MinEntries
+{
+}
 
-impl<T> FsRepository for T where T: CreateDir + DeleteDir + DirEmpty + SubDirs {}
+impl<T> FsRepository for T where
+    T: CreateDir + DeleteDir + DirEmpty + SubDirs + CopyDirContents + MinEntries
+{
+}
 
 pub trait CreateDir {
     fn create_dir_all(&self, path: &Path) -> Result<(), IoError>;
@@ -74,7 +80,7 @@ impl MinEntries for CliFsRepository {
             fs::read_dir(path).map_err(|e| IoError::ReadDir(e, path.to_path_buf()))?;
         let mut count = 0;
 
-        while let Some(entry) = entries.next() {
+        while let Some(_) = entries.next() {
             count += 1;
             if count >= min {
                 return Ok(true);

@@ -1,6 +1,6 @@
-pub mod args;
+pub mod command;
 pub mod error;
 pub mod execute;
 
-pub use args::TempCommand;
+pub use command::TempCommand;
 pub use error::TempError;
