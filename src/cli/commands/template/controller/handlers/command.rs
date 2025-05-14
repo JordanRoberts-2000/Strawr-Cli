@@ -1,5 +1,5 @@
 use crate::{
-    template::{TemplateCommand, TemplateContext, TemplateController, TemplateError},
+    template::{TemplateCommand, TemplateController, TemplateError},
     CliContext,
 };
 
@@ -15,16 +15,14 @@ impl TemplateController {
             return self.handle_subcommands(subcommand, &ctx);
         }
 
-        let ctx = TemplateContext::new(args, ctx);
-
-        if let Some(input) = &ctx.template {
+        if let Some(input) = &args.template {
             return self
-                .resolve_template(&input, &ctx.variant)?
-                .inject_files(&ctx.output);
+                .resolve_template(&input, &args.variant)?
+                .inject_files(&args.output);
         }
 
-        if ctx.backend.is_some() || ctx.frontend.is_some() {
-            return self.handle_stack_flags(&ctx);
+        if args.backend.is_some() || args.frontend.is_some() {
+            return self.handle_stack_flags(&args, &ctx);
         }
 
         // todo - add builder:

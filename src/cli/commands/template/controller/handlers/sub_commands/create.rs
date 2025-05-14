@@ -1,13 +1,13 @@
-use crate::template::{
-    context::CreateSubcommandContext, sub_commands::CreateSubcommand, TemplateController,
-    TemplateError,
+use crate::{
+    template::{sub_commands::CreateSubcommand, TemplateController, TemplateError},
+    CliContext,
 };
 
 impl TemplateController {
     pub fn handle_create_subcommand(
         &self,
         args: &CreateSubcommand,
-        ctx: &CreateSubcommandContext,
+        ctx: &CliContext,
     ) -> Result<(), TemplateError> {
         Ok(())
     }

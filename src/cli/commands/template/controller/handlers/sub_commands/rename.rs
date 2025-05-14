@@ -1,13 +1,13 @@
-use crate::template::{
-    context::RenameSubcommandContext, sub_commands::RenameSubcommand, TemplateController,
-    TemplateError,
+use crate::{
+    template::{sub_commands::RenameSubcommand, TemplateController, TemplateError},
+    CliContext,
 };
 
 impl TemplateController {
     pub fn handle_rename_subcommand(
         &self,
         args: &RenameSubcommand,
-        ctx: &RenameSubcommandContext,
+        ctx: &CliContext,
     ) -> Result<(), TemplateError> {
         Ok(())
     }

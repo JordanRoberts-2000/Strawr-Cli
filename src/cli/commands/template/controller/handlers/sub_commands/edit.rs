@@ -1,12 +1,13 @@
-use crate::template::{
-    context::EditSubcommandContext, sub_commands::EditSubcommand, TemplateController, TemplateError,
+use crate::{
+    template::{sub_commands::EditSubcommand, TemplateController, TemplateError},
+    CliContext,
 };
 
 impl TemplateController {
     pub fn handle_edit_subcommand(
         &self,
         args: &EditSubcommand,
-        ctx: &EditSubcommandContext,
+        ctx: &CliContext,
     ) -> Result<(), TemplateError> {
         Ok(())
     }

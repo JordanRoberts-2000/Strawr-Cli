@@ -5,7 +5,6 @@ pub(crate) mod constants {
 
 pub mod command;
 mod config;
-mod context;
 pub(crate) mod controller;
 mod error;
 pub(crate) mod models;
@@ -17,6 +16,6 @@ pub(crate) mod view;
 
 pub use self::{command::sub_commands, command::TemplateCommand, error::TemplateError};
 pub(crate) use self::{
-    command::TemplateSubcommand, config::TemplateConfig, context::TemplateContext,
-    controller::TemplateController, service::TemplateService, view::TemplateView,
+    command::TemplateSubcommand, config::TemplateConfig, controller::TemplateController,
+    service::TemplateService, view::TemplateView,
 };

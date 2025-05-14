@@ -1,5 +1,5 @@
 use crate::{
-    template::{context::*, TemplateController, TemplateError, TemplateSubcommand},
+    template::{TemplateController, TemplateError, TemplateSubcommand},
     CliContext,
 };
 
@@ -11,18 +11,15 @@ impl TemplateController {
     ) -> Result<(), TemplateError> {
         match subcommands {
             TemplateSubcommand::Create(cmd) => {
-                let ctx = CreateSubcommandContext::new(&cmd, &ctx);
                 self.handle_create_subcommand(&cmd, &ctx)?;
             }
             TemplateSubcommand::Delete(cmd) => {
                 self.handle_delete_subcommand(&cmd, &ctx)?;
             }
             TemplateSubcommand::Rename(cmd) => {
-                let ctx = RenameSubcommandContext::new(&ctx);
                 self.handle_rename_subcommand(&cmd, &ctx)?;
             }
             TemplateSubcommand::Edit(cmd) => {
-                let ctx = EditSubcommandContext::new(&cmd, &ctx);
                 self.handle_edit_subcommand(&cmd, &ctx)?;
             }
         };
