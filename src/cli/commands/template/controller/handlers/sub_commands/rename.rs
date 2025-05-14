@@ -9,6 +9,11 @@ impl TemplateController {
         args: &RenameSubcommand,
         ctx: &CliContext,
     ) -> Result<(), TemplateError> {
+        if let Some(input) = &args.template {
+            return self
+                .resolve_template(&input, &args.variant)?
+                .rename_template();
+        }
         Ok(())
     }
 }

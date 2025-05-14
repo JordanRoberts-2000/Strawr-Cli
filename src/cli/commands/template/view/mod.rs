@@ -123,4 +123,24 @@ impl TemplateView {
             format!("⚠️  You provided both inline and --variant; only inline was used.").yellow();
         println!("{msg}");
     }
+
+    pub fn template_renamed(&self, template: &Template, new_name: &ValidTemplateName) {
+        if self.muted {
+            return;
+        }
+        println!(
+            "Successfully renamed template '{}' to '{}' successfully",
+            template.name, new_name
+        )
+    }
+
+    pub fn variant_renamed(&self, variant: &Variant, new_name: &ValidVariantName) {
+        if self.muted {
+            return;
+        }
+        println!(
+            "Successfully renamed variant '{}' to '{}'",
+            variant.name, new_name
+        )
+    }
 }

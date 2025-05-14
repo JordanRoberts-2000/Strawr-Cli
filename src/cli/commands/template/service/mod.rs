@@ -10,6 +10,8 @@ mod impls {
     mod has_templates;
     mod has_variants;
     mod init_template_folder;
+    mod rename_template;
+    mod rename_variant;
 }
 
 pub(crate) use service::TemplateService;

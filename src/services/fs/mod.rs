@@ -8,12 +8,12 @@ use crate::{
 pub struct CliFsRepository;
 
 pub trait FsRepository:
-    CreateDir + DeleteDir + DirEmpty + SubDirs + CopyDirContents + MinEntries
+    CreateDir + DeleteDir + DirEmpty + SubDirs + CopyDirContents + MinEntries + Rename
 {
 }
 
 impl<T> FsRepository for T where
-    T: CreateDir + DeleteDir + DirEmpty + SubDirs + CopyDirContents + MinEntries
+    T: CreateDir + DeleteDir + DirEmpty + SubDirs + CopyDirContents + MinEntries + Rename
 {
 }
 
@@ -35,6 +35,10 @@ pub trait DirEmpty {
 
 pub trait SubDirs {
     fn sub_dirs(&self, path: &Path) -> Result<Vec<String>, IoError>;
+}
+
+pub trait Rename {
+    fn rename(&self, old: &Path, new: &Path) -> Result<(), IoError>;
 }
 
 pub trait MinEntries {
@@ -71,6 +75,13 @@ impl DirEmpty for CliFsRepository {
 impl SubDirs for CliFsRepository {
     fn sub_dirs(&self, path: &Path) -> Result<Vec<String>, IoError> {
         subfolders(path).map_err(|e| IoError::ReadDir(e, path.to_path_buf()))
+    }
+}
+
+impl Rename for CliFsRepository {
+    fn rename(&self, old: &Path, new: &Path) -> Result<(), IoError> {
+        std::fs::rename(&old, &new)
+            .map_err(|e| IoError::Rename(e, old.to_path_buf(), new.to_path_buf()))
     }
 }
 
