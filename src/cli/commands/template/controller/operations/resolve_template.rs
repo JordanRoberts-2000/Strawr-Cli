@@ -1,39 +1,33 @@
 use crate::template::{
-    models::{Template, Variant},
+    controller::resolver::TemplateResolver,
     types::{ParsedTemplateInput, ValidVariantName},
     TemplateController, TemplateError,
 };
 
 impl TemplateController {
-    pub fn resolve_template_and_variant(
-        &self,
-        input: &ParsedTemplateInput,
+    pub fn resolve_template<'a>(
+        &'a self,
+        template_arg: &ParsedTemplateInput,
         variant_arg: &Option<Option<ValidVariantName>>,
-    ) -> Result<(), TemplateError> {
-        // let (raw_template, raw_variant) = input;
-        // let template = self.service.get_existing_template(raw_template)?;
+    ) -> Result<TemplateResolver<'a>, TemplateError> {
+        let (template, variant) = self.resolve_template_arg(&template_arg)?;
 
-        // let variant = match variant_arg {
-        //     // variant flag has value
-        //     Some(Some(variant_arg_value)) => {
-        //         if raw_variant.is_some() {
-        //             self.view.warn_variant_ignored();
-        //         }
-        //         Some(
-        //             self.service
-        //                 .get_existing_variant(&template, variant_arg_value)?,
-        //         )
-        //     }
-        //     // variant flag present with no value
-        //     Some(None) => Some(self.select_variant(&template)?),
-        //     // variant flag not used
-        //     None => match raw_variant {
-        //         Some(v) => Some(self.service.get_existing_variant(&template, &v)?),
-        //         None => None,
-        //     },
-        // };
+        if let Some(v) = variant {
+            if variant_arg.is_some() {
+                self.view.warn_variant_ignored();
+            }
+            return Ok(TemplateResolver::new(self, template, Some(v)));
+        }
 
-        // Ok((template, variant))
-        Ok(())
+        if let Some(v) = variant_arg {
+            let resolved_variant = self.resolve_variant_arg(v, &template)?;
+            return Ok(TemplateResolver::new(
+                self,
+                template,
+                Some(resolved_variant),
+            ));
+        }
+
+        Ok(TemplateResolver::new(self, template, None))
     }
 }

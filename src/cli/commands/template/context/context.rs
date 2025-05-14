@@ -3,7 +3,6 @@ use std::path::PathBuf;
 use crate::{
     services::editor_launcher::Editor,
     template::{
-        constants::TEMPLATES_FOLDER_NAME,
         types::{ParsedTemplateInput, ValidVariantName},
         TemplateCommand,
     },
@@ -11,7 +10,6 @@ use crate::{
 };
 
 pub struct TemplateContext<'a> {
-    pub templates_path: PathBuf,
     pub template: &'a Option<ParsedTemplateInput>,
     pub variant: &'a Option<Option<ValidVariantName>>,
     pub output: &'a PathBuf,
@@ -24,11 +22,9 @@ pub struct TemplateContext<'a> {
 
 impl<'a> TemplateContext<'a> {
     pub fn new(args: &'a TemplateCommand, ctx: &'a CliContext) -> Self {
-        let templates_path = ctx.storage_dir.join(TEMPLATES_FOLDER_NAME);
         let editor = args.editor.as_ref().unwrap_or(&ctx.config.default_editor);
 
         Self {
-            templates_path,
             editor,
             output: &args.output,
             template: &args.template,

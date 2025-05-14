@@ -13,6 +13,8 @@ mod handlers {
 mod operations {
     mod no_input;
     mod resolve_template;
+    mod resolve_template_arg;
+    mod resolve_variant_arg;
     mod stack_flags;
     mod subcommands;
 }
@@ -26,9 +28,12 @@ mod actions {
         mod select;
     }
     mod variant {
+        mod delete;
         mod prompt_name;
         mod select;
     }
 }
+
+pub(crate) mod resolver;
 
 pub(crate) use core::TemplateController;

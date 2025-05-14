@@ -15,7 +15,6 @@ impl TemplateController {
                 self.handle_create_subcommand(&cmd, &ctx)?;
             }
             TemplateSubcommand::Delete(cmd) => {
-                let ctx = DeleteSubcommandContext::new(&ctx);
                 self.handle_delete_subcommand(&cmd, &ctx)?;
             }
             TemplateSubcommand::Rename(cmd) => {

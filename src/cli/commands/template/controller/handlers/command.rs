@@ -17,12 +17,13 @@ impl TemplateController {
 
         let ctx = TemplateContext::new(args, ctx);
 
-        // todo - add resolver:
-        if let Some(input) = &args.template {
-            // self.resolve_template(&input, &args.variant)?.inject_files(&ctx.output)?;
+        if let Some(input) = &ctx.template {
+            return self
+                .resolve_template(&input, &ctx.variant)?
+                .inject_files(&ctx.output);
         }
 
-        if args.backend.is_some() || args.frontend.is_some() {
+        if ctx.backend.is_some() || ctx.frontend.is_some() {
             return self.handle_stack_flags(&ctx);
         }
 

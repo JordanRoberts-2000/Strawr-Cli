@@ -4,7 +4,7 @@ use std::cell::OnceCell;
 use crate::prompt::{traits::CliInput, UserInput};
 
 use super::{
-    models::Template,
+    models::{Template, Variant},
     types::{ValidTemplateName, ValidVariantName},
     TemplateError,
 };
@@ -39,11 +39,34 @@ impl TemplateView {
         }
         println!("Template '{}' deleted successfully", template.name);
     }
+    pub fn variant_deleted(&self, template: &Template, variant: &Variant) {
+        if self.muted {
+            return;
+        }
+        println!(
+            "Variant '{}' from template '{}' deleted successfully",
+            variant.name, template.name
+        );
+    }
 
-    pub fn delete_confirmation(&self, template: &Template) -> Result<bool, TemplateError> {
+    pub fn delete_template_confirmation(&self, template: &Template) -> Result<bool, TemplateError> {
         let msg = format!(
             "Are you sure you want to delete template '{}'",
             template.name
+        );
+
+        let input = self.prompt().confirm(&msg)?;
+        Ok(input)
+    }
+
+    pub fn delete_variant_confirmation(
+        &self,
+        template: &Template,
+        variant: &Variant,
+    ) -> Result<bool, TemplateError> {
+        let msg = format!(
+            "Are you sure you want to delete variant '{}' from template '{}'",
+            variant.name, template.name
         );
 
         let input = self.prompt().confirm(&msg)?;
@@ -96,8 +119,8 @@ impl TemplateView {
     }
 
     pub fn warn_variant_ignored(&self) {
-        let msg = format!("⚠️  You provided both inline and --variant; only --variant was used.")
-            .yellow();
+        let msg =
+            format!("⚠️  You provided both inline and --variant; only inline was used.").yellow();
         println!("{msg}");
     }
 }
