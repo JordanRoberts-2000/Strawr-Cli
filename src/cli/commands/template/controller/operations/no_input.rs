@@ -28,7 +28,7 @@ impl TemplateController {
 
     fn handle_no_templates(&self, editor: &Editor) -> Result<(), TemplateError> {
         if self.view.no_templates()? {
-            let input = self.view.enter_template_name()?;
+            let input = self.prompt_template_name()?;
             self.create_template(&input, &editor)?;
         }
 

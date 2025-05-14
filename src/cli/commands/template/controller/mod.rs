@@ -1,6 +1,6 @@
 mod core;
 
-mod executers {
+mod handlers {
     mod command;
     mod sub_commands {
         mod create;
@@ -10,21 +10,23 @@ mod executers {
     }
 }
 
-mod helpers {
-    mod handle_subcommands;
+mod operations {
     mod no_input;
-    mod resolve_inputs;
+    mod resolve_template;
     mod stack_flags;
+    mod subcommands;
 }
 
-mod operations {
+mod actions {
     mod inject_files;
     mod template {
         mod create;
         mod delete;
+        mod prompt_name;
         mod select;
     }
     mod variant {
+        mod prompt_name;
         mod select;
     }
 }

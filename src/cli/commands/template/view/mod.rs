@@ -3,7 +3,11 @@ use std::cell::OnceCell;
 
 use crate::prompt::{traits::CliInput, UserInput};
 
-use super::{models::Template, TemplateError};
+use super::{
+    models::Template,
+    types::{ValidTemplateName, ValidVariantName},
+    TemplateError,
+};
 
 pub struct TemplateView {
     prompt: OnceCell<Box<dyn CliInput>>,
@@ -60,18 +64,28 @@ impl TemplateView {
         Ok(input)
     }
 
-    pub fn select_template(&self, options: &Vec<String>) -> Result<String, TemplateError> {
-        let msg = "Select template:";
-        let input = self.prompt().search(options, msg)?;
+    pub fn enter_variant_name(&self) -> Result<String, TemplateError> {
+        let msg = "Enter variant name:";
+        let input = self.prompt().text(msg)?;
 
         Ok(input)
     }
 
-    pub fn select_variant(&self, options: &Vec<String>) -> Result<String, TemplateError> {
+    pub fn select_template(
+        &self,
+        options: &Vec<String>,
+    ) -> Result<ValidTemplateName, TemplateError> {
+        let msg = "Select template:";
+        let input = self.prompt().search(options, msg)?;
+
+        Ok(ValidTemplateName::new(&input))
+    }
+
+    pub fn select_variant(&self, options: &Vec<String>) -> Result<ValidVariantName, TemplateError> {
         let msg = "Select variant:";
         let input = self.prompt().search(options, msg)?;
 
-        Ok(input)
+        Ok(ValidVariantName::new(&input))
     }
 
     pub fn output_not_empty_warning(&self) -> Result<bool, TemplateError> {

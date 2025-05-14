@@ -2,18 +2,22 @@ use std::path::PathBuf;
 
 use crate::{
     services::editor_launcher::Editor,
-    template::{constants::TEMPLATES_FOLDER_NAME, types::TemplateInput, TemplateCommand},
+    template::{
+        constants::TEMPLATES_FOLDER_NAME,
+        types::{ParsedTemplateInput, ValidVariantName},
+        TemplateCommand,
+    },
     CliContext,
 };
 
 pub struct TemplateContext<'a> {
     pub templates_path: PathBuf,
-    pub template: &'a Option<TemplateInput>,
-    pub variant: &'a Option<Option<String>>,
+    pub template: &'a Option<ParsedTemplateInput>,
+    pub variant: &'a Option<Option<ValidVariantName>>,
     pub output: &'a PathBuf,
     pub editor: &'a Editor,
-    pub backend: &'a Option<TemplateInput>,
-    pub frontend: &'a Option<TemplateInput>,
+    pub backend: &'a Option<ParsedTemplateInput>,
+    pub frontend: &'a Option<ParsedTemplateInput>,
     pub backend_folder_title: &'a String,
     pub frontend_folder_title: &'a String,
 }

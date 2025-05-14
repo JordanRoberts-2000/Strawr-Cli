@@ -1,8 +1,4 @@
-mod template {
-    pub mod model;
-}
-mod variant {
-    pub mod model;
-}
+mod template;
+mod variant;
 
-pub use {template::model::Template, variant::model::Variant};
+pub use {template::Template, variant::Variant};

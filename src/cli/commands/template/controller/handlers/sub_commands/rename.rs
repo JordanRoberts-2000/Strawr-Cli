@@ -4,7 +4,7 @@ use crate::template::{
 };
 
 impl TemplateController {
-    pub fn execute_rename_subcommand(
+    pub fn handle_rename_subcommand(
         &self,
         args: &RenameSubcommand,
         ctx: &RenameSubcommandContext,

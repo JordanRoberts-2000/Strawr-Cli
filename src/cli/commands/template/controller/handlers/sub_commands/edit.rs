@@ -3,7 +3,7 @@ use crate::template::{
 };
 
 impl TemplateController {
-    pub fn execute_edit_subcommand(
+    pub fn handle_edit_subcommand(
         &self,
         args: &EditSubcommand,
         ctx: &EditSubcommandContext,

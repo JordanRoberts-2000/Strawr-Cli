@@ -4,7 +4,7 @@ use crate::template::{
 };
 
 impl TemplateController {
-    pub fn execute_create_subcommand(
+    pub fn handle_create_subcommand(
         &self,
         args: &CreateSubcommand,
         ctx: &CreateSubcommandContext,

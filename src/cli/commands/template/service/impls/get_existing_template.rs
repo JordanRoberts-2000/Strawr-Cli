@@ -1,12 +1,16 @@
-use crate::template::{models::Template, service::TemplateService, TemplateError};
+use crate::template::{
+    models::Template, service::TemplateService, types::ValidTemplateName, TemplateError,
+};
 
 impl TemplateService {
-    pub fn get_existing_template(&self, str: &str) -> Result<Template, TemplateError> {
-        let valid_name = Template::validate_name(str)?;
-        let template = Template::new(&valid_name, &self.templates_path);
+    pub fn get_existing_template(
+        &self,
+        template: &ValidTemplateName,
+    ) -> Result<Template, TemplateError> {
+        let template = Template::new(&template, &self.templates_path);
 
         if !template.path.exists() {
-            return Err(TemplateError::TemplateNotFound(template.name.clone()));
+            return Err(TemplateError::TemplateNotFound(template.name.to_string()));
         }
 
         Ok(template)

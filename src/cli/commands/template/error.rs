@@ -32,6 +32,9 @@ pub enum TemplateError {
     #[error("No variants exist for template '{0}'")]
     NoVariants(String),
 
-    #[error("validation failed: {0}")]
-    Validation(String),
+    #[error("Template name invalid: '{0}'")]
+    InvalidTemplate(String),
+
+    #[error("Variant name invalid: '{0}'")]
+    InvalidVariant(String),
 }

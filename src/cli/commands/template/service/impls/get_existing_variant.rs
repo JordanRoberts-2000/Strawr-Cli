@@ -1,6 +1,7 @@
 use crate::template::{
     models::{Template, Variant},
     service::TemplateService,
+    types::ValidVariantName,
     TemplateError,
 };
 
@@ -8,10 +9,9 @@ impl TemplateService {
     pub fn get_existing_variant(
         &self,
         template: &Template,
-        str: &str,
+        variant: &ValidVariantName,
     ) -> Result<Variant, TemplateError> {
-        let valid_name = Variant::validate_name(str)?;
-        let variant = Variant::new(&template, &valid_name);
+        let variant = Variant::new(&template, &variant);
 
         if !variant.path.exists() {
             return Err(TemplateError::VariantNotFound {

@@ -4,7 +4,7 @@ use crate::template::{
 };
 
 impl TemplateController {
-    pub fn execute_delete_subcommand(
+    pub fn handle_delete_subcommand(
         &self,
         args: &DeleteSubcommand,
         ctx: &DeleteSubcommandContext,
