@@ -1,17 +1,24 @@
 pub mod service;
 mod impls {
-    mod create_template;
-    mod delete_template;
-    mod delete_variant;
-    mod get_existing_template;
-    mod get_existing_variant;
-    mod get_templates;
-    mod get_variants;
+    mod template {
+        mod create;
+        mod delete;
+        mod does_not_exist;
+        mod exists;
+        mod get;
+        mod has_variants;
+        mod rename;
+    }
+    mod variant {
+        mod create;
+        mod delete;
+        mod does_not_exist;
+        mod exists;
+        mod get;
+        mod rename;
+    }
     mod has_templates;
-    mod has_variants;
     mod init_template_folder;
-    mod rename_template;
-    mod rename_variant;
 }
 
 pub(crate) use service::TemplateService;

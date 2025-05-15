@@ -20,8 +20,8 @@ pub enum TemplateError {
     #[error("Cannot create template '{0}' as it already exists")]
     TemplateAlreadyExists(String),
 
-    #[error("Cannot create template variant '{0}' as it already exists")]
-    VariantAlreadyExists(String),
+    #[error("Cannot create variant '{variant}' for template '{template}' as it already exists")]
+    VariantAlreadyExists { template: String, variant: String },
 
     #[error("Failed to select")]
     SelectFailed(#[from] inquire::InquireError),

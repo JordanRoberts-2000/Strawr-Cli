@@ -6,20 +6,22 @@ use crate::template::{
 };
 
 pub struct Variant {
-    pub name: ValidVariantName,
+    pub id: ValidVariantName,
     pub path: PathBuf,
-    pub template_name: ValidTemplateName,
-    pub template_path: PathBuf,
+    pub template: Template,
 }
 
 impl Variant {
-    pub fn new(template: &Template, name: &ValidVariantName) -> Self {
-        let path = template.path.join(name.as_str());
+    pub fn new(template: &Template, id: &ValidVariantName) -> Self {
+        let path = template.path.join(id.as_str());
         Self {
-            name: name.clone(),
+            id: id.clone(),
             path,
-            template_name: template.name.clone(),
-            template_path: template.path.clone(),
+            template: template.clone(),
         }
+    }
+
+    pub fn get_template_id(&self) -> ValidTemplateName {
+        self.template.id.clone()
     }
 }

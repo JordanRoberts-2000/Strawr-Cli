@@ -2,16 +2,17 @@ use std::path::{Path, PathBuf};
 
 use crate::template::{constants::DEFAULT_FOLDER, types::ValidTemplateName};
 
+#[derive(Debug, Clone)]
 pub struct Template {
-    pub name: ValidTemplateName,
+    pub id: ValidTemplateName,
     pub path: PathBuf,
 }
 
 impl Template {
-    pub fn new(name: &ValidTemplateName, templates_path: &Path) -> Self {
-        let path = templates_path.join(name.as_str());
+    pub fn new(id: &ValidTemplateName, templates_path: &Path) -> Self {
+        let path = templates_path.join(id.as_str());
         Self {
-            name: name.clone(),
+            id: id.clone(),
             path,
         }
     }

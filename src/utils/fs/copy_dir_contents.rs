@@ -11,6 +11,13 @@ pub fn copy_dir_contents<S: AsRef<Path>, D: AsRef<Path>>(src: S, dst: D) -> io::
         ));
     }
 
+    if !dst.is_dir() {
+        return Err(io::Error::new(
+            io::ErrorKind::NotFound,
+            format!("Destination path {:?} is not a valid directory", src),
+        ));
+    }
+
     for entry in fs::read_dir(src)? {
         let entry = entry?;
         let entry_path = entry.path();
@@ -19,6 +26,7 @@ pub fn copy_dir_contents<S: AsRef<Path>, D: AsRef<Path>>(src: S, dst: D) -> io::
             Some(name) => name,
             None => continue,
         };
+        println!("{file_name}");
 
         let dst_path = dst.join(file_name);
 

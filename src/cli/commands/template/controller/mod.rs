@@ -29,6 +29,7 @@ mod actions {
         mod select;
     }
     mod variant {
+        mod create;
         mod delete;
         mod prompt_name;
         mod rename;

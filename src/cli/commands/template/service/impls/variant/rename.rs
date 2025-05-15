@@ -6,9 +6,12 @@ impl TemplateService {
         variant: &Variant,
         new_name: &ValidVariantName,
     ) -> Result<(), TemplateError> {
-        let new_variant_path = variant.template_path.join(new_name.as_str());
-        self.fs.rename(&variant.path, &new_variant_path)?;
+        let new_variant = Variant::new(&variant.template, new_name);
 
+        self.ensure_variant_exists(variant)?;
+        self.ensure_variant_does_not_exist(&new_variant)?;
+
+        self.fs.rename(&variant.path, &new_variant.path)?;
         Ok(())
     }
 }

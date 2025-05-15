@@ -10,12 +10,15 @@ impl TemplateController {
         template_arg: &ParsedTemplateInput,
     ) -> Result<(Template, Option<Variant>), TemplateError> {
         let (template_part, variant_part) = template_arg;
-        let template = self.service.get_existing_template(template_part)?;
+        let template = Template::new(&template_part, &self.service.templates_path);
 
         if let Some(v) = variant_part {
             let variant = match v {
-                None => self.select_variant(&template)?,
-                Some(v) => self.service.get_existing_variant(&template, v)?,
+                None => {
+                    self.service.ensure_template_exists(&template)?;
+                    self.select_variant(&template)?
+                }
+                Some(v) => Variant::new(&template, v),
             };
             return Ok((template, Some(variant)));
         }

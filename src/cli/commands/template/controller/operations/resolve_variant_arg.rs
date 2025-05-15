@@ -11,8 +11,8 @@ impl TemplateController {
         template: &Template,
     ) -> Result<Variant, TemplateError> {
         let variant = match variant_arg {
-            None => self.select_variant(&template)?,
-            Some(v) => self.service.get_existing_variant(&template, v)?,
+            None => self.select_variant(template)?,
+            Some(v) => Variant::new(template, v),
         };
 
         Ok(variant)

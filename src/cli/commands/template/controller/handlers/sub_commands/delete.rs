@@ -11,7 +11,7 @@ impl TemplateController {
     ) -> Result<(), TemplateError> {
         if let Some(input) = &args.template {
             return self
-                .resolve_template(&input, &args.variant)?
+                .resolve_template(input, &args.variant)?
                 .delete_template();
         }
 

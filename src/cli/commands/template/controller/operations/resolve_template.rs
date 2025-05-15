@@ -10,9 +10,9 @@ impl TemplateController {
         template_arg: &ParsedTemplateInput,
         variant_arg: &Option<Option<ValidVariantName>>,
     ) -> Result<TemplateResolver<'a>, TemplateError> {
-        let (template, variant) = self.resolve_template_arg(&template_arg)?;
+        let (template, variant_suffix) = self.resolve_template_arg(&template_arg)?;
 
-        if let Some(v) = variant {
+        if let Some(v) = variant_suffix {
             if variant_arg.is_some() {
                 self.view.warn_variant_ignored();
             }

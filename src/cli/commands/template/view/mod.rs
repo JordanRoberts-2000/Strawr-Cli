@@ -30,43 +30,49 @@ impl TemplateView {
         if self.muted {
             return;
         }
-        println!("Template '{}' created successfully", template.name);
+        println!("Template '{}' created successfully", template.id);
+    }
+
+    pub fn variant_created(&self, variant: &Variant) {
+        if self.muted {
+            return;
+        }
+        println!(
+            "Variant '{}' for template '{}' created successfully",
+            variant.id,
+            variant.get_template_id()
+        );
     }
 
     pub fn template_deleted(&self, template: &Template) {
         if self.muted {
             return;
         }
-        println!("Template '{}' deleted successfully", template.name);
+        println!("Template '{}' deleted successfully", template.id);
     }
-    pub fn variant_deleted(&self, template: &Template, variant: &Variant) {
+    pub fn variant_deleted(&self, variant: &Variant) {
         if self.muted {
             return;
         }
         println!(
             "Variant '{}' from template '{}' deleted successfully",
-            variant.name, template.name
+            variant.id,
+            variant.get_template_id()
         );
     }
 
     pub fn delete_template_confirmation(&self, template: &Template) -> Result<bool, TemplateError> {
-        let msg = format!(
-            "Are you sure you want to delete template '{}'",
-            template.name
-        );
+        let msg = format!("Are you sure you want to delete template '{}'", template.id);
 
         let input = self.prompt().confirm(&msg)?;
         Ok(input)
     }
 
-    pub fn delete_variant_confirmation(
-        &self,
-        template: &Template,
-        variant: &Variant,
-    ) -> Result<bool, TemplateError> {
+    pub fn delete_variant_confirmation(&self, variant: &Variant) -> Result<bool, TemplateError> {
         let msg = format!(
             "Are you sure you want to delete variant '{}' from template '{}'",
-            variant.name, template.name
+            variant.id,
+            variant.get_template_id()
         );
 
         let input = self.prompt().confirm(&msg)?;
@@ -130,7 +136,7 @@ impl TemplateView {
         }
         println!(
             "Successfully renamed template '{}' to '{}' successfully",
-            template.name, new_name
+            template.id, new_name
         )
     }
 
@@ -140,7 +146,7 @@ impl TemplateView {
         }
         println!(
             "Successfully renamed variant '{}' to '{}'",
-            variant.name, new_name
+            variant.id, new_name
         )
     }
 }

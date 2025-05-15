@@ -7,7 +7,7 @@ impl<'c> TemplateResolver<'c> {
         let path = self
             .variant
             .map(|v| v.path)
-            .unwrap_or_else(|| self.template.path.clone());
+            .unwrap_or_else(|| self.template.default_path().clone());
         self.controller.inject_template_files(&path, output)
     }
 }
