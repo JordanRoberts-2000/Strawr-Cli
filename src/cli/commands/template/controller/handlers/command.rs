@@ -25,11 +25,6 @@ impl TemplateController {
             return self.handle_stack_flags(&args, &ctx);
         }
 
-        // todo - add builder:
-        // self.when_no_input(&ctx)
-        // .select(Selection::TemplateOnly)
-        // .if_no_templates_show("No templates to delete")
-        // .then_inject(&ctx.output)?;
         Ok(())
     }
 }

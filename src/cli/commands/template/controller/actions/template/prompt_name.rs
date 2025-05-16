@@ -1,9 +1,16 @@
-use crate::template::{types::ValidTemplateName, TemplateController, TemplateError};
+use crate::template::{
+    models::Template, types::ValidTemplateName, TemplateController, TemplateError,
+};
 
 impl TemplateController {
-    pub fn prompt_template_name(&self) -> Result<ValidTemplateName, TemplateError> {
+    pub fn prompt_template_name(&self) -> Result<Template, TemplateError> {
         let input = self.view.enter_template_name()?;
-        let template: ValidTemplateName = input.parse().map_err(TemplateError::InvalidTemplate)?;
-        Ok(template)
+        let valid_template_name: ValidTemplateName =
+            input.parse().map_err(TemplateError::InvalidTemplate)?;
+
+        Ok(Template::new(
+            &valid_template_name,
+            &self.service.templates_path,
+        ))
     }
 }

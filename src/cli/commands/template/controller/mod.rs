@@ -37,6 +37,8 @@ mod actions {
     }
 }
 
+pub(crate) mod builder;
+
 pub(crate) mod resolver;
 
 pub(crate) use core::TemplateController;

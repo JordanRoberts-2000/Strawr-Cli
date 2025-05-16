@@ -79,11 +79,15 @@ impl TemplateView {
         Ok(input)
     }
 
-    pub fn no_templates(&self) -> Result<bool, TemplateError> {
+    pub fn no_templates_prompt_create_one(&self) -> Result<bool, TemplateError> {
         let msg = "No templates currently exist, would you like to create one?";
 
         let input = self.prompt().confirm(msg)?;
         Ok(input)
+    }
+
+    pub fn no_templates(&self, msg: &str) {
+        println!("{msg}");
     }
 
     pub fn enter_template_name(&self) -> Result<String, TemplateError> {
@@ -110,6 +114,16 @@ impl TemplateView {
         Ok(ValidTemplateName::new(&input))
     }
 
+    // pub fn select_variant_or_template(
+    //     &self,
+    //     options: &Vec<String>,
+    // ) -> Result<ValidTemplateName, TemplateError> {
+    //     let msg = "Modify template or one of its variants:";
+    //     let input = self.prompt().select(["template", "variant"], msg)?;
+
+    //     Ok()
+    // }
+
     pub fn select_variant(&self, options: &Vec<String>) -> Result<ValidVariantName, TemplateError> {
         let msg = "Select variant:";
         let input = self.prompt().search(options, msg)?;
@@ -130,23 +144,23 @@ impl TemplateView {
         println!("{msg}");
     }
 
-    pub fn template_renamed(&self, template: &Template, new_name: &ValidTemplateName) {
+    pub fn template_renamed(&self, template: &Template, new_template: &Template) {
         if self.muted {
             return;
         }
         println!(
             "Successfully renamed template '{}' to '{}' successfully",
-            template.id, new_name
+            template.id, new_template.id
         )
     }
 
-    pub fn variant_renamed(&self, variant: &Variant, new_name: &ValidVariantName) {
+    pub fn variant_renamed(&self, variant: &Variant, new_variant: &Variant) {
         if self.muted {
             return;
         }
         println!(
             "Successfully renamed variant '{}' to '{}'",
-            variant.id, new_name
+            variant.id, new_variant.id
         )
     }
 }

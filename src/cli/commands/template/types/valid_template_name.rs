@@ -1,6 +1,6 @@
 use std::{fmt, str};
 
-use crate::{template::constants::DEFAULT_FOLDER, utils::validation};
+use crate::{template::TemplateSubcommand, utils::validation};
 
 #[derive(Debug, Clone)]
 pub struct ValidTemplateName(String);
@@ -18,13 +18,10 @@ impl str::FromStr for ValidTemplateName {
     type Err = String;
 
     fn from_str(s: &str) -> Result<Self, Self::Err> {
-        let variant = validation::slug(s)?;
+        let template = validation::slug(s)?;
+        validation::reserved::<TemplateSubcommand>(&template)?;
 
-        if variant == DEFAULT_FOLDER {
-            return Err(format!("'{DEFAULT_FOLDER}' is a reserved value"));
-        }
-
-        Ok(Self(variant))
+        Ok(Self(template))
     }
 }
 

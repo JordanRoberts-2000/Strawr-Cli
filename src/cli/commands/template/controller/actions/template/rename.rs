@@ -1,14 +1,14 @@
-use crate::template::{
-    models::Template, types::ValidTemplateName, TemplateController, TemplateError,
-};
+use crate::template::{models::Template, TemplateController, TemplateError};
 
 impl TemplateController {
     pub fn rename_template(&self, template: &Template) -> Result<(), TemplateError> {
-        let input = self.view.enter_template_name()?;
-        let new_name: ValidTemplateName = input.parse().map_err(TemplateError::InvalidTemplate)?;
+        self.service.ensure_template_exists(&template)?;
 
-        self.service.rename_template(&template, &new_name)?;
-        self.view.template_renamed(&template, &new_name);
+        let new_template = self.prompt_template_name()?;
+        self.service.ensure_template_does_not_exist(&new_template)?;
+
+        self.service.rename_template(&template, &new_template)?;
+        self.view.template_renamed(&template, &new_template);
         Ok(())
     }
 }
