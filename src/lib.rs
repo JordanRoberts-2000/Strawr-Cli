@@ -6,7 +6,7 @@ mod constants;
 mod context;
 mod core;
 mod error;
-mod services;
+pub mod services;
 mod utils;
 
 pub(crate) use {cli::commands::template, context::CliService, core::*};
@@ -15,7 +15,6 @@ pub use {
     config::CliConfig,
     context::CliContext,
     error::CliError,
-    services::prompt,
 };
 
 pub fn run_cli(cli: &Cli) -> Result<(), CliError> {

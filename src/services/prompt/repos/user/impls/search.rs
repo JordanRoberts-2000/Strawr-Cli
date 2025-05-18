@@ -3,7 +3,10 @@ use inquire::{
     InquireError, Select,
 };
 
-use crate::services::prompt::{traits::SelectPrompt, PromptError, UserInput};
+use crate::services::prompt::{
+    traits::SearchPrompt,
+    user::{UserInputError, UserInputRepo},
+};
 
 fn render_config<'a>() -> RenderConfig<'a> {
     let mut config = RenderConfig::default();
@@ -12,10 +15,11 @@ fn render_config<'a>() -> RenderConfig<'a> {
     config
 }
 
-impl SelectPrompt for UserInput {
-    fn select(&self, options: &[String], msg: &str) -> Result<String, PromptError> {
+impl SearchPrompt for UserInputRepo {
+    type Error = UserInputError;
+
+    fn search(&self, options: &[String], msg: &str) -> Result<String, UserInputError> {
         let prompt = Select::new(msg, options.to_vec())
-            .without_filtering()
             .without_help_message()
             .with_page_size(4)
             .with_render_config(render_config())
@@ -24,9 +28,9 @@ impl SelectPrompt for UserInput {
         match prompt {
             Ok(selected) => Ok(selected.to_string()),
             Err(InquireError::OperationInterrupted | InquireError::OperationCanceled) => {
-                Err(PromptError::Canceled)
+                Err(UserInputError::Canceled)
             }
-            Err(err) => Err(PromptError::InquireError(err)),
+            Err(err) => Err(UserInputError::InquireError(err)),
         }
     }
 }

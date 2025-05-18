@@ -6,8 +6,8 @@ use crate::services::{
     prompt::{traits::CliInput, UserInput},
 };
 
-pub struct CliService {
-    pub prompt: OnceCell<Box<dyn CliInput>>,
+pub struct CliService<I: CliInput> {
+    pub prompt: I,
     // pub clipboard: Box<dyn Clipboard>,
     // pub keychain: Box<dyn Keychain>,
     pub editor_launcher: OnceCell<Box<dyn EditorLauncher>>,
