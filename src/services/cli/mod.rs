@@ -2,6 +2,7 @@ use std::{cell::OnceCell, path::Path};
 
 use crate::{
     services::{
+        clipboard::{ClipboardError, ClipboardService},
         editor_launcher::{traits::EditorLauncher, CliEditorLauncher, Editor},
         errors::EditorLauncherError,
         prompt::{PasswordDisplay, PromptService},
@@ -12,7 +13,7 @@ use crate::{
 pub struct CliService {
     password_input_display_mode: PasswordDisplay,
     pub prompt: OnceCell<PromptService>,
-    // pub clipboard: Box<dyn Clipboard>,
+    pub clipboard: OnceCell<ClipboardService>,
     // pub keychain: Box<dyn Keychain>,
     pub editor_launcher: OnceCell<Box<dyn EditorLauncher>>,
 }
@@ -22,6 +23,7 @@ impl CliService {
         Self {
             password_input_display_mode: config.password_input_display_mode,
             prompt: OnceCell::new(),
+            clipboard: OnceCell::new(),
             editor_launcher: OnceCell::new(),
         }
     }
@@ -32,6 +34,14 @@ impl CliService {
             service.set_password_mode(&self.password_input_display_mode.into());
             service
         })
+    }
+
+    pub fn clipboard(&self, text: &str) -> Result<(), ClipboardError> {
+        self.clipboard
+            .get_or_init(|| ClipboardService::new())
+            .save_to_clipboard(text)?;
+
+        Ok(())
     }
 
     pub fn launch_editor(&self, editor: &Editor, path: &Path) -> Result<(), EditorLauncherError> {

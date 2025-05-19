@@ -29,4 +29,8 @@ impl MockInputRepo {
     pub fn print_history(&self) {
         println!("{:#?}", self.history);
     }
+
+    pub fn last(&self) -> Option<MockInputCall> {
+        self.history.borrow().last().cloned()
+    }
 }
