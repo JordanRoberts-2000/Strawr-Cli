@@ -7,7 +7,7 @@ pub enum MockInput {
     Checklist(Vec<String>),
 }
 
-#[derive(Debug)]
+#[derive(Debug, PartialEq)]
 pub enum MockInputCall {
     Confirm {
         msg: String,

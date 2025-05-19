@@ -24,25 +24,57 @@ impl SearchPrompt for MockInputRepo {
     }
 }
 
-// #[cfg(test)]
-// mod tests {
-//     use super::*;
+#[cfg(test)]
+mod tests {
+    use super::*;
 
-//     #[test]
-//     fn test_select_prompt_returns_expected_value() {
-//         // Setup
-//         let test_inputs = vec![Input::SelectWithoutFilter("selected_option".to_string())];
-//         let test_input = TestInput::from(test_inputs);
+    #[test]
+    fn search_returns_value_and_records_history() {
+        let options = vec!["apple".to_string(), "banana".to_string()];
+        let inputs = vec![
+            MockInput::Search("banana".into()),
+            MockInput::Search("apple".into()),
+        ];
+        let repo = MockInputRepo::from(inputs);
+        assert!(repo.history.borrow().is_empty());
 
-//         let options: Vec<String> = vec!["Option1", "Option2", "Option3"]
-//             .iter()
-//             .map(|s| s.to_string())
-//             .collect();
+        // first call
+        let got1 = repo.search(&options, "Pick fruit:").unwrap();
+        assert_eq!(got1, "banana".to_string());
+        // second call
+        let got2 = repo.search(&options, "Pick fruit:").unwrap();
+        assert_eq!(got2, "apple".to_string());
 
-//         // Act
-//         let result = test_input.search(&options, "Select an option");
+        // history recorded twice
+        let hist = repo.history.borrow();
+        assert_eq!(hist.len(), 2);
+        assert_eq!(
+            hist[0],
+            MockInputCall::Search {
+                options: options.clone(),
+                msg: "Pick fruit:".to_string(),
+            }
+        );
+        assert_eq!(
+            hist[1],
+            MockInputCall::Search {
+                options: options.clone(),
+                msg: "Pick fruit:".to_string(),
+            }
+        );
+    }
 
-//         // Assert
-//         assert_eq!(result.unwrap(), "selected_option");
-//     }
-// }
+    #[test]
+    #[should_panic(expected = "Ran out of test inputs for 'Foo?'")]
+    fn search_panics_if_no_inputs_left() {
+        let repo = MockInputRepo::new();
+        let _ = repo.search(&vec!["x".into()], "Foo?");
+    }
+
+    #[test]
+    #[should_panic(expected = "Expected Select input")]
+    fn search_panics_on_wrong_variant() {
+        let repo = MockInputRepo::from(vec![MockInput::Confirm(true)]);
+        let _ = repo.search(&vec!["x".into()], "Bar?");
+    }
+}

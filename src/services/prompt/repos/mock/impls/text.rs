@@ -23,20 +23,54 @@ impl TextPrompt for MockInputRepo {
     }
 }
 
-// #[cfg(test)]
-// mod tests {
-//     use super::*;
+#[cfg(test)]
+mod tests {
+    use super::*;
 
-//     #[test]
-//     fn test_text_input_returns_expected_value() {
-//         // Setup
-//         let test_inputs = vec![Input::Text("hello world".to_string())];
-//         let test_input = TestInput::from(test_inputs);
+    #[test]
+    fn text_returns_value_and_records_history() {
+        let inputs = vec![
+            MockInput::Text("hello".into()),
+            MockInput::Text("world".into()),
+        ];
+        let repo = MockInputRepo::from(inputs);
+        assert!(repo.history.borrow().is_empty());
 
-//         // Act
-//         let result = test_input.text("Enter some text");
+        // first call
+        let got = repo.text("Enter text:").unwrap();
+        assert_eq!(got, "hello".to_string());
+        // second call
+        let got2 = repo.text("Enter text:").unwrap();
+        assert_eq!(got2, "world".to_string());
 
-//         // Assert
-//         assert_eq!(result.unwrap(), "hello world");
-//     }
-// }
+        // history recorded twice
+        let hist = repo.history.borrow();
+        assert_eq!(hist.len(), 2);
+        assert_eq!(
+            hist[0],
+            MockInputCall::Text {
+                msg: "Enter text:".into()
+            }
+        );
+        assert_eq!(
+            hist[1],
+            MockInputCall::Text {
+                msg: "Enter text:".into()
+            }
+        );
+    }
+
+    #[test]
+    #[should_panic(expected = "Ran out of test inputs for 'Foo?'")]
+    fn text_panics_if_no_inputs_left() {
+        let repo = MockInputRepo::new();
+        let _ = repo.text("Foo?");
+    }
+
+    #[test]
+    #[should_panic(expected = "Expected Text input")]
+    fn text_panics_on_wrong_variant() {
+        let repo = MockInputRepo::from(vec![MockInput::Confirm(true)]);
+        let _ = repo.text("Bar?");
+    }
+}

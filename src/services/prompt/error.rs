@@ -7,4 +7,10 @@ pub enum PromptServiceError {
 
     #[error("invalid response from prompt: {0}")]
     InvalidResponse(String),
+
+    #[error("no options provided to prompt")]
+    EmptyOptions,
+
+    #[error("default index {0} is out of range (0..{1})")]
+    InvalidDefaultIndex(usize, usize),
 }

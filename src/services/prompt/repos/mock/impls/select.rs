@@ -24,25 +24,54 @@ impl SelectPrompt for MockInputRepo {
     }
 }
 
-// #[cfg(test)]
-// mod tests {
-//     use super::*;
+#[cfg(test)]
+mod tests {
+    use super::*;
 
-//     #[test]
-//     fn test_select_input_returns_expected_value() {
-//         // Setup
-//         let test_inputs = vec![Input::Select("selected_option".to_string())];
-//         let test_input = TestInput::from(test_inputs);
+    #[test]
+    fn select_returns_value_and_records_history() {
+        let options = vec!["a".to_string(), "b".to_string()];
+        let inputs = vec![MockInput::Select("b".into()), MockInput::Select("a".into())];
+        let repo = MockInputRepo::from(inputs);
+        assert!(repo.history.borrow().is_empty());
 
-//         let options: Vec<String> = vec!["Option1", "Option2", "Option3"]
-//             .iter()
-//             .map(|s| s.to_string())
-//             .collect();
+        // first call
+        let got1 = repo.select(&options, "Pick one:").unwrap();
+        assert_eq!(got1, "b".to_string());
+        // second call
+        let got2 = repo.select(&options, "Pick one:").unwrap();
+        assert_eq!(got2, "a".to_string());
 
-//         // Act
-//         let result = test_input.select(&options, "Select an option");
+        // history recorded correctly
+        let hist = repo.history.borrow();
+        assert_eq!(hist.len(), 2);
+        assert_eq!(
+            hist[0],
+            MockInputCall::Select {
+                options: options.clone(),
+                msg: "Pick one:".into(),
+            }
+        );
+        assert_eq!(
+            hist[1],
+            MockInputCall::Select {
+                options: options.clone(),
+                msg: "Pick one:".into(),
+            }
+        );
+    }
 
-//         // Assert
-//         assert_eq!(result.unwrap(), "selected_option");
-//     }
-// }
+    #[test]
+    #[should_panic(expected = "Ran out of test inputs for 'Foo?'")]
+    fn select_panics_if_no_inputs_left() {
+        let repo = MockInputRepo::new();
+        let _ = repo.select(&vec!["x".into(), "y".into()], "Foo?");
+    }
+
+    #[test]
+    #[should_panic(expected = "Expected Select input")]
+    fn select_panics_on_wrong_variant() {
+        let repo = MockInputRepo::from(vec![MockInput::Confirm(true)]);
+        let _ = repo.select(&vec!["x".into()], "Bar?");
+    }
+}

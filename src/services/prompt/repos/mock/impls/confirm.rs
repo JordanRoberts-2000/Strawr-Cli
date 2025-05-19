@@ -23,25 +23,47 @@ impl ConfirmPrompt for MockInputRepo {
     }
 }
 
-// #[cfg(test)]
-// mod tests {
-//     use super::*;
+#[cfg(test)]
+mod tests {
+    use super::*;
 
-//     #[test]
-//     fn test_confirm_yes() {
-//         let test_inputs = vec![Input::Confirm(true)];
-//         let test_input = TestInput::from(test_inputs);
+    #[test]
+    fn confirm_returns_value_and_records_history() {
+        let inputs = vec![MockInput::Confirm(true), MockInput::Confirm(false)];
+        let repo = MockInputRepo::from(inputs);
+        assert!(repo.history.borrow().is_empty());
 
-//         let result = test_input.confirm("Are you sure?");
-//         assert_eq!(result.unwrap(), true);
-//     }
+        // returns input
+        let got = repo.confirm("Proceed?").unwrap();
+        assert_eq!(got, true);
 
-//     #[test]
-//     fn test_confirm_no() {
-//         let test_inputs = vec![Input::Confirm(false)];
-//         let test_input = TestInput::from(test_inputs);
+        let got = repo.confirm("Proceed?").unwrap();
+        assert_eq!(got, false);
 
-//         let result = test_input.confirm("Proceed?");
-//         assert_eq!(result.unwrap(), false);
-//     }
-// }
+        // records history
+        let hist = repo.history.borrow();
+        assert_eq!(hist.len(), 2);
+
+        assert_eq!(
+            hist[0],
+            MockInputCall::Confirm {
+                msg: "Proceed?".to_string()
+            }
+        );
+    }
+
+    #[test]
+    #[should_panic(expected = "Ran out of test inputs for 'Foo?'")]
+    fn confirm_panics_if_no_inputs_left() {
+        let repo = MockInputRepo::new(); // empty queue
+        let _ = repo.confirm("Foo?");
+    }
+
+    #[test]
+    #[should_panic(expected = "Expected Confirm input")]
+    fn confirm_panics_on_wrong_variant() {
+        let repo = MockInputRepo::from(vec![MockInput::Text("oops".into())]);
+        // should panic with “Expected Confirm input”
+        let _ = repo.confirm("Bar?");
+    }
+}
