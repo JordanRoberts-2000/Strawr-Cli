@@ -1,6 +1,6 @@
 use crate::template::{models::Variant, TemplateController, TemplateError};
 
-impl TemplateController {
+impl<'c> TemplateController<'c> {
     pub fn rename_variant(&self, variant: &Variant) -> Result<(), TemplateError> {
         self.service.ensure_template_exists(&variant.template)?;
         self.service.ensure_variant_exists(variant)?;

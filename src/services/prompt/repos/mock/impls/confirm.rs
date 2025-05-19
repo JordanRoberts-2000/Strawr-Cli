@@ -1,14 +1,11 @@
-use std::convert::Infallible;
-
 use crate::services::prompt::{
     mock::{MockInput, MockInputCall, MockInputRepo},
     traits::ConfirmPrompt,
+    user::UserInputError,
 };
 
 impl ConfirmPrompt for MockInputRepo {
-    type Error = Infallible;
-
-    fn confirm(&self, msg: &str) -> Result<bool, Infallible> {
+    fn confirm(&self, msg: &str) -> Result<bool, UserInputError> {
         self.history.borrow_mut().push(MockInputCall::Confirm {
             msg: msg.to_string(),
         });

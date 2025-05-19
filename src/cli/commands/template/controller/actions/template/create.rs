@@ -3,7 +3,7 @@ use crate::{
     template::{models::Template, TemplateController, TemplateError},
 };
 
-impl TemplateController {
+impl<'c> TemplateController<'c> {
     pub fn create_template(
         &self,
         template: &Template,

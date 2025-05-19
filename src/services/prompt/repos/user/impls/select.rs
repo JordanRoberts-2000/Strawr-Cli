@@ -1,5 +1,3 @@
-use std::fmt::Display;
-
 use inquire::{
     ui::{Color, RenderConfig, StyleSheet},
     InquireError, Select,
@@ -18,13 +16,7 @@ fn render_config<'a>() -> RenderConfig<'a> {
 }
 
 impl SelectPrompt for UserInputRepo {
-    type Error = UserInputError;
-
-    fn select<T: Display + Clone>(
-        &self,
-        options: &[T],
-        msg: &str,
-    ) -> Result<String, UserInputError> {
+    fn select(&self, options: &[String], msg: &str) -> Result<String, UserInputError> {
         let prompt = Select::new(msg, options.to_vec())
             .without_filtering()
             .without_help_message()

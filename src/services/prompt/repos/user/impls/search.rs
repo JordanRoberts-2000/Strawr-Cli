@@ -16,8 +16,6 @@ fn render_config<'a>() -> RenderConfig<'a> {
 }
 
 impl SearchPrompt for UserInputRepo {
-    type Error = UserInputError;
-
     fn search(&self, options: &[String], msg: &str) -> Result<String, UserInputError> {
         let prompt = Select::new(msg, options.to_vec())
             .without_help_message()

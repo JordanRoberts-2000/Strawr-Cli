@@ -1,14 +1,11 @@
-use std::convert::Infallible;
-
 use crate::services::prompt::{
     mock::{MockInput, MockInputCall, MockInputRepo},
     traits::SearchPrompt,
+    user::UserInputError,
 };
 
 impl SearchPrompt for MockInputRepo {
-    type Error = Infallible;
-
-    fn search(&self, options: &[String], msg: &str) -> Result<String, Infallible> {
+    fn search(&self, options: &[String], msg: &str) -> Result<String, UserInputError> {
         self.history.borrow_mut().push(MockInputCall::Search {
             options: options.to_vec(),
             msg: msg.to_string(),

@@ -4,12 +4,12 @@ use crate::template::{
     TemplateController, TemplateError,
 };
 
-impl TemplateController {
-    pub fn resolve_template<'a>(
-        &'a self,
+impl<'a> TemplateController<'a> {
+    pub fn resolve_template(
+        &self,
         template_arg: &ParsedTemplateInput,
         variant_arg: &Option<Option<ValidVariantName>>,
-    ) -> Result<TemplateResolver<'a>, TemplateError> {
+    ) -> Result<TemplateResolver, TemplateError> {
         let (template, variant_suffix) = self.resolve_template_arg(&template_arg)?;
 
         if let Some(v) = variant_suffix {

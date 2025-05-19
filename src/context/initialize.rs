@@ -1,15 +1,6 @@
-use crate::{
-    prompt::{traits::CliInput, UserInput},
-    services::storage,
-    CliConfig, CliContext, CliError,
-};
+use crate::{services::storage, CliConfig, CliContext, CliError, CliService};
 
-use super::CliService;
-
-impl<P> CliContext<P>
-where
-    P: CliInput,
-{
+impl CliContext {
     pub fn initialize(debug: &bool) -> Result<Self, CliError> {
         let storage_dir = storage::initialize_storage_dir()?;
         let config = CliConfig::parse(&storage_dir)?;
@@ -19,7 +10,7 @@ where
             debug: *debug,
             storage_dir,
             config,
-            service: CliService<P> { prompt: P },
+            service: CliService::new(),
         })
     }
 }

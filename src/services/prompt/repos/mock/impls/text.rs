@@ -1,14 +1,11 @@
-use std::convert::Infallible;
-
 use crate::services::prompt::{
     mock::{MockInput, MockInputCall, MockInputRepo},
     traits::TextPrompt,
+    user::UserInputError,
 };
 
 impl TextPrompt for MockInputRepo {
-    type Error = Infallible;
-
-    fn text(&self, msg: &str) -> Result<String, Infallible> {
+    fn text(&self, msg: &str) -> Result<String, UserInputError> {
         self.history.borrow_mut().push(MockInputCall::Text {
             msg: msg.to_string(),
         });

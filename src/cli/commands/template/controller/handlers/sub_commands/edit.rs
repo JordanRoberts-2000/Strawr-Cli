@@ -3,7 +3,7 @@ use crate::{
     CliContext,
 };
 
-impl TemplateController {
+impl<'a> TemplateController<'a> {
     pub fn handle_edit_subcommand(
         &self,
         args: &EditSubcommand,

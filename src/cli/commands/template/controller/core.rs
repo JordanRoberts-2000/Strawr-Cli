@@ -1,19 +1,18 @@
 use crate::{
-    template::{constants::TEMPLATES_FOLDER_NAME, TemplateService, TemplateView},
+    template::{TemplateService, TemplateView},
     CliContext,
 };
 
-pub struct TemplateController {
+pub struct TemplateController<'a> {
     pub service: TemplateService,
-    pub view: TemplateView,
+    pub view: TemplateView<'a>,
 }
 
-impl TemplateController {
-    pub fn new(ctx: &CliContext) -> Self {
-        let templates_path = ctx.storage_dir.join(TEMPLATES_FOLDER_NAME);
+impl<'a> TemplateController<'a> {
+    pub fn new(ctx: &'a CliContext) -> Self {
         Self {
-            service: TemplateService::new(&templates_path),
-            view: TemplateView::new(&ctx.config.mute),
+            service: TemplateService::new(&ctx),
+            view: TemplateView::new(&ctx),
         }
     }
 }

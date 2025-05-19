@@ -4,7 +4,7 @@ use crate::template::{
     TemplateController, TemplateError,
 };
 
-impl TemplateController {
+impl<'c> TemplateController<'c> {
     pub fn select_variant(&self, template: &Template) -> Result<Variant, TemplateError> {
         self.service.ensure_template_exists(template)?;
 

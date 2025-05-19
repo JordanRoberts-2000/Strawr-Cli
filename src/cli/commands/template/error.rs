@@ -6,7 +6,7 @@ pub enum TemplateError {
     Io(#[from] IoError),
 
     #[error(transparent)]
-    Prompt(#[from] PromptError),
+    Prompt(#[from] PromptServiceError),
 
     #[error(transparent)]
     EditorLauncher(#[from] EditorLauncherError),

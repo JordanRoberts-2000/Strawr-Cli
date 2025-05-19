@@ -1,6 +1,6 @@
-use strawr::prompt::{traits::SelectPrompt, UserInput};
+use strawr::services::prompt::{user::UserInputRepo, PromptService};
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub enum Fruit {
     Apple,
     Banana,
@@ -12,20 +12,16 @@ impl std::fmt::Display for Fruit {
 }
 
 fn main() {
-    let fruits = vec![
-        "apple",
-        "peach",
-        "pears",
-        "plums",
-        "bananas",
-        "strawberries",
-    ];
-
     let fruits_enum = vec![Fruit::Apple, Fruit::Banana];
 
-    let input = UserInput;
-    match input.select(&fruits, "Choose a fruit:\n") {
-        Ok(input) => println!("{input}"),
+    let prompt = PromptService::new(UserInputRepo);
+    match prompt.select(&fruits_enum, "Choose a fruit:\n") {
+        Ok(input) => {
+            match input {
+                Fruit::Apple => println!("Enjoy your apple"),
+                Fruit::Banana => println!("Enjoy your banana"),
+            };
+        }
         Err(e) => eprintln!("Error: {e}"),
     };
 }

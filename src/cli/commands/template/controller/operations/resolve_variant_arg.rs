@@ -4,7 +4,7 @@ use crate::template::{
     TemplateController, TemplateError,
 };
 
-impl TemplateController {
+impl<'a> TemplateController<'a> {
     pub fn resolve_variant_arg(
         &self,
         variant_arg: &Option<ValidVariantName>,

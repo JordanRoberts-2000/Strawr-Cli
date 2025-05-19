@@ -2,7 +2,7 @@ use crate::template::{
     models::Template, types::ValidTemplateName, TemplateController, TemplateError,
 };
 
-impl TemplateController {
+impl<'c> TemplateController<'c> {
     pub fn prompt_template_name(&self) -> Result<Template, TemplateError> {
         let input = self.view.enter_template_name()?;
         let valid_template_name: ValidTemplateName =

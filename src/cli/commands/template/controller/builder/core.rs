@@ -10,7 +10,7 @@ pub struct NoInputBuilder<'c> {
     template: Option<Template>,
     variant: Option<Variant>,
     done: bool,
-    controller: &'c TemplateController,
+    controller: &'c TemplateController<'c>,
 }
 
 impl<'c> NoInputBuilder<'c> {

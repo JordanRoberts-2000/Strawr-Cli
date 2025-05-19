@@ -4,7 +4,7 @@ use crate::template::{
     TemplateController, TemplateError,
 };
 
-impl TemplateController {
+impl<'a> TemplateController<'a> {
     pub fn resolve_template_arg(
         &self,
         template_arg: &ParsedTemplateInput,

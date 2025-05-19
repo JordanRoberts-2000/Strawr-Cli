@@ -3,10 +3,14 @@ use std::{
     path::{Path, PathBuf},
 };
 
-use crate::services::{
-    editor_launcher::{traits::EditorLauncher, CliEditorLauncher, Editor},
-    errors::EditorLauncherError,
-    fs::{CliFsRepository, FsRepository},
+use crate::{
+    services::{
+        editor_launcher::{traits::EditorLauncher, CliEditorLauncher, Editor},
+        errors::EditorLauncherError,
+        fs::{CliFsRepository, FsRepository},
+    },
+    template::constants::TEMPLATES_FOLDER_NAME,
+    CliContext,
 };
 
 pub struct TemplateService {
@@ -16,9 +20,10 @@ pub struct TemplateService {
 }
 
 impl TemplateService {
-    pub fn new(templates_path: &PathBuf) -> Self {
+    pub fn new(ctx: &CliContext) -> Self {
+        let templates_path = ctx.storage_dir.join(TEMPLATES_FOLDER_NAME);
         Self {
-            templates_path: templates_path.clone(),
+            templates_path,
             editor_launcher: OnceCell::new(),
             fs: Box::new(CliFsRepository),
         }

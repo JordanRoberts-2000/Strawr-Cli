@@ -4,7 +4,7 @@ use crate::template::{
 };
 
 pub struct TemplateResolver<'c> {
-    pub(super) controller: &'c TemplateController,
+    pub(super) controller: &'c TemplateController<'c>,
     pub(super) template: Template,
     pub(super) variant: Option<Variant>,
 }

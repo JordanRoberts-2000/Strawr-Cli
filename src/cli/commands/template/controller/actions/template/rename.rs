@@ -1,6 +1,6 @@
 use crate::template::{models::Template, TemplateController, TemplateError};
 
-impl TemplateController {
+impl<'c> TemplateController<'c> {
     pub fn rename_template(&self, template: &Template) -> Result<(), TemplateError> {
         self.service.ensure_template_exists(&template)?;
 

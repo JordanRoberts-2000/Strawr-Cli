@@ -1,4 +1,4 @@
-use strawr::services::prompt::{traits::ConfirmPrompt, user::UserInputRepo, PromptService};
+use strawr::services::prompt::{user::UserInputRepo, PromptService};
 
 fn main() {
     let prompt = PromptService::new(UserInputRepo);

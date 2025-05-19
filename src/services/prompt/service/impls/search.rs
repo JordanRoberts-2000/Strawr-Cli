@@ -10,10 +10,7 @@ impl PromptService {
     ) -> Result<T, PromptServiceError> {
         let str_options: Vec<String> = options.iter().map(|opt| opt.to_string()).collect();
 
-        let input = self
-            .repo
-            .search(&str_options, msg)
-            .map_err(|e| PromptServiceError::RepoSearch(Box::new(e)))?;
+        let input = self.repo.search(&str_options, msg)?;
 
         let idx = str_options
             .iter()

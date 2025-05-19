@@ -1,3 +1,4 @@
+quiet = false # suppress non-error output
 default_editor = "vscode" # "vscode", "zed", "nano", "vim"
 
 [grab]

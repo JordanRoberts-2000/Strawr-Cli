@@ -6,8 +6,6 @@ use crate::services::prompt::{
 };
 
 impl ConfirmPrompt for UserInputRepo {
-    type Error = UserInputError;
-
     fn confirm(&self, msg: &str) -> Result<bool, UserInputError> {
         let prompt = Confirm::new(msg).with_default(false).prompt();
 

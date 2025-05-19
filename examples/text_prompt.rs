@@ -1,8 +1,8 @@
-use strawr::prompt::{traits::TextPrompt, UserInput};
+use strawr::services::prompt::{user::UserInputRepo, PromptService};
 
 fn main() {
-    let input = UserInput;
-    match input.text("Please enter some text:") {
+    let prompt = PromptService::new(UserInputRepo);
+    match prompt.text("Please enter some text:") {
         Ok(input) => println!("Input: '{input}'"),
         Err(e) => eprintln!("Error: {e}"),
     }

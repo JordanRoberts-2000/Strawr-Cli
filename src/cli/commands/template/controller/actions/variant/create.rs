@@ -3,7 +3,7 @@ use crate::{
     template::{models::Variant, TemplateController, TemplateError},
 };
 
-impl TemplateController {
+impl<'c> TemplateController<'c> {
     pub fn create_variant(&self, variant: &Variant, editor: &Editor) -> Result<(), TemplateError> {
         self.service.ensure_template_exists(&variant.template)?;
         self.service.ensure_variant_does_not_exist(variant)?;

@@ -9,7 +9,7 @@ mod error;
 pub mod services;
 mod utils;
 
-pub(crate) use {cli::commands::template, context::CliService, core::*};
+pub(crate) use {cli::commands::template, core::*, services::cli::CliService};
 pub use {
     cli::{cli::Cli, commands},
     config::CliConfig,

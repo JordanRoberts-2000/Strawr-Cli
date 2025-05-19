@@ -1,20 +1,17 @@
-use strawr::prompt::{traits::SearchPrompt, UserInput};
+use strawr::services::prompt::{user::UserInputRepo, PromptService};
 
 fn main() {
-    let fruits: Vec<String> = vec![
+    let fruits = vec![
         "apple",
         "peach",
         "pears",
         "plums",
         "bananas",
         "strawberries",
-    ]
-    .iter()
-    .map(|s| s.to_string())
-    .collect();
+    ];
 
-    let input = UserInput;
-    match input.search(&fruits, "Choose a fruit:\n") {
+    let prompt = PromptService::new(UserInputRepo);
+    match prompt.search(&fruits, "Choose a fruit:\n") {
         Ok(input) => println!("{input}"),
         Err(e) => eprintln!("Error: {e}"),
     };

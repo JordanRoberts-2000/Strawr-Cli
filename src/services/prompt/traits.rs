@@ -1,19 +1,17 @@
+use super::user::UserInputError;
+
 pub trait ConfirmPrompt {
-    type Error;
-    fn confirm(&self, msg: &str) -> Result<bool, Self::Error>;
+    fn confirm(&self, msg: &str) -> Result<bool, UserInputError>;
 }
 
 pub trait SelectPrompt {
-    type Error;
-    fn select(&self, options: &[String], msg: &str) -> Result<String, Self::Error>;
+    fn select(&self, options: &[String], msg: &str) -> Result<String, UserInputError>;
 }
 
 pub trait SearchPrompt {
-    type Error;
-    fn search(&self, options: &[String], msg: &str) -> Result<String, Self::Error>;
+    fn search(&self, options: &[String], msg: &str) -> Result<String, UserInputError>;
 }
 
 pub trait TextPrompt {
-    type Error;
-    fn text(&self, msg: &str) -> Result<String, Self::Error>;
+    fn text(&self, msg: &str) -> Result<String, UserInputError>;
 }

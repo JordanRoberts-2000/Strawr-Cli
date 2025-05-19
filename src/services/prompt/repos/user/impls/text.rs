@@ -6,8 +6,6 @@ use crate::services::prompt::{
 };
 
 impl TextPrompt for UserInputRepo {
-    type Error = UserInputError;
-
     fn text(&self, msg: &str) -> Result<String, UserInputError> {
         match Text::new(msg).prompt() {
             Ok(input) => Ok(input),

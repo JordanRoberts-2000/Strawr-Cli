@@ -5,6 +5,7 @@ pub enum MockInput {
     Search(String),
 }
 
+#[derive(Debug)]
 pub enum MockInputCall {
     Confirm { msg: String },
     Text { msg: String },
