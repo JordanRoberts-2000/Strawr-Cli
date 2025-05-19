@@ -1,4 +1,4 @@
-use strawr::services::prompt::{user::UserInputRepo, PromptService};
+use strawr::services::prompt::PromptService;
 
 fn main() {
     let fruits = vec![
@@ -10,7 +10,7 @@ fn main() {
         "strawberries",
     ];
 
-    let prompt = PromptService::new(UserInputRepo);
+    let prompt = PromptService::new();
     match prompt.search(&fruits, "Choose a fruit:\n") {
         Ok(input) => println!("{input}"),
         Err(e) => eprintln!("Error: {e}"),

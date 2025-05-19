@@ -1,6 +1,7 @@
 pub enum MockInput {
     Confirm(bool),
     Text(String),
+    Password(String),
     Select(String),
     Search(String),
     Checklist(Vec<String>),
@@ -12,6 +13,9 @@ pub enum MockInputCall {
         msg: String,
     },
     Text {
+        msg: String,
+    },
+    Password {
         msg: String,
     },
     Select {

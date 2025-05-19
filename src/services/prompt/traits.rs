@@ -1,3 +1,5 @@
+use inquire::PasswordDisplayMode;
+
 use super::user::UserInputError;
 
 pub trait ConfirmPrompt {
@@ -23,4 +25,12 @@ pub trait MultiSelectPrompt {
 
 pub trait TextPrompt {
     fn text(&self, msg: &str) -> Result<String, UserInputError>;
+}
+
+pub trait PasswordPrompt {
+    fn password(
+        &self,
+        display_mode: &PasswordDisplayMode,
+        msg: &str,
+    ) -> Result<String, UserInputError>;
 }

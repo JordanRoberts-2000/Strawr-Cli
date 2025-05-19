@@ -9,7 +9,7 @@ impl<'a> TemplateView<'a> {
     pub fn new(ctx: &'a CliContext) -> Self {
         Self {
             prompt: ctx.service.prompt(),
-            muted: ctx.config.quiet,
+            muted: ctx.config.quiet_mode,
         }
     }
 }

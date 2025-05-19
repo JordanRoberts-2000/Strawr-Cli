@@ -1,7 +1,7 @@
-use strawr::services::prompt::{user::UserInputRepo, PromptService};
+use strawr::services::prompt::PromptService;
 
 fn main() {
-    let prompt = PromptService::new(UserInputRepo);
+    let prompt = PromptService::new();
     match prompt.multi_select_with_defaults(
         &vec!["option1", "option2"],
         &[1],

@@ -1,4 +1,4 @@
-use strawr::services::prompt::{user::UserInputRepo, PromptService};
+use strawr::services::prompt::PromptService;
 
 #[derive(Debug, Clone)]
 pub enum Fruit {
@@ -14,7 +14,7 @@ impl std::fmt::Display for Fruit {
 fn main() {
     let fruits_enum = vec![Fruit::Apple, Fruit::Banana];
 
-    let prompt = PromptService::new(UserInputRepo);
+    let prompt = PromptService::new();
     match prompt.select(&fruits_enum, "Choose a fruit:\n") {
         Ok(input) => {
             match input {

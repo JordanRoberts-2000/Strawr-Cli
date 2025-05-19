@@ -1,3 +1,4 @@
+mod enums;
 mod error;
 mod service;
 pub mod traits;
@@ -7,6 +8,7 @@ mod repos {
 }
 
 pub use {
+    enums::PasswordDisplay,
     error::PromptServiceError,
     repos::{mock, user},
     service::core::PromptService,
