@@ -1,8 +1,14 @@
 use crate::services::prompt::traits::*;
 
-pub trait PromptRepo: ConfirmPrompt + TextPrompt + SelectPrompt + SearchPrompt {}
+pub trait PromptRepo:
+    ConfirmPrompt + TextPrompt + SelectPrompt + SearchPrompt + MultiSelectPrompt
+{
+}
 
-impl<T> PromptRepo for T where T: ConfirmPrompt + TextPrompt + SelectPrompt + SearchPrompt {}
+impl<T> PromptRepo for T where
+    T: ConfirmPrompt + TextPrompt + SelectPrompt + SearchPrompt + MultiSelectPrompt
+{
+}
 
 pub struct PromptService {
     pub(super) repo: Box<dyn PromptRepo>,
