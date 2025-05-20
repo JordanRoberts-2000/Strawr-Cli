@@ -1,39 +1,33 @@
-use std::{
-    cell::OnceCell,
-    path::{Path, PathBuf},
-};
+use std::path::PathBuf;
 
 use crate::{
     services::{
-        editor_launcher::{traits::EditorLauncher, CliEditorLauncher, Editor},
-        errors::EditorLauncherError,
+        cli::traits::HasEditorLauncherService,
         fs::{CliFsRepository, FsRepository},
     },
     template::constants::TEMPLATES_FOLDER_NAME,
-    CliContext,
+    CliContext, CliService,
 };
 
-pub struct TemplateService {
+pub struct TemplateService<'ctx> {
     pub templates_path: PathBuf,
-    pub editor_launcher: OnceCell<Box<dyn EditorLauncher>>,
+    pub cli_svc: &'ctx CliService,
     pub fs: Box<dyn FsRepository>,
 }
 
-impl TemplateService {
-    pub fn new(ctx: &CliContext) -> Self {
+impl<'ctx> TemplateService<'ctx> {
+    pub fn new(ctx: &'ctx CliContext) -> Self {
         let templates_path = ctx.storage_dir.join(TEMPLATES_FOLDER_NAME);
         Self {
             templates_path,
-            editor_launcher: OnceCell::new(),
+            cli_svc: &ctx.service,
             fs: Box::new(CliFsRepository),
         }
     }
+}
 
-    pub fn launch_editor(&self, editor: &Editor, path: &Path) -> Result<(), EditorLauncherError> {
-        self.editor_launcher
-            .get_or_init(|| Box::new(CliEditorLauncher))
-            .open(editor, &path)?;
-
-        Ok(())
+impl<'ctx> HasEditorLauncherService for TemplateService<'ctx> {
+    fn cli(&self) -> &CliService {
+        self.cli_svc
     }
 }

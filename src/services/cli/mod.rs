@@ -1,21 +1,22 @@
-use std::{cell::OnceCell, path::Path};
+use std::cell::OnceCell;
 
 use crate::{
     services::{
-        clipboard::{ClipboardError, ClipboardService},
-        editor_launcher::{traits::EditorLauncher, CliEditorLauncher, Editor},
-        errors::EditorLauncherError,
+        clipboard::ClipboardService,
+        editor_launcher::EditorLauncherService,
         prompt::{PasswordDisplay, PromptService},
     },
     CliConfig,
 };
+
+pub mod traits;
 
 pub struct CliService {
     password_input_display_mode: PasswordDisplay,
     pub prompt: OnceCell<PromptService>,
     pub clipboard: OnceCell<ClipboardService>,
     // pub keychain: Box<dyn Keychain>,
-    pub editor_launcher: OnceCell<Box<dyn EditorLauncher>>,
+    pub editor_launcher: OnceCell<EditorLauncherService>,
 }
 
 impl CliService {
@@ -28,7 +29,7 @@ impl CliService {
         }
     }
 
-    pub fn prompt(&self) -> &PromptService {
+    pub fn init_prompt(&self) -> &PromptService {
         self.prompt.get_or_init(|| {
             let mut service = PromptService::new();
             service.set_password_mode(&self.password_input_display_mode.into());
@@ -36,19 +37,12 @@ impl CliService {
         })
     }
 
-    pub fn clipboard(&self, text: &str) -> Result<(), ClipboardError> {
-        self.clipboard
-            .get_or_init(|| ClipboardService::new())
-            .save_to_clipboard(text)?;
-
-        Ok(())
+    pub fn init_clipboard(&self) -> &ClipboardService {
+        self.clipboard.get_or_init(|| ClipboardService::new())
     }
 
-    pub fn launch_editor(&self, editor: &Editor, path: &Path) -> Result<(), EditorLauncherError> {
+    pub fn init_launch_editor(&self) -> &EditorLauncherService {
         self.editor_launcher
-            .get_or_init(|| Box::new(CliEditorLauncher))
-            .open(editor, &path)?;
-
-        Ok(())
+            .get_or_init(|| EditorLauncherService::new())
     }
 }

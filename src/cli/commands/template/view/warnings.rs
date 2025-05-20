@@ -1,11 +1,14 @@
-use crate::template::{TemplateError, TemplateView};
+use crate::{
+    services::cli::traits::HasPromptService,
+    template::{TemplateError, TemplateView},
+};
 
 use colored::*;
 
 impl<'a> TemplateView<'a> {
     pub fn output_not_empty_warning(&self) -> Result<bool, TemplateError> {
         let msg = "The output directory is not empty. Do you still want to inject template files?";
-        let input = self.prompt.confirm(msg)?;
+        let input = self.prompt().confirm(msg)?;
 
         Ok(input)
     }

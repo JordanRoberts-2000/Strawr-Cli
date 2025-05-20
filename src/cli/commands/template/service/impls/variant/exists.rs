@@ -1,6 +1,6 @@
 use crate::template::{models::Variant, service::TemplateService, TemplateError};
 
-impl TemplateService {
+impl<'svc> TemplateService<'svc> {
     pub fn ensure_variant_exists(&self, variant: &Variant) -> Result<(), TemplateError> {
         self.ensure_template_exists(&variant.template)?;
 

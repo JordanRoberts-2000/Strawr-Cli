@@ -1,9 +1,15 @@
-mod launcher {
-    pub(crate) mod cli;
-    pub(crate) mod test;
+mod repos {
+    pub mod mock;
+    pub mod user;
 }
 mod enums;
-pub mod error;
-pub(crate) mod traits;
+mod error;
+mod service;
+pub mod traits;
 
-pub(crate) use {enums::Editor, error::EditorLauncherError, launcher::cli::CliEditorLauncher};
+pub use {
+    enums::Editor,
+    error::EditorLauncherError,
+    repos::{mock::MockEditorLauncherRepo, user::EditorLauncherRepo},
+    service::EditorLauncherService,
+};

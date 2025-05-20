@@ -2,9 +2,9 @@ use crate::services::editor_launcher::{traits::EditorLauncher, Editor, EditorLau
 
 use std::{path::Path, process::Command};
 
-pub struct CliEditorLauncher;
+pub struct EditorLauncherRepo;
 
-impl EditorLauncher for CliEditorLauncher {
+impl EditorLauncher for EditorLauncherRepo {
     fn open(&self, editor: &Editor, path: &Path) -> Result<(), EditorLauncherError> {
         log::info!("Opening {:?} in {:?}", editor, path);
 

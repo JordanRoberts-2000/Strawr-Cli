@@ -1,15 +1,21 @@
-use crate::{services::prompt::PromptService, CliContext};
+use crate::{services::cli::traits::HasPromptService, CliContext, CliService};
 
-pub struct TemplateView<'a> {
-    pub prompt: &'a PromptService,
+pub struct TemplateView<'ctx> {
+    pub cli_svc: &'ctx CliService,
     pub muted: bool,
 }
 
-impl<'a> TemplateView<'a> {
-    pub fn new(ctx: &'a CliContext) -> Self {
+impl<'ctx> TemplateView<'ctx> {
+    pub fn new(ctx: &'ctx CliContext) -> Self {
         Self {
-            prompt: ctx.service.prompt(),
+            cli_svc: &ctx.service,
             muted: ctx.config.quiet_mode,
         }
+    }
+}
+
+impl<'ctx> HasPromptService for TemplateView<'ctx> {
+    fn cli(&self) -> &CliService {
+        self.cli_svc
     }
 }

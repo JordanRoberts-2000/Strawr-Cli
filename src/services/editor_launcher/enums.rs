@@ -1,4 +1,4 @@
-#[derive(Debug, Clone, clap::ValueEnum, serde::Deserialize)]
+#[derive(Debug, Clone, clap::ValueEnum, serde::Deserialize, PartialEq)]
 #[serde(rename_all = "lowercase")]
 pub enum Editor {
     #[clap(name = "vscode", alias = "vs-code", alias = "vs", alias = "v")]

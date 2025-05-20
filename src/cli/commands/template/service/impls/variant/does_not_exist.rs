@@ -1,6 +1,6 @@
 use crate::template::{models::Variant, service::TemplateService, TemplateError};
 
-impl TemplateService {
+impl<'svc> TemplateService<'svc> {
     pub fn ensure_variant_does_not_exist(&self, variant: &Variant) -> Result<(), TemplateError> {
         if variant.path.exists() {
             return Err(TemplateError::VariantAlreadyExists {

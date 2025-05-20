@@ -1,5 +1,5 @@
 use crate::{
-    services::editor_launcher::Editor,
+    services::{cli::traits::HasEditorLauncherService, editor_launcher::Editor},
     template::{models::Variant, TemplateController, TemplateError},
 };
 

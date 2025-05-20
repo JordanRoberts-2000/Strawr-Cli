@@ -1,6 +1,6 @@
 use crate::template::{models::Template, TemplateError, TemplateService};
 
-impl TemplateService {
+impl<'svc> TemplateService<'svc> {
     pub fn rename_template(
         &self,
         template: &Template,

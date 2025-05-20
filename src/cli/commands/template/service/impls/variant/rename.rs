@@ -1,6 +1,6 @@
 use crate::template::{models::Variant, TemplateError, TemplateService};
 
-impl TemplateService {
+impl<'svc> TemplateService<'svc> {
     pub fn rename_variant(
         &self,
         variant: &Variant,

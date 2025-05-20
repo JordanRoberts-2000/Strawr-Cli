@@ -3,13 +3,13 @@ use crate::{
     CliContext,
 };
 
-pub struct TemplateController<'a> {
-    pub service: TemplateService,
-    pub view: TemplateView<'a>,
+pub struct TemplateController<'ctx> {
+    pub service: TemplateService<'ctx>,
+    pub view: TemplateView<'ctx>,
 }
 
-impl<'a> TemplateController<'a> {
-    pub fn new(ctx: &'a CliContext) -> Self {
+impl<'ctx> TemplateController<'ctx> {
+    pub fn new(ctx: &'ctx CliContext) -> Self {
         Self {
             service: TemplateService::new(&ctx),
             view: TemplateView::new(&ctx),
