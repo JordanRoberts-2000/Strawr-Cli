@@ -1,4 +1,4 @@
-pub mod fs;
+pub(crate) mod fs;
 pub mod keyring;
 pub mod logger;
 pub mod spinner;

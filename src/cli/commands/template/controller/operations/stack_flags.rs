@@ -1,4 +1,5 @@
 use crate::{
+    error::IoError,
     template::{TemplateCommand, TemplateController, TemplateError},
     CliContext,
 };
@@ -20,7 +21,8 @@ impl<'a> TemplateController<'a> {
 
                 let target_dir = args.output.join(folder_title);
                 if !target_dir.exists() {
-                    self.service.fs.create_dir_all(&target_dir)?;
+                    std::fs::create_dir_all(&target_dir)
+                        .map_err(|e| IoError::CreateDir(e, target_dir.to_path_buf()))?;
                 }
 
                 match variant {

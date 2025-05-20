@@ -1,7 +1,6 @@
 pub(crate) mod cli;
 pub mod clipboard;
 pub mod editor_launcher;
-pub(crate) mod fs;
 pub mod prompt;
 pub(crate) mod storage;
 

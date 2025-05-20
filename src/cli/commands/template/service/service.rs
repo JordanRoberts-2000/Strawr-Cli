@@ -1,18 +1,13 @@
 use std::path::PathBuf;
 
 use crate::{
-    services::{
-        cli::traits::HasEditorLauncherService,
-        fs::{CliFsRepository, FsRepository},
-    },
-    template::constants::TEMPLATES_FOLDER_NAME,
+    services::cli::traits::HasEditorLauncherService, template::constants::TEMPLATES_FOLDER_NAME,
     CliContext, CliService,
 };
 
 pub struct TemplateService<'ctx> {
     pub templates_path: PathBuf,
     pub cli_svc: &'ctx CliService,
-    pub fs: Box<dyn FsRepository>,
 }
 
 impl<'ctx> TemplateService<'ctx> {
@@ -21,7 +16,6 @@ impl<'ctx> TemplateService<'ctx> {
         Self {
             templates_path,
             cli_svc: &ctx.service,
-            fs: Box::new(CliFsRepository),
         }
     }
 }

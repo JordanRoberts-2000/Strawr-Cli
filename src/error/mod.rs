@@ -1,7 +1,7 @@
-mod cli_error;
+mod cli;
 mod io;
 mod parse;
 pub(crate) mod utils;
 
-pub use cli_error::CliError;
+pub use cli::CliError;
 pub(crate) use {io::IoError, parse::ParseError};

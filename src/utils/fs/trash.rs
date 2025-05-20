@@ -1,13 +1,28 @@
-use std::{fs, path::Path};
+use std::path::Path;
 
-pub fn trash(path: &Path) -> Result<(), std::io::Error> {
+use crate::error::IoError;
+
+pub fn trash(path: impl AsRef<Path>) -> Result<(), IoError> {
+    let path = path.as_ref();
+
+    if !path.exists() {
+        return Err(IoError::PathNotFound(path.to_path_buf()));
+    }
+
     if let Err(trash_err) = trash::delete(path) {
         log::warn!(
-            "Failed to delete file {:?} via trash::delete: {:?}. Falling back to fs::remove_file.",
-            path,
+            "Failed to trash '{}'. Falling back to permanent delete. err: {:?}",
+            path.display(),
             trash_err
         );
-        fs::remove_file(path)?;
+
+        let md = std::fs::metadata(path).map_err(|e| IoError::Stat(e, path.to_path_buf()))?;
+
+        if md.is_dir() {
+            std::fs::remove_dir_all(path).map_err(|e| IoError::DeleteDir(e, path.to_path_buf()))?;
+        } else {
+            std::fs::remove_file(path).map_err(|e| IoError::DeleteFile(e, path.to_path_buf()))?;
+        }
     }
 
     Ok(())

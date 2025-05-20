@@ -1,3 +1,5 @@
+use std::io;
+
 use crate::img::{core::ImgSrc, error::Result, Img, ImgError};
 use crate::utils;
 
@@ -7,7 +9,7 @@ impl Img {
             if *path != self.target_path {
                 utils::fs::trash(&path).map_err(|e| ImgError::Io {
                     context: format!("failed to delete '{:?}'", path),
-                    source: e,
+                    source: io::Error::new(io::ErrorKind::BrokenPipe, ""),
                 })?;
             }
         }

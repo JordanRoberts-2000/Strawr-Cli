@@ -8,6 +8,9 @@ pub enum IoError {
     #[error("Failed to delete directory at `{1}`: {0}")]
     DeleteDir(#[source] io::Error, PathBuf),
 
+    #[error("Failed to delete file at `{1}`: {0}")]
+    DeleteFile(#[source] io::Error, PathBuf),
+
     #[error("Failed to read directory at `{1}`: {0}")]
     ReadDir(#[source] io::Error, PathBuf),
 
@@ -18,7 +21,7 @@ pub enum IoError {
     GetCurrentDir(std::io::Error),
 
     #[error("Failed to copy directory contents from `{1}` to `{2}`: {0}")]
-    CopyDirContents(#[source] io::Error, PathBuf, PathBuf),
+    Copy(#[source] io::Error, PathBuf, PathBuf),
 
     #[error("Failed to write to file at `{1}`: {0}")]
     WriteFile(#[source] io::Error, PathBuf),
@@ -34,4 +37,7 @@ pub enum IoError {
 
     #[error("path is not a file: {0}")]
     NotAFile(PathBuf),
+
+    #[error("Failed to stat path `{1}`: {0}")]
+    Stat(#[source] io::Error, PathBuf),
 }
