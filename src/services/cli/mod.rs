@@ -1,9 +1,11 @@
 use std::cell::OnceCell;
 
 use crate::{
+    constants::KEYRING_SERVICE,
     services::{
         clipboard::ClipboardService,
         editor_launcher::EditorLauncherService,
+        keyring::KeyringService,
         prompt::{PasswordDisplay, PromptService},
     },
     CliConfig,
@@ -15,7 +17,7 @@ pub struct CliService {
     password_input_display_mode: PasswordDisplay,
     pub prompt: OnceCell<PromptService>,
     pub clipboard: OnceCell<ClipboardService>,
-    // pub keychain: Box<dyn Keychain>,
+    pub keyring: OnceCell<KeyringService>,
     pub editor_launcher: OnceCell<EditorLauncherService>,
 }
 
@@ -25,8 +27,17 @@ impl CliService {
             password_input_display_mode: config.password_input_display_mode,
             prompt: OnceCell::new(),
             clipboard: OnceCell::new(),
+            keyring: OnceCell::new(),
             editor_launcher: OnceCell::new(),
         }
+    }
+
+    pub fn init_keyring(&self) -> &KeyringService {
+        self.keyring.get_or_init(|| {
+            let mut service = KeyringService::new(KEYRING_SERVICE);
+            service.set_password_mode(&self.password_input_display_mode.into());
+            service
+        })
     }
 
     pub fn init_prompt(&self) -> &PromptService {
