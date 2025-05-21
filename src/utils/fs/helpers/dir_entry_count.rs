@@ -16,3 +16,64 @@ pub fn dir_entry_count(path: impl AsRef<Path>) -> Result<usize, IoError> {
 
     Ok(count)
 }
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+    use assert_fs::prelude::*;
+
+    #[test]
+    fn returns_zero_for_empty_directory() {
+        let temp = assert_fs::TempDir::new().unwrap();
+        let dir = temp.path();
+
+        assert_eq!(dir_entry_count(dir).unwrap(), 0);
+    }
+
+    #[test]
+    fn counts_files_and_subdirectories() {
+        let temp = assert_fs::TempDir::new().unwrap();
+        let dir = temp.child("my_dir");
+        dir.create_dir_all().unwrap();
+
+        // Create two files and one subdirectory inside `my_dir`
+        let file1 = dir.child("a.txt");
+        let file2 = dir.child("b.txt");
+        file1.touch().unwrap();
+        file2.touch().unwrap();
+
+        let sub = dir.child("nested");
+        sub.create_dir_all().unwrap();
+
+        assert_eq!(dir_entry_count(dir.path()).unwrap(), 3);
+    }
+
+    #[test]
+    fn errors_when_path_missing() {
+        let temp = assert_fs::TempDir::new().unwrap();
+        let missing = temp.child("does_not_exist");
+
+        let err = dir_entry_count(missing.path()).unwrap_err();
+        match err {
+            IoError::PathNotFound(p) => {
+                assert_eq!(p, missing.path().to_path_buf());
+            }
+            other => panic!("expected PathNotFound, got {:?}", other),
+        }
+    }
+
+    #[test]
+    fn errors_when_path_is_file() {
+        let temp = assert_fs::TempDir::new().unwrap();
+        let file = temp.child("foo.txt");
+        file.touch().unwrap();
+
+        let err = dir_entry_count(file.path()).unwrap_err();
+        match err {
+            IoError::NotADirectory(p) => {
+                assert_eq!(p, file.path().to_path_buf());
+            }
+            other => panic!("expected NotADirectory, got {:?}", other),
+        }
+    }
+}

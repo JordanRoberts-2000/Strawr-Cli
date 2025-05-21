@@ -1,7 +1,6 @@
 use std::fs;
 
 use strawr::CliContext;
-use tempfile::tempdir;
 
 // #[test]
 // fn test_template_command_with_no_args_empty_templates_user_declines() {

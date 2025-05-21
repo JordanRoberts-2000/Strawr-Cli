@@ -36,104 +36,140 @@ pub fn copy_dir_contents(src: impl AsRef<Path>, dst: impl AsRef<Path>) -> Result
     Ok(())
 }
 
-// #[cfg(test)]
-// mod tests {
-//     use std::{io::Read, path::PathBuf};
+#[cfg(test)]
+mod tests {
+    use super::*;
+    use assert_fs::prelude::*;
+    use predicates::prelude::*;
 
-//     use super::*;
-//     use tempfile::tempdir;
+    #[test]
+    fn copies_empty_directory_without_error() {
+        let temp = assert_fs::TempDir::new().unwrap();
+        let src = temp.child("src");
+        let dst = temp.child("dst");
+        src.create_dir_all().unwrap();
+        dst.create_dir_all().unwrap();
 
-//     #[test]
-//     fn test_copy_dir_contents() -> std::io::Result<()> {
-//         // Create a temporary source directory
-//         let src_dir = tempdir()?;
-//         let src_path = src_dir.path();
+        // Should succeed and leave dst empty
+        copy_dir_contents(src.path(), dst.path()).unwrap();
+        let entries: Vec<_> = fs::read_dir(dst.path()).unwrap().collect();
+        assert!(entries.is_empty(), "dst directory should still be empty");
+    }
 
-//         // Create some files in the source directory
-//         let file1_path = src_path.join("file1.txt");
-//         let file2_path = src_path.join("file2.txt");
-//         fs::write(&file1_path, "Hello")?;
-//         fs::write(&file2_path, "World")?;
+    #[test]
+    fn copies_files_and_subdirectories() {
+        let temp = assert_fs::TempDir::new().unwrap();
+        let src = temp.child("src");
+        let dst = temp.child("dst");
+        src.create_dir_all().unwrap();
+        dst.create_dir_all().unwrap();
 
-//         // Create a subdirectory with a file
-//         let subdir_path = src_path.join("subdir");
-//         fs::create_dir(&subdir_path)?;
-//         let subfile_path = subdir_path.join("subfile.txt");
-//         fs::write(&subfile_path, "Subdata")?;
+        // Set up a file and a nested directory in src
+        let f1 = src.child("hello.txt");
+        f1.write_str("world").unwrap();
+        let nested = src.child("nested");
+        nested.create_dir_all().unwrap();
+        let f2 = nested.child("foo.txt");
+        f2.write_str("bar").unwrap();
 
-//         // Create a temporary destination directory
-//         let dst_dir = tempdir()?;
-//         let dst_path = dst_dir.path();
+        // Perform the copy
+        copy_dir_contents(src.path(), dst.path()).unwrap();
 
-//         // Perform the copy
-//         copy_dir_contents(src_path, dst_path)?;
+        // Assert top-level file copied
+        let copied = dst.child("hello.txt");
+        copied.assert(predicate::path::exists());
+        let content = fs::read_to_string(copied.path()).unwrap();
+        assert_eq!(content, "world");
 
-//         // Verify that the files were copied
-//         let dst_file1 = dst_path.join("file1.txt");
-//         let dst_file2 = dst_path.join("file2.txt");
-//         let dst_subfile = dst_path.join("subdir").join("subfile.txt");
+        // Assert nested directory and file copied
+        let nested_dst = dst.child("nested");
+        nested_dst.assert(predicate::path::exists());
+        nested_dst.assert(predicate::path::is_dir());
+        let copied_nested = nested_dst.child("foo.txt");
+        copied_nested.assert(predicate::path::exists());
+        let content2 = fs::read_to_string(copied_nested.path()).unwrap();
+        assert_eq!(content2, "bar");
+    }
 
-//         assert!(dst_file1.exists());
-//         assert!(dst_file2.exists());
-//         assert!(dst_subfile.exists());
+    #[test]
+    fn test_copy_overwrites_existing_files() {
+        let temp = assert_fs::TempDir::new().unwrap();
+        let src = temp.child("src");
+        let dst = temp.child("dst");
+        src.create_dir_all().unwrap();
+        dst.create_dir_all().unwrap();
 
-//         // read and verify content
-//         let mut buf = String::new();
-//         fs::File::open(&dst_file1)?.read_to_string(&mut buf)?;
-//         assert_eq!(buf, "Hello");
+        // Create a file in src with "new content"
+        let src_file = src.child("foo.txt");
+        src_file.write_str("new content").unwrap();
 
-//         buf.clear();
-//         fs::File::open(&dst_file2)?.read_to_string(&mut buf)?;
-//         assert_eq!(buf, "World");
+        // Create a file of the same name in dst with "old content"
+        let dst_file = dst.child("foo.txt");
+        dst_file.write_str("old content").unwrap();
 
-//         buf.clear();
-//         fs::File::open(&dst_subfile)?.read_to_string(&mut buf)?;
-//         assert_eq!(buf, "Subdata");
+        // Perform the copy
+        copy_dir_contents(src.path(), dst.path()).unwrap();
 
-//         Ok(())
-//     }
+        // Assert that dst/foo.txt now contains "new content", not "old content"
+        let result = std::fs::read_to_string(dst_file.path()).unwrap();
+        assert_eq!(result, "new content");
+    }
 
-//     #[test]
-//     fn test_copy_overwrites_existing_files() -> std::io::Result<()> {
-//         let src_dir = tempdir()?;
-//         let dst_dir = tempdir()?;
+    #[test]
+    fn errors_when_src_missing() {
+        let temp = assert_fs::TempDir::new().unwrap();
+        let src = temp.child("no_src");
+        let dst = temp.child("dst");
+        dst.create_dir_all().unwrap();
 
-//         let file_name = "file.txt";
-//         let src_file = src_dir.path().join(file_name);
-//         let dst_file = dst_dir.path().join(file_name);
+        let err = copy_dir_contents(src.path(), dst.path()).unwrap_err();
+        match err {
+            IoError::PathNotFound(p) => assert_eq!(p, src.path().to_path_buf()),
+            other => panic!("expected PathNotFound for src, got {:?}", other),
+        }
+    }
 
-//         fs::write(&src_file, "new content")?;
-//         fs::write(&dst_file, "old content")?;
+    #[test]
+    fn errors_when_dst_missing() {
+        let temp = assert_fs::TempDir::new().unwrap();
+        let src = temp.child("src");
+        src.create_dir_all().unwrap();
+        let dst = temp.child("no_dst");
 
-//         copy_dir_contents(src_dir.path(), dst_dir.path())?;
+        let err = copy_dir_contents(src.path(), dst.path()).unwrap_err();
+        match err {
+            IoError::PathNotFound(p) => assert_eq!(p, dst.path().to_path_buf()),
+            other => panic!("expected PathNotFound for dst, got {:?}", other),
+        }
+    }
 
-//         let mut content = String::new();
-//         fs::File::open(&dst_file)?.read_to_string(&mut content)?;
+    #[test]
+    fn errors_when_src_is_file() {
+        let temp = assert_fs::TempDir::new().unwrap();
+        let src_file = temp.child("file.txt");
+        src_file.touch().unwrap();
+        let dst = temp.child("dst");
+        dst.create_dir_all().unwrap();
 
-//         assert_eq!(content, "new content");
+        let err = copy_dir_contents(src_file.path(), dst.path()).unwrap_err();
+        match err {
+            IoError::NotADirectory(p) => assert_eq!(p, src_file.path().to_path_buf()),
+            other => panic!("expected NotADirectory for src, got {:?}", other),
+        }
+    }
 
-//         Ok(())
-//     }
+    #[test]
+    fn errors_when_dst_is_file() {
+        let temp = assert_fs::TempDir::new().unwrap();
+        let src = temp.child("src");
+        src.create_dir_all().unwrap();
+        let dst_file = temp.child("dst.txt");
+        dst_file.touch().unwrap();
 
-//     #[test]
-//     fn test_copy_from_empty_directory() -> std::io::Result<()> {
-//         let src_dir = tempdir()?;
-//         let dst_dir = tempdir()?;
-
-//         copy_dir_contents(src_dir.path(), dst_dir.path())?;
-
-//         assert!(fs::read_dir(dst_dir.path())?.next().is_none());
-
-//         Ok(())
-//     }
-
-//     #[test]
-//     fn test_copy_from_nonexistent_directory_should_fail() {
-//         let nonexistent = PathBuf::from("/does/not/exist");
-//         let dst_dir = tempdir().unwrap();
-
-//         let result = copy_dir_contents(nonexistent, dst_dir.path());
-
-//         assert!(result.is_err());
-//     }
-// }
+        let err = copy_dir_contents(src.path(), dst_file.path()).unwrap_err();
+        match err {
+            IoError::NotADirectory(p) => assert_eq!(p, dst_file.path().to_path_buf()),
+            other => panic!("expected NotADirectory for dst, got {:?}", other),
+        }
+    }
+}

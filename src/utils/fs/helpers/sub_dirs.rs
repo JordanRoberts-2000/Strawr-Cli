@@ -25,50 +25,65 @@ pub fn sub_dirs(path: impl AsRef<Path>) -> Result<Vec<String>, IoError> {
     Ok(folder_names)
 }
 
-// #[cfg(test)]
-// mod tests {
-//     use std::path::PathBuf;
+#[cfg(test)]
+mod tests {
+    use super::*;
+    use assert_fs::prelude::*;
 
-//     use super::*;
-//     use tempfile::tempdir;
+    #[test]
+    fn returns_empty_for_empty_directory() {
+        let temp = assert_fs::TempDir::new().unwrap();
+        let dir = temp.path();
 
-//     #[test]
-//     fn returns_only_subfolders() -> Result<(), Box<dyn std::error::Error>> {
-//         let temp_dir = tempdir()?;
+        let result = sub_dirs(dir).unwrap();
+        assert!(result.is_empty());
+    }
 
-//         // Create subfolders
-//         let subfolder1 = temp_dir.path().join("folder1");
-//         let subfolder2 = temp_dir.path().join("folder2");
-//         fs::create_dir(&subfolder1)?;
-//         fs::create_dir(&subfolder2)?;
+    #[test]
+    fn ignores_files_and_only_lists_subdirectories() {
+        let temp = assert_fs::TempDir::new().unwrap();
+        let dir = temp.child("root");
+        dir.create_dir_all().unwrap();
 
-//         // Create files
-//         let file1 = temp_dir.path().join("file1.txt");
-//         fs::write(&file1, "content")?;
+        // create two files
+        let f1 = dir.child("file1.txt");
+        let f2 = dir.child("file2.log");
+        f1.touch().unwrap();
+        f2.touch().unwrap();
 
-//         let result = subfolders(temp_dir.path())?;
+        // create two subdirectories
+        let d1 = dir.child("alpha");
+        let d2 = dir.child("beta");
+        d1.create_dir_all().unwrap();
+        d2.create_dir_all().unwrap();
 
-//         // Should only return the two folders
-//         assert_eq!(result.len(), 2);
-//         assert!(result.contains(&"folder1".to_string()));
-//         assert!(result.contains(&"folder2".to_string()));
-//         assert!(!result.contains(&"file1.txt".to_string()));
+        let mut subs = sub_dirs(dir.path()).unwrap();
+        subs.sort();
+        assert_eq!(subs, vec!["alpha".to_string(), "beta".to_string()]);
+    }
 
-//         Ok(())
-//     }
+    #[test]
+    fn errors_when_path_missing() {
+        let temp = assert_fs::TempDir::new().unwrap();
+        let missing = temp.child("nope_dir");
 
-//     #[test]
-//     fn returns_empty_for_empty_dir() -> Result<(), Box<dyn std::error::Error>> {
-//         let temp_dir = tempdir()?;
-//         let result = subfolders(temp_dir.path())?;
-//         assert!(result.is_empty());
-//         Ok(())
-//     }
+        let err = sub_dirs(missing.path()).unwrap_err();
+        match err {
+            IoError::PathNotFound(p) => assert_eq!(p, missing.path().to_path_buf()),
+            other => panic!("expected PathNotFound, got {:?}", other),
+        }
+    }
 
-//     #[test]
-//     fn returns_error_for_nonexistent_path() {
-//         let non_existent_path = PathBuf::from("/unlikely_to_exist_test_path_xyz123");
-//         let result = subfolders(non_existent_path);
-//         assert!(result.is_err());
-//     }
-// }
+    #[test]
+    fn errors_when_path_is_file() {
+        let temp = assert_fs::TempDir::new().unwrap();
+        let file = temp.child("foo.txt");
+        file.touch().unwrap();
+
+        let err = sub_dirs(file.path()).unwrap_err();
+        match err {
+            IoError::NotADirectory(p) => assert_eq!(p, file.path().to_path_buf()),
+            other => panic!("expected NotADirectory, got {:?}", other),
+        }
+    }
+}

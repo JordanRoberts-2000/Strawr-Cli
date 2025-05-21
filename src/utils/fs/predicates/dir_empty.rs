@@ -9,38 +9,62 @@ pub fn dir_empty(path: impl AsRef<Path>) -> Result<bool, IoError> {
     Ok(entries.next().is_none())
 }
 
-// #[cfg(test)]
-// mod tests {
-//     use super::*;
-//     use std::fs::File;
-//     use tempfile::tempdir;
+#[cfg(test)]
+mod tests {
+    use super::*;
+    use assert_fs::prelude::*;
 
-//     #[test]
-//     fn detects_empty_directory() -> io::Result<()> {
-//         let dir = tempdir()?;
-//         let path = dir.path();
+    #[test]
+    fn returns_true_for_empty_directory() {
+        let temp = assert_fs::TempDir::new().unwrap();
+        let dir = temp.path();
 
-//         assert_eq!(is_dir_empty(path)?, true);
+        let is_empty = dir_empty(dir).unwrap();
+        assert!(is_empty, "Expected empty directory to return true");
+    }
 
-//         Ok(())
-//     }
+    #[test]
+    fn returns_false_for_directory_with_entries() {
+        let temp = assert_fs::TempDir::new().unwrap();
+        let dir = temp.child("populated");
+        dir.create_dir_all().unwrap();
 
-//     #[test]
-//     fn detects_non_empty_directory() -> io::Result<()> {
-//         let dir = tempdir()?;
-//         let file_path = dir.path().join("dummy.txt");
+        // Create a file and a subdirectory inside
+        let file = dir.child("file.txt");
+        file.touch().unwrap();
+        let subdir = dir.child("nested");
+        subdir.create_dir_all().unwrap();
 
-//         File::create(&file_path)?;
+        let is_empty = dir_empty(dir.path()).unwrap();
+        assert!(!is_empty, "Expected non-empty directory to return false");
+    }
 
-//         assert_eq!(is_dir_empty(dir.path())?, false);
+    #[test]
+    fn errors_when_path_missing() {
+        let temp = assert_fs::TempDir::new().unwrap();
+        let missing = temp.child("no_such_dir");
 
-//         Ok(())
-//     }
+        let err = dir_empty(missing.path()).unwrap_err();
+        match err {
+            IoError::PathNotFound(p) => {
+                assert_eq!(p, missing.path().to_path_buf());
+            }
+            _ => panic!("expected PathNotFound, got {:?}", err),
+        }
+    }
 
-//     #[test]
-//     fn errors_on_nonexistent_path() {
-//         let path = Path::new("/this/does/not/exist/1234");
-//         let result = is_dir_empty(path);
-//         assert!(result.is_err());
-//     }
-// }
+    #[test]
+    fn errors_when_path_is_file() {
+        let temp = assert_fs::TempDir::new().unwrap();
+        let file = temp.child("just_a_file.txt");
+        file.touch().unwrap();
+
+        let err = dir_empty(file.path()).unwrap_err();
+        match err {
+            IoError::NotADirectory(p) => {
+                assert_eq!(p, file.path().to_path_buf());
+            }
+            _ => panic!("expected NotADirectory, got {:?}", err),
+        }
+    }
+}
