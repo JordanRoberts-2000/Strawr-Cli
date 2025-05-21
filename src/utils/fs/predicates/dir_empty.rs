@@ -1,8 +1,6 @@
 use std::{fs, path::Path};
 
-use crate::error::IoError;
-
-use super::ensure_dir;
+use crate::{error::IoError, utils::fs::ensure_dir};
 
 pub fn dir_empty(path: impl AsRef<Path>) -> Result<bool, IoError> {
     let path = ensure_dir(path)?;

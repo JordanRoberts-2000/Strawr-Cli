@@ -2,7 +2,7 @@ use std::{fs, path::Path};
 
 use crate::error::IoError;
 
-use super::ensure_dir;
+use crate::utils::fs::ensure_dir;
 
 pub fn dir_entry_count(path: impl AsRef<Path>) -> Result<usize, IoError> {
     let path = ensure_dir(path)?;

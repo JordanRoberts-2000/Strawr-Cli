@@ -1,16 +1,15 @@
 use std::path::Path;
 
 use crate::{
-    error::IoError,
     template::{constants::TEMPLATES_FOLDER_NAME, TemplateError},
+    utils,
 };
 
 pub fn templates_folder_init(storage_dir: &Path) -> Result<(), TemplateError> {
     let templates_path = storage_dir.join(TEMPLATES_FOLDER_NAME);
 
     if !templates_path.exists() {
-        std::fs::create_dir_all(&templates_path)
-            .map_err(|e| TemplateError::Io(IoError::CreateDir(e, templates_path)))?;
+        utils::fs::create_dir_all(&templates_path)?;
     }
 
     Ok(())

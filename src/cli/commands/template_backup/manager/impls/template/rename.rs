@@ -1,9 +1,10 @@
-use std::fs::rename;
-
 use crate::{
     error::IoError,
     template::{utils::Template, TemplateError, TemplateManager, TemplateSubcommand},
-    utils::validation::{reserved, slug},
+    utils::{
+        fs,
+        validation::{reserved, slug},
+    },
 };
 
 impl<'a> TemplateManager<'a> {
@@ -24,8 +25,7 @@ impl<'a> TemplateManager<'a> {
             )));
         }
 
-        rename(&template.path, &new_template_path)
-            .map_err(|e| IoError::Rename(e, template.path.clone(), new_template_path.clone()))?;
+        fs::rename(&template.path, &new_template_path)?;
 
         Ok(Template::new(&valid_slug, &new_template_path))
     }

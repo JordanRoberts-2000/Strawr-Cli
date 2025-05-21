@@ -1,6 +1,6 @@
 use crate::{
-    error::IoError,
     template::{models::Variant, TemplateError, TemplateService},
+    utils,
 };
 
 impl<'svc> TemplateService<'svc> {
@@ -9,13 +9,7 @@ impl<'svc> TemplateService<'svc> {
         variant: &Variant,
         new_variant: &Variant,
     ) -> Result<(), TemplateError> {
-        std::fs::rename(&variant.path, &new_variant.path).map_err(|e| {
-            IoError::Rename(
-                e,
-                variant.path.to_path_buf(),
-                new_variant.path.to_path_buf(),
-            )
-        })?;
+        utils::fs::rename(&variant.path, &new_variant.path)?;
         Ok(())
     }
 }

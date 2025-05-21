@@ -2,7 +2,7 @@ use std::{fs, path::Path};
 
 use crate::error::IoError;
 
-use super::ensure_dir;
+use crate::utils::fs::ensure_dir;
 
 pub fn copy_dir_contents(src: impl AsRef<Path>, dst: impl AsRef<Path>) -> Result<(), IoError> {
     let src = ensure_dir(src)?;

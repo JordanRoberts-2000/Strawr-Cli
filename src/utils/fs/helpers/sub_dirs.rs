@@ -2,7 +2,7 @@ use std::{fs, path::Path};
 
 use crate::error::IoError;
 
-use super::ensure_dir;
+use crate::utils::fs::ensure_dir;
 
 pub fn sub_dirs(path: impl AsRef<Path>) -> Result<Vec<String>, IoError> {
     let path = ensure_dir(path)?;

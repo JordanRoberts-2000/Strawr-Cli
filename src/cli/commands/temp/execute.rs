@@ -1,4 +1,4 @@
-use std::{env, fs};
+use std::env;
 
 use uuid::Uuid;
 
@@ -15,8 +15,7 @@ impl TempCommand {
 
         let temp_dir_path = temp_dir_path.join("temporary");
 
-        fs::create_dir_all(&temp_dir_path)
-            .map_err(|e| IoError::CreateDir(e, temp_dir_path.clone()))?;
+        utils::fs::create_dir_all(&temp_dir_path)?;
 
         log::info!("Created temp dir at: {}", temp_dir_path.display());
 

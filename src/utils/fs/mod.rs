@@ -1,12 +1,22 @@
-mod copy_dir_contents;
-mod dir_empty;
-mod dir_entry_count;
-mod ensure_dir;
-mod ensure_file;
-mod sub_dirs;
-mod trash;
+mod ensure {
+    pub(super) mod ensure_dir;
+    pub(super) mod ensure_file;
+}
+mod helpers {
+    pub(super) mod dir_entry_count;
+    pub(super) mod sub_dirs;
+}
+mod operations {
+    pub(super) mod copy_dir_contents;
+    pub(super) mod create_dir_all;
+    pub(super) mod rename;
+    pub(super) mod trash;
+}
+mod predicates {
+    pub(super) mod dir_empty;
+}
 
-pub use {
-    copy_dir_contents::*, dir_empty::*, dir_entry_count::*, ensure_dir::*, ensure_file::*,
-    sub_dirs::*, trash::*,
-};
+pub use ensure::{ensure_dir::*, ensure_file::*};
+pub use helpers::{dir_entry_count::*, sub_dirs::*};
+pub use operations::{copy_dir_contents::*, create_dir_all::*, rename::*, trash::*};
+pub use predicates::dir_empty::*;

@@ -1,8 +1,8 @@
-use std::{env, fs, path::PathBuf};
+use std::{env, path::PathBuf};
 
 use crate::{
     constants::{CONFIG_FOLDER_NAME, CONFIG_HOME_ENV, DEV_CONFIG_FOLDER_PATH},
-    error::IoError,
+    utils,
 };
 
 use super::error::StorageError;
@@ -22,7 +22,7 @@ pub fn initialize_storage_dir() -> Result<PathBuf, StorageError> {
     };
 
     if !storage_dir.exists() {
-        fs::create_dir_all(&storage_dir).map_err(|e| IoError::CreateDir(e, storage_dir.clone()))?;
+        utils::fs::create_dir_all(&storage_dir)?;
         log::info!("Created storage directory '{:?}'", storage_dir);
     }
 
