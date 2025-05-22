@@ -1,5 +1,8 @@
 use crate::{
-    template::{sub_commands::DeleteSubcommand, TemplateController, TemplateError},
+    template::{
+        controller::enums::VariantArgEmpty, sub_commands::DeleteSubcommand, TemplateController,
+        TemplateError,
+    },
     CliContext,
 };
 
@@ -11,7 +14,7 @@ impl<'a> TemplateController<'a> {
     ) -> Result<(), TemplateError> {
         if let Some(input) = &args.template {
             return self
-                .resolve_template(input, &args.variant)?
+                .resolve_template(&input, &args.variant, VariantArgEmpty::Select)?
                 .delete_template();
         }
 

@@ -9,7 +9,6 @@ pub(crate) mod controller;
 mod error;
 pub(crate) mod models;
 pub(crate) mod service;
-pub(crate) mod test_utils;
 pub(crate) mod types;
 pub(crate) mod utils;
 pub(crate) mod view;

@@ -1,3 +1,4 @@
+pub mod markers;
 mod template;
 mod variant;
 

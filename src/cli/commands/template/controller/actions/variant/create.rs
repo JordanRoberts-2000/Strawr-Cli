@@ -1,16 +1,21 @@
 use crate::{
-    services::{cli::traits::HasEditorLauncherService, editor_launcher::Editor},
-    template::{models::Variant, TemplateController, TemplateError},
+    services::editor_launcher::Editor,
+    template::{
+        models::{
+            markers::{DoesNotExist, Exists},
+            Variant,
+        },
+        TemplateController, TemplateError,
+    },
 };
 
 impl<'c> TemplateController<'c> {
     pub fn create_variant(&self, variant: &Variant, editor: &Editor) -> Result<(), TemplateError> {
-        self.service.ensure_template_exists(&variant.template)?;
-        self.service.ensure_variant_does_not_exist(variant)?;
+        let to_create: Variant<DoesNotExist> = variant.ensure_does_not_exist()?;
+        let created: Variant<Exists> = self.service.create_variant(&to_create)?;
 
-        self.service.create_variant(&variant)?;
-        self.view.variant_created(&variant);
-        self.service.launch_editor(&editor, &variant.path)?;
+        self.view.variant_created(&created);
+        self.service.open_variant_in_editor(&created, &editor)?;
         Ok(())
     }
 }

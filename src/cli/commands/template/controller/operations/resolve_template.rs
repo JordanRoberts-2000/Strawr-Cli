@@ -1,5 +1,5 @@
 use crate::template::{
-    controller::resolver::TemplateResolver,
+    controller::{enums::VariantArgEmpty, resolver::TemplateResolver},
     types::{ParsedTemplateInput, ValidVariantName},
     TemplateController, TemplateError,
 };
@@ -9,8 +9,10 @@ impl<'a> TemplateController<'a> {
         &self,
         template_arg: &ParsedTemplateInput,
         variant_arg: &Option<Option<ValidVariantName>>,
+        variant_arg_empty: VariantArgEmpty,
     ) -> Result<TemplateResolver, TemplateError> {
-        let (template, variant_suffix) = self.resolve_template_arg(&template_arg)?;
+        let (template, variant_suffix) =
+            self.resolve_template_arg(template_arg, &variant_arg_empty)?;
 
         if let Some(v) = variant_suffix {
             if variant_arg.is_some() {
@@ -20,7 +22,7 @@ impl<'a> TemplateController<'a> {
         }
 
         if let Some(v) = variant_arg {
-            let resolved_variant = self.resolve_variant_arg(v, &template)?;
+            let resolved_variant = self.resolve_variant_arg(v, &template, &variant_arg_empty)?;
             return Ok(TemplateResolver::new(
                 self,
                 template,

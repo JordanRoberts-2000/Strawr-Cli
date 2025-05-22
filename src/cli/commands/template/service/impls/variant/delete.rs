@@ -1,11 +1,14 @@
 use crate::{
-    template::{models::Variant, TemplateError, TemplateService},
+    template::{
+        models::{markers::Exists, Variant},
+        TemplateError, TemplateService,
+    },
     utils,
 };
 
 impl<'svc> TemplateService<'svc> {
-    pub fn delete_variant(&self, variant: &Variant) -> Result<(), TemplateError> {
-        utils::fs::trash(&variant.path)?;
+    pub fn delete_variant(&self, variant: &Variant<Exists>) -> Result<(), TemplateError> {
+        utils::fs::trash(&variant.path())?;
         Ok(())
     }
 }

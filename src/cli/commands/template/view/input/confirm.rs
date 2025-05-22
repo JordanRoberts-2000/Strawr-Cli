@@ -1,24 +1,33 @@
 use crate::{
     services::cli::traits::HasPromptService,
     template::{
-        models::{Template, Variant},
+        models::{markers::Exists, Template, Variant},
         TemplateError, TemplateView,
     },
 };
 
 impl<'a> TemplateView<'a> {
-    pub fn delete_template_confirmation(&self, template: &Template) -> Result<bool, TemplateError> {
-        let msg = format!("Are you sure you want to delete template '{}'", template.id);
+    pub fn delete_template_confirmation(
+        &self,
+        template: &Template<Exists>,
+    ) -> Result<bool, TemplateError> {
+        let msg = format!(
+            "Are you sure you want to delete template '{}'",
+            template.id()
+        );
 
         let input = self.prompt().confirm(&msg)?;
         Ok(input)
     }
 
-    pub fn delete_variant_confirmation(&self, variant: &Variant) -> Result<bool, TemplateError> {
+    pub fn delete_variant_confirmation(
+        &self,
+        variant: &Variant<Exists>,
+    ) -> Result<bool, TemplateError> {
         let msg = format!(
             "Are you sure you want to delete variant '{}' from template '{}'",
-            variant.id,
-            variant.get_template_id()
+            variant.id(),
+            variant.template_id()
         );
 
         let input = self.prompt().confirm(&msg)?;

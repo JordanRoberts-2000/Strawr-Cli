@@ -1,6 +1,7 @@
 use crate::{
-    error::IoError,
-    template::{TemplateCommand, TemplateController, TemplateError},
+    template::{
+        controller::enums::VariantArgEmpty, TemplateCommand, TemplateController, TemplateError,
+    },
     utils, CliContext,
 };
 
@@ -17,7 +18,8 @@ impl<'a> TemplateController<'a> {
 
         for (template_arg, folder_title) in stacks {
             if let Some(template_arg) = template_arg {
-                let (template, variant) = self.resolve_template_arg(&template_arg)?;
+                let (template, variant) =
+                    self.resolve_template_arg(&template_arg, &VariantArgEmpty::Select)?;
 
                 let target_dir = args.output.join(folder_title);
                 if !target_dir.exists() {
@@ -25,8 +27,8 @@ impl<'a> TemplateController<'a> {
                 }
 
                 match variant {
-                    Some(v) => self.inject_template_files(&v.path, &target_dir)?,
-                    None => self.inject_template_files(&template.path, &target_dir)?,
+                    Some(v) => self.inject_variant_files(&v, &target_dir)?,
+                    None => self.inject_template_files(&template, &target_dir)?,
                 };
             }
         }

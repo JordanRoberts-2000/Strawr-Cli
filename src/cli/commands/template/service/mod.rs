@@ -3,18 +3,16 @@ mod impls {
     mod template {
         mod create;
         mod delete;
-        mod does_not_exist;
-        mod exists;
         mod get;
         mod has_variants;
+        mod open_in_editor;
         mod rename;
     }
     mod variant {
         mod create;
         mod delete;
-        mod does_not_exist;
-        mod exists;
         mod get;
+        mod open_in_editor;
         mod rename;
     }
     mod has_templates;

@@ -1,11 +1,15 @@
 use crate::{
-    template::{models::Template, service::TemplateService, TemplateError},
+    template::{
+        models::{markers::Exists, Template},
+        service::TemplateService,
+        TemplateError,
+    },
     utils,
 };
 
 impl<'svc> TemplateService<'svc> {
-    pub fn get_variants(&self, template: &Template) -> Result<Vec<String>, TemplateError> {
-        let variants = utils::fs::sub_dirs(&template.path)?;
+    pub fn get_variants(&self, template: &Template<Exists>) -> Result<Vec<String>, TemplateError> {
+        let variants = utils::fs::sub_dirs(&template.path())?;
         Ok(variants)
     }
 }

@@ -1,5 +1,8 @@
 use crate::{
-    template::{sub_commands::CreateSubcommand, TemplateController, TemplateError},
+    template::{
+        controller::enums::VariantArgEmpty, sub_commands::CreateSubcommand, TemplateController,
+        TemplateError,
+    },
     CliContext,
 };
 
@@ -13,7 +16,7 @@ impl<'a> TemplateController<'a> {
 
         if let Some(input) = &args.template {
             return self
-                .resolve_template(input, &args.variant)?
+                .resolve_template(&input, &args.variant, VariantArgEmpty::PromptText)?
                 .create_template(editor);
         }
         Ok(())

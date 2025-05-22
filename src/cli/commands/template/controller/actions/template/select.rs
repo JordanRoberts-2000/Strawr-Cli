@@ -1,7 +1,10 @@
-use crate::template::{models::Template, TemplateController, TemplateError};
+use crate::template::{
+    models::{markers::Exists, Template},
+    TemplateController, TemplateError,
+};
 
 impl<'c> TemplateController<'c> {
-    pub fn select_template(&self) -> Result<Template, TemplateError> {
+    pub fn select_template(&self) -> Result<Template<Exists>, TemplateError> {
         let templates = self.service.get_templates()?;
         let input = self.view.select_template(&templates)?;
 

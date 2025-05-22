@@ -1,9 +1,11 @@
-use crate::template::{models::Variant, TemplateController, TemplateError};
+use crate::template::{
+    models::{markers::Exists, Variant},
+    TemplateController, TemplateError,
+};
 
 impl<'c> TemplateController<'c> {
     pub fn delete_variant(&self, variant: &Variant) -> Result<(), TemplateError> {
-        self.service.ensure_template_exists(&variant.template)?;
-        self.service.ensure_variant_does_not_exist(variant)?;
+        let variant: Variant<Exists> = variant.ensure_exists()?;
 
         if !self.view.delete_variant_confirmation(&variant)? {
             return Ok(());

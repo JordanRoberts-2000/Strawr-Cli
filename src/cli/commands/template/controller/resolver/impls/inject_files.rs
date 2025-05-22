@@ -4,10 +4,12 @@ use crate::template::{controller::resolver::TemplateResolver, TemplateError};
 
 impl<'c> TemplateResolver<'c> {
     pub fn inject_files(self, output: &Path) -> Result<(), TemplateError> {
-        let path = self
-            .variant
-            .map(|v| v.path)
-            .unwrap_or_else(|| self.template.default_path().clone());
-        self.controller.inject_template_files(&path, output)
+        if let Some(v) = &self.variant {
+            return self.controller.inject_variant_files(v, output);
+        }
+
+        return self
+            .controller
+            .inject_template_files(&self.template, output);
     }
 }

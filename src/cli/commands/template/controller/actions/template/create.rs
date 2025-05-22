@@ -1,6 +1,12 @@
 use crate::{
-    services::{cli::traits::HasEditorLauncherService, editor_launcher::Editor},
-    template::{models::Template, TemplateController, TemplateError},
+    services::editor_launcher::Editor,
+    template::{
+        models::{
+            markers::{DoesNotExist, Exists},
+            Template,
+        },
+        TemplateController, TemplateError,
+    },
 };
 
 impl<'c> TemplateController<'c> {
@@ -9,11 +15,11 @@ impl<'c> TemplateController<'c> {
         template: &Template,
         editor: &Editor,
     ) -> Result<(), TemplateError> {
-        self.service.create_template(template)?;
-        self.view.template_created(&template);
-        self.service
-            .launch_editor(&editor, &template.default_path())?;
+        let to_create: Template<DoesNotExist> = template.ensure_does_not_exist()?;
+        let created: Template<Exists> = self.service.create_template(&to_create)?;
 
+        self.view.template_created(&created);
+        self.service.open_template_in_editor(&created, editor)?;
         Ok(())
     }
 }

@@ -20,10 +20,10 @@ mod operations {
 }
 
 mod actions {
-    mod inject_files;
     mod template {
         mod create;
         mod delete;
+        mod inject_files;
         mod prompt_name;
         mod rename;
         mod select;
@@ -31,13 +31,14 @@ mod actions {
     mod variant {
         mod create;
         mod delete;
+        mod inject_files;
         mod prompt_name;
         mod rename;
         mod select;
     }
 }
 
-pub(crate) mod builder;
+pub(crate) mod enums;
 
 pub(crate) mod resolver;
 

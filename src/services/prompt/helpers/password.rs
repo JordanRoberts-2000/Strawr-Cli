@@ -6,7 +6,10 @@ pub fn password_prompt(
     display_mode: &PasswordDisplayMode,
     msg: &str,
 ) -> Result<String, UserInputError> {
-    let prompt = Password::new(msg).with_display_mode(*display_mode).prompt();
+    let prompt = Password::new(msg)
+        .without_confirmation()
+        .with_display_mode(*display_mode)
+        .prompt();
 
     match prompt {
         Ok(input) => Ok(input),
