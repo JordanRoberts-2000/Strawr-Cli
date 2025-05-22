@@ -12,6 +12,10 @@ impl<'ctx> TemplateView<'ctx> {
             muted: ctx.config.quiet_mode,
         }
     }
+
+    pub fn msg(&self, msg: &str) {
+        println!("{msg}");
+    }
 }
 
 impl<'ctx> HasPromptService for TemplateView<'ctx> {

@@ -1,7 +1,8 @@
 use crate::{
     template::{
-        controller::enums::VariantArgEmpty, sub_commands::EditSubcommand, TemplateController,
-        TemplateError,
+        controller::enums::{NoTemplates, TemplateSelect, VariantArgEmpty},
+        sub_commands::EditSubcommand,
+        TemplateController, TemplateError,
     },
     CliContext,
 };
@@ -18,6 +19,12 @@ impl<'a> TemplateController<'a> {
                 .resolve_template(&input, &args.variant, VariantArgEmpty::Select)?
                 .edit_template(editor);
         }
+
+        self.handle_no_input(&editor)
+            .if_no_templates(NoTemplates::Msg("No templates currently exist".to_string()))?
+            .select(TemplateSelect::TemplateOrVariant)?
+            .edit_template()?;
+
         Ok(())
     }
 }

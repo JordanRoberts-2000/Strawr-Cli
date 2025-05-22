@@ -107,3 +107,12 @@ impl From<Variant<Exists>> for Variant<Unchecked> {
         }
     }
 }
+
+impl From<&Variant<Exists>> for Variant<Unchecked> {
+    fn from(v: &Variant<Exists>) -> Variant<Unchecked> {
+        Variant {
+            core: v.core.clone(),
+            _state: PhantomData,
+        }
+    }
+}

@@ -85,3 +85,21 @@ impl From<Template<DoesNotExist>> for Template<Exists> {
         }
     }
 }
+
+impl From<Template<Exists>> for Template<Unchecked> {
+    fn from(v: Template<Exists>) -> Template<Unchecked> {
+        Template {
+            core: v.core,
+            _state: PhantomData,
+        }
+    }
+}
+
+impl From<&Template<Exists>> for Template<Unchecked> {
+    fn from(v: &Template<Exists>) -> Template<Unchecked> {
+        Template {
+            core: v.core.clone(),
+            _state: PhantomData,
+        }
+    }
+}

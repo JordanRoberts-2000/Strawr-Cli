@@ -9,7 +9,7 @@ use crate::{
 
 impl<'svc> TemplateService<'svc> {
     pub(crate) fn has_variants(&self, template: &Template<Exists>) -> Result<bool, TemplateError> {
-        let has_variants = utils::fs::dir_entry_count(&template.path())? > 1;
+        let has_variants = utils::fs::dir_entry_count(&template.default_path())? > 1;
         Ok(has_variants)
     }
 }

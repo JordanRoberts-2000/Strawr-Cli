@@ -12,13 +12,12 @@ impl<'a> TemplateController<'a> {
         template: &Template,
         variant_empty: &VariantArgEmpty,
     ) -> Result<Variant, TemplateError> {
+        let t = template.ensure_exists()?;
+
         let variant = match variant_arg {
             None => match variant_empty {
-                VariantArgEmpty::Select => self.select_variant(&template)?.into(),
-                VariantArgEmpty::PromptText => {
-                    let t = template.ensure_exists()?;
-                    self.prompt_variant_name(&t)?
-                }
+                VariantArgEmpty::Select => self.select_variant(&t)?.into(),
+                VariantArgEmpty::PromptText => self.prompt_variant_name(&t)?,
             },
             Some(v) => {
                 let t: Template<Exists> = template.ensure_exists()?;

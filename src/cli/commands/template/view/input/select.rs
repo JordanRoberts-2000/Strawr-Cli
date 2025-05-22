@@ -1,6 +1,7 @@
 use crate::{
     services::cli::traits::HasPromptService,
     template::{
+        controller::enums::TemplateOrVariant,
         types::{ValidTemplateName, ValidVariantName},
         TemplateError, TemplateView,
     },
@@ -22,5 +23,13 @@ impl<'a> TemplateView<'a> {
         let input = self.prompt().search(options, msg)?;
 
         Ok(ValidVariantName::new(&input))
+    }
+
+    pub fn select_template_or_variant(&self) -> Result<TemplateOrVariant, TemplateError> {
+        let options = vec![TemplateOrVariant::Template, TemplateOrVariant::Variant];
+        let msg = "Select template or one of its variants?:";
+        let choice = self.prompt().select(&options, msg)?;
+
+        Ok(choice)
     }
 }

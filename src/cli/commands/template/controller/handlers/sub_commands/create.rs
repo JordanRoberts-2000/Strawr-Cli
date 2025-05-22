@@ -1,7 +1,8 @@
 use crate::{
     template::{
-        controller::enums::VariantArgEmpty, sub_commands::CreateSubcommand, TemplateController,
-        TemplateError,
+        controller::enums::{NoTemplates, TemplateSelect, VariantArgEmpty},
+        sub_commands::CreateSubcommand,
+        TemplateController, TemplateError,
     },
     CliContext,
 };
@@ -19,6 +20,11 @@ impl<'a> TemplateController<'a> {
                 .resolve_template(&input, &args.variant, VariantArgEmpty::PromptText)?
                 .create_template(editor);
         }
+
+        self.handle_no_input(&editor)
+            .if_no_templates(NoTemplates::PromptCreation)?
+            .create_template()?;
+
         Ok(())
     }
 }

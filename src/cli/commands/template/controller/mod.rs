@@ -19,27 +19,9 @@ mod operations {
     mod subcommands;
 }
 
-mod actions {
-    mod template {
-        mod create;
-        mod delete;
-        mod inject_files;
-        mod prompt_name;
-        mod rename;
-        mod select;
-    }
-    mod variant {
-        mod create;
-        mod delete;
-        mod inject_files;
-        mod prompt_name;
-        mod rename;
-        mod select;
-    }
-}
-
+mod actions;
 pub(crate) mod enums;
-
-pub(crate) mod resolver;
+pub mod fluent;
+pub mod resolver;
 
 pub(crate) use core::TemplateController;

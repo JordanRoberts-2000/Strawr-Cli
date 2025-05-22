@@ -5,9 +5,10 @@ use crate::template::{
 };
 
 impl<'c> TemplateController<'c> {
-    pub fn select_variant(&self, template: &Template) -> Result<Variant<Exists>, TemplateError> {
-        let template: Template<Exists> = template.ensure_exists()?;
-
+    pub fn select_variant(
+        &self,
+        template: &Template<Exists>,
+    ) -> Result<Variant<Exists>, TemplateError> {
         if !self.service.has_variants(&template)? {
             return Err(TemplateError::NoVariants(template.id().to_string()));
         }
@@ -21,9 +22,8 @@ impl<'c> TemplateController<'c> {
 
     pub fn select_variant_including_default(
         &self,
-        template: &Template,
+        template: &Template<Exists>,
     ) -> Result<Variant<Exists>, TemplateError> {
-        let template: Template<Exists> = template.ensure_exists()?;
         let variants = self.service.get_variants(&template)?;
         let input = self.view.select_variant(&variants)?;
 
