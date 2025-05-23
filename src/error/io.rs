@@ -1,5 +1,7 @@
 use std::{io, path::PathBuf};
 
+use crate::utils::validation::ValidationError;
+
 #[derive(thiserror::Error, Debug)]
 pub enum IoError {
     #[error("Failed to create directory at `{1}`: {0}")]
@@ -29,15 +31,9 @@ pub enum IoError {
     #[error("Failed to read file at `{1}`: {0}")]
     ReadFile(#[source] io::Error, PathBuf),
 
-    #[error("path does not exist: {0}")]
-    PathNotFound(PathBuf),
-
-    #[error("path is not a directory: {0}")]
-    NotADirectory(PathBuf),
-
-    #[error("path is not a file: {0}")]
-    NotAFile(PathBuf),
-
     #[error("Failed to stat path `{1}`: {0}")]
     Stat(#[source] io::Error, PathBuf),
+
+    #[error(transparent)]
+    Validation(#[from] ValidationError),
 }

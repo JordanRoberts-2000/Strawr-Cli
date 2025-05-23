@@ -2,11 +2,11 @@ use std::{fs, path::Path};
 
 use crate::error::IoError;
 
-use crate::utils::fs::ensure_dir;
+use crate::utils::validation::validate;
 
 pub fn copy_dir_contents(src: impl AsRef<Path>, dst: impl AsRef<Path>) -> Result<(), IoError> {
-    let src = ensure_dir(src)?;
-    let dst = ensure_dir(dst)?;
+    let src = validate::existing_dir(src)?;
+    let dst = validate::existing_dir(dst)?;
 
     let entries = fs::read_dir(&src).map_err(|e| IoError::ReadDir(e, src.to_path_buf()))?;
 
@@ -38,6 +38,8 @@ pub fn copy_dir_contents(src: impl AsRef<Path>, dst: impl AsRef<Path>) -> Result
 
 #[cfg(test)]
 mod tests {
+    use crate::utils::validation::ValidationError;
+
     use super::*;
     use assert_fs::prelude::*;
     use predicates::prelude::*;
@@ -124,7 +126,9 @@ mod tests {
 
         let err = copy_dir_contents(src.path(), dst.path()).unwrap_err();
         match err {
-            IoError::PathNotFound(p) => assert_eq!(p, src.path().to_path_buf()),
+            IoError::Validation(ValidationError::PathNotFound(p)) => {
+                assert_eq!(p, src.path().to_path_buf());
+            }
             other => panic!("expected PathNotFound for src, got {:?}", other),
         }
     }
@@ -138,7 +142,9 @@ mod tests {
 
         let err = copy_dir_contents(src.path(), dst.path()).unwrap_err();
         match err {
-            IoError::PathNotFound(p) => assert_eq!(p, dst.path().to_path_buf()),
+            IoError::Validation(ValidationError::PathNotFound(p)) => {
+                assert_eq!(p, dst.path().to_path_buf());
+            }
             other => panic!("expected PathNotFound for dst, got {:?}", other),
         }
     }
@@ -153,8 +159,10 @@ mod tests {
 
         let err = copy_dir_contents(src_file.path(), dst.path()).unwrap_err();
         match err {
-            IoError::NotADirectory(p) => assert_eq!(p, src_file.path().to_path_buf()),
-            other => panic!("expected NotADirectory for src, got {:?}", other),
+            IoError::Validation(ValidationError::NotADirectory(p)) => {
+                assert_eq!(p, src_file.path().to_path_buf());
+            }
+            other => panic!("expected NotADirectory, for src {:?}", other),
         }
     }
 
@@ -168,8 +176,10 @@ mod tests {
 
         let err = copy_dir_contents(src.path(), dst_file.path()).unwrap_err();
         match err {
-            IoError::NotADirectory(p) => assert_eq!(p, dst_file.path().to_path_buf()),
-            other => panic!("expected NotADirectory for dst, got {:?}", other),
+            IoError::Validation(ValidationError::NotADirectory(p)) => {
+                assert_eq!(p, dst_file.path().to_path_buf());
+            }
+            other => panic!("expected NotADirectory, for dst {:?}", other),
         }
     }
 }

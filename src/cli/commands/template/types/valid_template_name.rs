@@ -1,6 +1,6 @@
 use std::{fmt, str};
 
-use crate::{template::TemplateSubcommand, utils::validation};
+use crate::{template::TemplateSubcommand, utils::validation::adaptors::clap::validate};
 
 #[derive(Debug, Clone)]
 pub struct ValidTemplateName(String);
@@ -18,8 +18,8 @@ impl str::FromStr for ValidTemplateName {
     type Err = String;
 
     fn from_str(s: &str) -> Result<Self, Self::Err> {
-        let template = validation::slug(s)?;
-        validation::reserved::<TemplateSubcommand>(&template)?;
+        let template = validate::slug(s).map_err(|e| e.to_string())?;
+        validate::reserved::<TemplateSubcommand>(&template)?;
 
         Ok(Self(template))
     }

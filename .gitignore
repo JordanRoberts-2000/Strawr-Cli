@@ -6,3 +6,4 @@ todo.txt
 /imgTestFolder
 .strawr.dev/
 playground/
+src/cli/commands/img_backup

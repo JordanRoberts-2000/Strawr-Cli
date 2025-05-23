@@ -1,6 +1,6 @@
 #[derive(clap::Parser, Debug)]
 #[command()]
-pub struct Get {
+pub struct GetSubcommmand {
     #[arg(help = "Path to img file or folder (positional argument)")]
     pub path: String,
 

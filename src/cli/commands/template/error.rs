@@ -1,4 +1,4 @@
-use crate::{error::IoError, services::errors::*};
+use crate::{error::IoError, services::errors::*, utils::validation::ValidationError};
 
 #[derive(thiserror::Error, Debug)]
 pub enum TemplateError {
@@ -10,6 +10,9 @@ pub enum TemplateError {
 
     #[error(transparent)]
     EditorLauncher(#[from] EditorLauncherError),
+
+    #[error(transparent)]
+    Validation(#[from] ValidationError),
 
     #[error("Template '{0}' does not exist")]
     TemplateNotFound(String),

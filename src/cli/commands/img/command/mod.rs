@@ -1,3 +1,5 @@
-pub mod args;
-pub mod execute;
-pub mod helpers;
+pub mod command;
+// mod sub_commands {
+//     pub mod gen;
+//     pub mod get;
+// }

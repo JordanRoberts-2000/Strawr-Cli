@@ -9,7 +9,7 @@ use crate::{
         utils::template_parser,
         TemplateController, TemplateError,
     },
-    utils::validation::existing_dir,
+    utils::validation::adaptors::clap::validate,
     CliContext,
 };
 
@@ -30,7 +30,7 @@ pub struct TemplateCommand {
     #[arg(long, short, value_parser = template_parser, conflicts_with_all = ["variant", "template"])]
     pub frontend: Option<ParsedTemplateInput>,
 
-    #[arg(long, short, default_value = ".", value_parser = existing_dir)]
+    #[arg(long, short, default_value = ".", value_parser = validate::existing_dir)]
     pub output: PathBuf,
 
     #[arg(short, long, ignore_case = true)]

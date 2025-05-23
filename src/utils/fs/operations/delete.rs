@@ -1,12 +1,14 @@
 use std::path::Path;
 
-use crate::error::IoError;
+use crate::{error::IoError, utils::validation::ValidationError};
 
 pub fn delete(path: impl AsRef<Path>) -> Result<(), IoError> {
     let path = path.as_ref();
 
     if !path.exists() {
-        return Err(IoError::PathNotFound(path.to_path_buf()));
+        return Err(IoError::Validation(ValidationError::PathNotFound(
+            path.to_path_buf(),
+        )));
     }
 
     let md = std::fs::metadata(path).map_err(|e| IoError::Stat(e, path.to_path_buf()))?;
@@ -72,7 +74,7 @@ mod tests {
         // Path does not exist, expect PathNotFound
         let err = delete(missing.path()).unwrap_err();
         match err {
-            IoError::PathNotFound(p) => {
+            IoError::Validation(ValidationError::PathNotFound(p)) => {
                 assert_eq!(p, missing.path().to_path_buf());
             }
             other => panic!("expected PathNotFound, got {:?}", other),

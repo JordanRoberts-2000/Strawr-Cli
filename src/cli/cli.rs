@@ -12,8 +12,8 @@ pub struct Cli {
 
 #[derive(clap::Subcommand, Debug)]
 pub enum Command {
-    // #[command(about = "Modify image files")]
-    // Img(ImgCommand),
+    #[command(about = "Modify image files")]
+    Img(ImgCommand),
     // #[command(about = "Create temporary environments")]
     // Temp(TempCommand),
     // #[command(about = "Set and get encrypted data")]
@@ -33,7 +33,7 @@ impl Command {
     pub fn execute(&self, ctx: &CliContext) -> Result<(), CliError> {
         match self {
             // Self::Grab(cmd) => cmd.execute(ctx)?,
-            // Self::Img(cmd) => cmd.execute(ctx)?,
+            Self::Img(cmd) => cmd.execute(ctx)?,
             // Self::Temp(cmd) => cmd.execute(ctx)?,
             Self::Template(cmd) => cmd.execute(ctx)?,
             Self::Backup => todo!(),

@@ -1,7 +1,10 @@
-mod paths;
-mod reserved;
-mod slug;
+mod core;
+mod error;
+pub mod adaptors {
+    pub mod clap;
+}
 
-pub use paths::*;
-pub use reserved::reserved;
-pub use slug::slug;
+pub use error::ValidationError;
+pub mod validate {
+    pub use super::core::*;
+}

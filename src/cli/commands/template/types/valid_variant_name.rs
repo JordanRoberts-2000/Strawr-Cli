@@ -1,6 +1,6 @@
 use std::{fmt, str};
 
-use crate::{template::constants::DEFAULT_FOLDER, utils::validation};
+use crate::{template::constants::DEFAULT_FOLDER, utils::validation::adaptors::clap::validate};
 
 #[derive(Debug, Clone, PartialEq)]
 pub struct ValidVariantName(String);
@@ -19,7 +19,7 @@ impl str::FromStr for ValidVariantName {
     type Err = String;
 
     fn from_str(s: &str) -> Result<Self, Self::Err> {
-        let variant = validation::slug(s)?;
+        let variant = validate::slug(s)?;
 
         if variant == DEFAULT_FOLDER {
             return Err(format!("'{DEFAULT_FOLDER}' is a reserved value"));

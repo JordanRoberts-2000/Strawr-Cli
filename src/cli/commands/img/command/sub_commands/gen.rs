@@ -1,12 +1,10 @@
-use crate::cli::commands::img::utils::enums::ImageSize;
-
 #[derive(clap::Parser, Debug, Clone)]
 #[command(arg_required_else_help = true, group(
     clap::ArgGroup::new("orientation")
         .args(&["wide", "tall", "size"])
         .multiple(false)
 ))]
-pub struct Gen {
+pub struct GenSubcommand {
     #[arg(help = "Text description or prompt for image generation")]
     pub description: String,
 

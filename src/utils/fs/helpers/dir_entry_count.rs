@@ -2,10 +2,10 @@ use std::{fs, path::Path};
 
 use crate::error::IoError;
 
-use crate::utils::fs::ensure_dir;
+use crate::utils::validation::validate;
 
 pub fn dir_entry_count(path: impl AsRef<Path>) -> Result<usize, IoError> {
-    let path = ensure_dir(path)?;
+    let path = validate::existing_dir(path)?;
 
     let mut entries = fs::read_dir(&path).map_err(|e| IoError::ReadDir(e, path.to_path_buf()))?;
     let mut count = 0;
@@ -19,6 +19,8 @@ pub fn dir_entry_count(path: impl AsRef<Path>) -> Result<usize, IoError> {
 
 #[cfg(test)]
 mod tests {
+    use crate::utils::validation::ValidationError;
+
     use super::*;
     use assert_fs::prelude::*;
 
@@ -55,10 +57,10 @@ mod tests {
 
         let err = dir_entry_count(missing.path()).unwrap_err();
         match err {
-            IoError::PathNotFound(p) => {
+            IoError::Validation(ValidationError::PathNotFound(p)) => {
                 assert_eq!(p, missing.path().to_path_buf());
             }
-            other => panic!("expected PathNotFound, got {:?}", other),
+            other => panic!("expected Validation::PathNotFound, got {:?}", other),
         }
     }
 
@@ -70,7 +72,7 @@ mod tests {
 
         let err = dir_entry_count(file.path()).unwrap_err();
         match err {
-            IoError::NotADirectory(p) => {
+            IoError::Validation(ValidationError::NotADirectory(p)) => {
                 assert_eq!(p, file.path().to_path_buf());
             }
             other => panic!("expected NotADirectory, got {:?}", other),

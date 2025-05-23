@@ -1,12 +1,12 @@
 // pub mod backup;
 // pub mod config;
 // pub mod grab;
-// pub mod img;
+pub mod img;
 // pub mod temp;
 pub mod template;
 
-pub use self::template::TemplateCommand;
+pub use {img::ImgCommand, template::TemplateCommand};
 
 pub mod errors {
-    pub use super::template::TemplateError;
+    pub use super::{img::ImgError, template::TemplateError};
 }

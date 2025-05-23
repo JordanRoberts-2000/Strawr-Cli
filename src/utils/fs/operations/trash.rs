@@ -1,12 +1,14 @@
 use std::path::Path;
 
-use crate::error::IoError;
+use crate::{error::IoError, utils::validation::ValidationError};
 
 pub fn trash(path: impl AsRef<Path>) -> Result<(), IoError> {
     let path = path.as_ref();
 
     if !path.exists() {
-        return Err(IoError::PathNotFound(path.to_path_buf()));
+        return Err(IoError::Validation(ValidationError::PathNotFound(
+            path.to_path_buf(),
+        )));
     }
 
     if let Err(trash_err) = trash::delete(path) {

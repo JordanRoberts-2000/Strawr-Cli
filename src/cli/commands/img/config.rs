@@ -1,21 +1,7 @@
-use crate::services::img::CompressionType;
-
-use super::{
-    sub_commands::{gen::config::ImgGenConfig, get::config::ImgGetConfig},
-    utils::enums::ValidImageFormat,
-};
-
-#[derive(Debug, serde::Deserialize, Clone)]
-#[serde(rename_all = "lowercase")]
-pub enum ColorOutput {
-    Rgb,
-    Hex,
-}
-
 #[derive(Debug, serde::Deserialize, validator::Validate, Clone)]
 pub struct ImgConfig {
-    pub default_format: ValidImageFormat,
-    pub default_webp_compression: CompressionType,
+    // pub default_format: ValidImageFormat,
+    // pub default_webp_compression: CompressionType,
     #[validate(range(min = 1, max = 100, message = "Must be between 1 and 100"))]
     pub default_webp_quality: u8,
     #[validate(range(min = 1, max = 100, message = "Must be between 1 and 100"))]
@@ -29,6 +15,17 @@ pub struct ImgConfig {
     pub placeholder_blur_intensity: u8,
     #[validate(range(min = 1, message = "Must be greater than 0"))]
     pub max_size: Option<u32>,
-    pub get: ImgGetConfig,
-    pub gen: ImgGenConfig,
+    // pub get: ImgGetConfig,
+    // pub gen: ImgGenConfig,
 }
+
+// #[derive(Debug, serde::Deserialize, validator::Validate, Clone)]
+// pub struct ImgGetConfig {
+//     pub default_color_output: ColorOutput,
+// }
+
+// #[derive(Debug, serde::Deserialize, validator::Validate, Clone)]
+// pub struct ImgGenConfig {
+//     pub default_ai_model: Model,
+//     pub default_img_size: ImageSize,
+// }
