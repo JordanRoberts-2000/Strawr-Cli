@@ -44,3 +44,57 @@ impl GenImage for MockAiRepo {
         }
     }
 }
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn gen_image_and_description_in_order() {
+        let mock = MockAiRepo::new(vec![
+            MockAiOutput::ImageUrl("http://example.com/foo.png".into()),
+            MockAiOutput::ImageDescription("A foo image".into()),
+        ]);
+
+        // 1st call => ImageUrl variant
+        let url = mock.gen_image("anything").unwrap();
+        assert_eq!(url, "http://example.com/foo.png");
+
+        // 2nd call => ImageDescription variant
+        let desc = mock.get_image_description(&url).unwrap();
+        assert_eq!(desc, "A foo image");
+    }
+
+    #[test]
+    #[should_panic(expected = "expected ImageUrl")]
+    fn panic_if_wrong_variant_for_gen_image() {
+        // We only queue a description, so gen_image() will see the wrong variant.
+        let mock = MockAiRepo::new(vec![MockAiOutput::ImageDescription("oops".into())]);
+        // This should panic with “expected ImageUrl…”
+        let _ = mock.gen_image("anything");
+    }
+
+    #[test]
+    #[should_panic(expected = "no more responses")]
+    fn panic_if_no_responses_for_gen_image() {
+        let mock = MockAiRepo::new(vec![]);
+        let _ = mock.gen_image("anything");
+    }
+
+    #[test]
+    #[should_panic(expected = "expected ImageDescription")]
+    fn panic_if_wrong_variant_for_get_image_description() {
+        // We only queue a URL, so get_image_description() will see the wrong variant.
+        let mock = MockAiRepo::new(vec![MockAiOutput::ImageUrl(
+            "http://example.com/foo.png".into(),
+        )]);
+        let _ = mock.get_image_description("http://example.com/foo.png");
+    }
+
+    #[test]
+    #[should_panic(expected = "no more responses")]
+    fn panic_if_no_responses_for_get_image_description() {
+        let mock = MockAiRepo::new(vec![]);
+        let _ = mock.get_image_description("http://example.com/foo.png");
+    }
+}
