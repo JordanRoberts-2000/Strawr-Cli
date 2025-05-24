@@ -1,0 +1,32 @@
+use serde_json::json;
+
+use crate::{
+    ai::{error::Result, open_ai_client::OpenAiClient},
+    utils::parse_model,
+};
+
+use super::ImageDescriptionResponse;
+
+const OPENAI_CHAT_URL: &str = "https://api.openai.com/v1/chat/completions";
+const OPENAI_AI_MODEL: &str = "gpt-4o";
+
+pub fn image_description(api_key: impl AsRef<str>, url: impl Into<String>) -> Result<String> {
+    let body = json!({
+      "model": OPENAI_AI_MODEL,
+      "messages": [
+          {
+              "role": "user",
+              "content": [
+                  { "type": "text", "text": "Generate a concise descriptive alt text for the following image." },
+                  { "type": "image_url", "image_url": { "url": url.into() } }
+              ]
+          }
+      ]
+    });
+
+    let json = OpenAiClient::new(api_key.as_ref()).post_json(OPENAI_CHAT_URL, &body)?;
+
+    let model: ImageDescriptionResponse = parse_model(&json)?;
+
+    model.description(json)
+}

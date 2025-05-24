@@ -1,8 +1,6 @@
-mod alt;
 mod image;
+pub(crate) mod open_ai_client;
 
-pub use alt::alt_tag;
-pub use image::{
-    image,
-    models::{ImageSize, Model},
-};
+pub mod gen {
+    pub use super::image::*;
+}

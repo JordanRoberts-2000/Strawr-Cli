@@ -1,20 +1,27 @@
-use crate::error::ParseError;
+use crate::{error::ParseError, utils::validation::ValidationError};
 
 pub(crate) type Result<T> = std::result::Result<T, AiError>;
 
 #[derive(thiserror::Error, Debug)]
 pub enum AiError {
-    #[error("I/O error: {0}")]
-    Io(#[from] std::io::Error),
-    #[error("request error: {0}")]
+    #[error("HTTP request failed: {0}")]
     RequestError(#[from] reqwest::Error),
-    #[error("Failed to parse: {0}")]
-    Parse(#[from] ParseError),
-    #[error("Invalid JSON: {message}. Received: {json:#?}")]
-    InvalidJson {
-        json: serde_json::Value,
-        message: String,
+
+    #[error("non-success HTTP status {status} from {url}")]
+    HttpStatus {
+        status: reqwest::StatusCode,
+        url: String,
     },
-    #[error("Validation error: {0}")]
-    Validation(String),
+
+    #[error(transparent)]
+    Parse(#[from] ParseError),
+
+    #[error(transparent)]
+    Validation(#[from] ValidationError),
+
+    #[error("no content returned in choices: {0}")]
+    NoContentReturned(serde_json::Value),
+
+    #[error("no images returned in `data`; raw JSON:\n{0}")]
+    NoImagesReturned(serde_json::Value),
 }

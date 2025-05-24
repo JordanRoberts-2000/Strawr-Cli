@@ -1,12 +1,9 @@
-use builder::ImageBuilder;
-
-pub mod builder;
-pub mod models;
-
-pub fn image<A, D>(api_key: A, description: D) -> ImageBuilder
-where
-    A: Into<String>,
-    D: Into<String>,
-{
-    ImageBuilder::new(api_key, description)
+mod image_decription;
+mod img_gen;
+mod models {
+    pub mod image_description;
+    pub mod image_gen;
 }
+
+pub(crate) use models::{image_description::ImageDescriptionResponse, image_gen::ImageGenResponse};
+pub use {image_decription::image_description, img_gen::*};
