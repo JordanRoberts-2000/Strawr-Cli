@@ -1,10 +1,10 @@
 use arboard::Clipboard as ArboardClipboard;
 
-use crate::services::clipboard::{Clipboard, ClipboardError};
+use crate::services::clipboard::{ClipboardError, ClipboardRepo};
 
-pub struct ClipboardRepo;
+pub struct UserClipboardRepo;
 
-impl Clipboard for ClipboardRepo {
+impl ClipboardRepo for UserClipboardRepo {
     fn set_text(&self, text: &str) -> Result<(), ClipboardError> {
         let mut clipboard = ArboardClipboard::new().map_err(ClipboardError::ClipboardAccess)?;
         clipboard

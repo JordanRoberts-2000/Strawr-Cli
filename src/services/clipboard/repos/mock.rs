@@ -1,12 +1,12 @@
 use std::cell::RefCell;
 
-use crate::services::clipboard::{Clipboard, ClipboardError};
+use crate::services::clipboard::{ClipboardError, ClipboardRepo};
 
 pub struct MockClipboardRepo {
     history: RefCell<Vec<String>>,
 }
 
-impl Clipboard for MockClipboardRepo {
+impl ClipboardRepo for MockClipboardRepo {
     fn set_text(&self, text: &str) -> Result<(), ClipboardError> {
         self.history.borrow_mut().push(text.to_string());
         Ok(())

@@ -1,15 +1,13 @@
 use std::path::PathBuf;
 
-use clap::{value_parser, ArgAction, Parser};
+use clap::{value_parser, ArgAction, Parser, Subcommand};
 
 use crate::{
     commands::img::{
         enums::{ImageInput, ImageSize, ValidImageFormat},
         utils::aspect_ratio_parse,
         ImgError,
-    },
-    utils::validation::adaptors::clap::validate,
-    CliContext,
+    }, img::Img, utils::validation::adaptors::clap::validate, CliContext
 };
 
 // use super::sub_commands::{get::GetSubcommmand, r#gen::GenSubcommand};
@@ -90,7 +88,13 @@ pub struct ImgCommand {
 
 impl ImgCommand {
     pub fn execute(&self, ctx: &CliContext) -> Result<(), ImgError> {
-        println!("{:?}", self.crop);
+        // let url = ctx.service.init_ai()?.generate_image("a zoo animal in a barn")?;
+        // println!("{}", url);
+        // let mut img = Img::download(&url)?;
+        // let data_url = img.data_url()?;
+        // let description = ctx.service.init_ai()?.get_image_description(&data_url)?;
+        // println!("{}", description);
+        
         // let controller = TemplateController::new(&ctx);
         // controller.handle_command(self, &ctx)
 

@@ -20,9 +20,16 @@ pub enum ParseError {
         title: String,
     },
 
-    #[error("failed to fetch or decode JSON from {title}:\n{source}")]
-    JsonFetch {
+    #[error("failed to decode JSON from {url}:\n{source}")]
+    JsonResponse {
         source: reqwest::Error,
-        title: String,
+        url: reqwest::Url,
+    },
+
+    #[error("failed to parse JSON into {model}:\nerror: {source}\njson: {source}")]
+    JsonModel {
+        source: serde_json::Error,
+        json: String,
+        model: String,
     },
 }

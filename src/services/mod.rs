@@ -1,3 +1,4 @@
+pub mod ai;
 pub(crate) mod cli;
 pub mod clipboard;
 pub mod editor_launcher;

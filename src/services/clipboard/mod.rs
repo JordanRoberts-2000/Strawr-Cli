@@ -8,7 +8,7 @@ mod repos {
 
 pub use {
     error::ClipboardError,
-    repos::{mock::MockClipboardRepo, user::ClipboardRepo},
+    repos::{mock::MockClipboardRepo, user::UserClipboardRepo},
     service::ClipboardService,
     traits::*,
 };

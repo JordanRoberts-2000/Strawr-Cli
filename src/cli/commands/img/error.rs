@@ -3,9 +3,8 @@ use std::path::PathBuf;
 use thiserror::Error;
 
 use crate::{
-    ai::AiError,
     img::ImgError as ImageError,
-    services::{errors::ClipboardError, keyring::KeyringError},
+    services::{ai::AiServiceError, errors::ClipboardError, keyring::KeyringError},
 };
 
 #[derive(Error, Debug)]
@@ -19,7 +18,7 @@ pub enum ImgError {
     #[error("Internal error occured: {0}")]
     ImgService(#[from] ImageError),
     #[error("Internal error occured: {0}")]
-    AiService(#[from] AiError),
+    AiService(#[from] AiServiceError),
     #[error("Internal error occured: {0}")]
     Keyring(#[from] KeyringError),
     #[error("Internal error occured: {0}")]
