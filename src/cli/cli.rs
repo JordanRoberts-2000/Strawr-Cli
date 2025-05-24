@@ -24,7 +24,7 @@ pub enum Command {
     #[command(about = "Backup saved data")]
     Backup,
     #[command(about = "Edit configurations")]
-    Config,
+    Config(ConfigCommand),
     #[command(about = "Uninstalls cli tool and deletes its saved data")]
     Uninstall,
 }
@@ -37,7 +37,7 @@ impl Command {
             // Self::Temp(cmd) => cmd.execute(ctx)?,
             Self::Template(cmd) => cmd.execute(ctx)?,
             Self::Backup => todo!(),
-            Self::Config => todo!(),
+            Self::Config(cmd) => cmd.execute(ctx)?,
             Self::Uninstall => todo!(),
         }
 

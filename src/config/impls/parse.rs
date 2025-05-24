@@ -8,7 +8,7 @@ use {
 };
 
 impl CliConfig {
-    pub fn parse(storage_dir: &PathBuf) -> Result<Self, ConfigError> {
+    pub fn parse(storage_dir: &PathBuf) -> Result<(Self, PathBuf), ConfigError> {
         let config_path = storage_dir.join("config.toml");
         log::trace!("Config path: {:?}", config_path);
 
@@ -28,6 +28,6 @@ impl CliConfig {
 
         config.validate().map_err(ConfigError::Validation)?;
 
-        Ok(config)
+        Ok((config, config_path))
     }
 }
