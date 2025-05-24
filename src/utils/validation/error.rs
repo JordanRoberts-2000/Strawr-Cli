@@ -14,8 +14,8 @@ pub enum ValidationError {
     #[error("`{0}` is a reserved value")]
     Reserved(String),
 
-    #[error("cannot be empty: {0}")]
-    Empty(String),
+    #[error("cannot be empty")]
+    Empty,
 
     #[error("max size exceeded, max size {max}: {input})")]
     TooLong { max: usize, input: String },
