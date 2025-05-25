@@ -1,6 +1,6 @@
 use std::path::{Path, PathBuf};
 
-use crate::utils::validation::ValidationError;
+use crate::validation::ValidationError;
 
 pub fn existing_dir(path: impl AsRef<Path>) -> Result<PathBuf, ValidationError> {
     let path = path.as_ref();

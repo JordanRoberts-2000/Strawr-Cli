@@ -1,6 +1,6 @@
 use std::{fs, path::Path};
 
-use crate::{error::IoError, utils::validation::validate};
+use crate::{error::IoError, validation::validate};
 
 pub fn dir_empty(path: impl AsRef<Path>) -> Result<bool, IoError> {
     let path = validate::existing_dir(path)?;
@@ -11,7 +11,7 @@ pub fn dir_empty(path: impl AsRef<Path>) -> Result<bool, IoError> {
 
 #[cfg(test)]
 mod tests {
-    use crate::utils::validation::ValidationError;
+    use crate::validation::ValidationError;
 
     use super::*;
     use assert_fs::prelude::*;

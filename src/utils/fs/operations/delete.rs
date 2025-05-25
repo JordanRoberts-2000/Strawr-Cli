@@ -1,6 +1,6 @@
 use std::path::Path;
 
-use crate::{error::IoError, utils::validation::ValidationError};
+use crate::{error::IoError, validation::ValidationError};
 
 pub fn delete(path: impl AsRef<Path>) -> Result<(), IoError> {
     let path = path.as_ref();

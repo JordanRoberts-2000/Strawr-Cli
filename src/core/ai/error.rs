@@ -1,4 +1,4 @@
-use crate::{error::ParseError, utils::validation::ValidationError};
+use crate::{error::ParseError, validation::ValidationError};
 
 pub(crate) type AiResult<T> = std::result::Result<T, AiError>;
 

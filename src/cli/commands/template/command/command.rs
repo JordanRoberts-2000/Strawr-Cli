@@ -9,7 +9,7 @@ use crate::{
         utils::template_parser,
         TemplateController, TemplateError,
     },
-    utils::validation::adaptors::clap::validate,
+    validation::adaptors::clap::validate,
     CliContext,
 };
 

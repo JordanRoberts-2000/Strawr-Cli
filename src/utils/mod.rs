@@ -4,7 +4,6 @@ pub mod logger;
 mod parsing;
 pub mod spinner;
 pub mod time;
-pub mod validation;
 
 pub use keyring::Keyring;
 pub use parsing::{parse_model, parse_response};

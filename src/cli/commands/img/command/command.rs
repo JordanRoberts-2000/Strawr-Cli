@@ -7,7 +7,7 @@ use crate::{
         enums::{ImageInput, ImageSize, ValidImageFormat},
         utils::aspect_ratio_parse,
         ImgError,
-    }, img::Img, utils::validation::adaptors::clap::validate, CliContext
+    }, validation::adaptors::clap::validate, CliContext
 };
 
 use super::sub_commands::{get::GetSubcommmand, r#gen::GenSubcommand};

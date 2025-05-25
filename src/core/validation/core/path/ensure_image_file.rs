@@ -1,4 +1,4 @@
-use crate::utils::validation::ValidationError;
+use crate::validation::ValidationError;
 use std::path::{Path, PathBuf};
 
 pub fn existing_image_file(path: impl AsRef<Path>) -> Result<PathBuf, ValidationError> {

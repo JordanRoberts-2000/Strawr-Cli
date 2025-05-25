@@ -1,6 +1,6 @@
 use std::{fmt, str};
 
-use crate::{template::TemplateSubcommand, utils::validation::adaptors::clap::validate};
+use crate::{template::TemplateSubcommand, validation::adaptors::clap::validate};
 
 #[derive(Debug, Clone)]
 pub struct ValidTemplateName(String);

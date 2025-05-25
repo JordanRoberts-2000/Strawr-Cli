@@ -4,7 +4,8 @@ use crate::{
     ai::{AiImageModel, Dalle2ImageSize, Dalle3ImageSize, ImageSize},
     commands::img::{utils::dalle_version_parse, ImgError},
     img::Img,
-    utils::{spinner, validation::adaptors::clap::validate},
+    utils::spinner,
+    validation::adaptors::clap::validate,
     CliContext,
 };
 

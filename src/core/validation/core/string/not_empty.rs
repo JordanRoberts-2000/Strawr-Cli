@@ -1,4 +1,4 @@
-use crate::utils::validation::ValidationError;
+use crate::validation::ValidationError;
 
 pub fn not_empty(input: impl AsRef<str>) -> Result<String, ValidationError> {
     let input = input.as_ref().trim();

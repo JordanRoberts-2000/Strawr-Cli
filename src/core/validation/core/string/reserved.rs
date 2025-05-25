@@ -1,6 +1,6 @@
 use strum::VariantNames;
 
-use crate::utils::validation::ValidationError;
+use crate::validation::ValidationError;
 
 pub fn reserved<E: VariantNames>(str: impl AsRef<str>) -> Result<String, ValidationError> {
     let s = str.as_ref();

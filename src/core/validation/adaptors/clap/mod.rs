@@ -1,6 +1,6 @@
 use {std::path::PathBuf, strum::VariantNames};
 
-use crate::utils::validation::validate as v;
+use crate::validation::validate as v;
 
 pub mod validate {
     use url::Url;

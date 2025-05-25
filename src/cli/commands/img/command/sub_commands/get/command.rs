@@ -1,6 +1,6 @@
 use std::path::PathBuf;
 
-use crate::utils::validation::adaptors::clap::validate;
+use crate::validation::adaptors::clap::validate;
 
 #[derive(clap::Parser, Debug)]
 #[command(group(

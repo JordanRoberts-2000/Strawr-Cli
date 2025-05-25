@@ -2,7 +2,7 @@ use std::{fs, path::Path};
 
 use crate::error::IoError;
 
-use crate::utils::validation::validate;
+use crate::validation::validate;
 
 pub fn copy_dir_contents(src: impl AsRef<Path>, dst: impl AsRef<Path>) -> Result<(), IoError> {
     let src = validate::existing_dir(src)?;
@@ -38,7 +38,7 @@ pub fn copy_dir_contents(src: impl AsRef<Path>, dst: impl AsRef<Path>) -> Result
 
 #[cfg(test)]
 mod tests {
-    use crate::utils::validation::ValidationError;
+    use crate::validation::ValidationError;
 
     use super::*;
     use assert_fs::prelude::*;

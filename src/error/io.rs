@@ -1,6 +1,6 @@
 use std::{io, path::PathBuf};
 
-use crate::utils::validation::ValidationError;
+use crate::validation::ValidationError;
 
 #[derive(thiserror::Error, Debug)]
 pub enum IoError {

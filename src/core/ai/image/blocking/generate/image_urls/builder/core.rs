@@ -3,7 +3,7 @@ use crate::{
         image::enums::{AiImageModel, ImageSize},
         AiError,
     },
-    utils::validation::validate,
+    validation::validate,
 };
 
 pub struct ImageGenBuilder {

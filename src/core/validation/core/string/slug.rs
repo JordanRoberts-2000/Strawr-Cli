@@ -1,4 +1,4 @@
-use crate::utils::validation::ValidationError;
+use crate::validation::ValidationError;
 
 const MAX_SLUG_LENGTH: usize = 50;
 

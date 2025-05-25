@@ -1,6 +1,6 @@
 use std::{fmt, str};
 
-use crate::{template::constants::DEFAULT_FOLDER, utils::validation::adaptors::clap::validate};
+use crate::{template::constants::DEFAULT_FOLDER, validation::adaptors::clap::validate};
 
 #[derive(Debug, Clone, PartialEq)]
 pub struct ValidVariantName(String);

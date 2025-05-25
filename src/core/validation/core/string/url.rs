@@ -1,4 +1,4 @@
-use crate::utils::validation::ValidationError;
+use crate::validation::ValidationError;
 use url::Url;
 
 /// Just syntax‐validate a URL.

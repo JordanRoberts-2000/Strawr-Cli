@@ -1,4 +1,4 @@
-use crate::{error::IoError, services::errors::*, utils::validation::ValidationError};
+use crate::{error::IoError, services::errors::*, validation::ValidationError};
 
 #[derive(thiserror::Error, Debug)]
 pub enum TemplateError {

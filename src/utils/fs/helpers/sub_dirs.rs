@@ -2,7 +2,7 @@ use std::{fs, path::Path};
 
 use crate::error::IoError;
 
-use crate::utils::validation::validate;
+use crate::validation::validate;
 
 pub fn sub_dirs(path: impl AsRef<Path>) -> Result<Vec<String>, IoError> {
     let path = validate::existing_dir(path)?;
@@ -27,7 +27,7 @@ pub fn sub_dirs(path: impl AsRef<Path>) -> Result<Vec<String>, IoError> {
 
 #[cfg(test)]
 mod tests {
-    use crate::utils::validation::ValidationError;
+    use crate::validation::ValidationError;
 
     use super::*;
     use assert_fs::prelude::*;

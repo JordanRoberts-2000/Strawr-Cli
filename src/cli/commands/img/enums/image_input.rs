@@ -5,7 +5,7 @@ use {
 
 use crate::{
     commands::img::ImgError,
-    utils::validation::{validate, ValidationError},
+    validation::{validate, ValidationError},
 };
 
 #[derive(Debug, PartialEq, Clone)]

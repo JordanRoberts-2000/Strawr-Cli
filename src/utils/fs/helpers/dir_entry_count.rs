@@ -2,7 +2,7 @@ use std::{fs, path::Path};
 
 use crate::error::IoError;
 
-use crate::utils::validation::validate;
+use crate::validation::validate;
 
 pub fn dir_entry_count(path: impl AsRef<Path>) -> Result<usize, IoError> {
     let path = validate::existing_dir(path)?;
@@ -19,7 +19,7 @@ pub fn dir_entry_count(path: impl AsRef<Path>) -> Result<usize, IoError> {
 
 #[cfg(test)]
 mod tests {
-    use crate::utils::validation::ValidationError;
+    use crate::validation::ValidationError;
 
     use super::*;
     use assert_fs::prelude::*;
