@@ -1,10 +1,16 @@
-use crate::utils::validation::adaptors::clap::validate;
+use std::path::PathBuf;
+
+use crate::{commands::img::ImgError, utils::validation::adaptors::clap::validate, CliContext};
 
 #[derive(clap::Parser, Debug)]
-#[command()]
+#[command(group(
+  clap::ArgGroup::new("output")
+      .args(&["data_url", "blur_data_url", "hash", "color", "alt"])
+      .multiple(false)
+))]
 pub struct GetSubcommmand {
-    #[arg(help = "Path to img file or folder (positional argument)", value_parser = validate::not_empty )]
-    pub path: String,
+    #[arg(help = "Path to img file or folder (positional argument)", value_parser = validate::existing_image_file)]
+    pub path: PathBuf,
 
     #[arg(
         help = "Retrieve the data URL representation of the image",
@@ -44,4 +50,11 @@ pub struct GetSubcommmand {
         action = clap::ArgAction::SetTrue
     )]
     pub alt: bool,
+}
+
+impl GetSubcommmand {
+    pub fn execute(&self, ctx: &CliContext) -> Result<(), ImgError> {
+        println!("GET SUBCOMMAND");
+        Ok(())
+    }
 }

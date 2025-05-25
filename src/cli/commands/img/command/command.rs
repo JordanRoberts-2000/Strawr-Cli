@@ -90,7 +90,7 @@ impl ImgSubcommand {
   pub fn execute(&self, ctx: &CliContext) -> Result<(), ImgError> {
       match self {
           Self::Gen(cmd) => cmd.execute(ctx)?,
-          Self::Get(cmd) => todo!(),
+          Self::Get(cmd) => cmd.execute(ctx)?,
       };
 
       Ok(())

@@ -5,11 +5,14 @@ pub enum ValidationError {
     #[error("path does not exist: {0}")]
     PathNotFound(PathBuf),
 
-    #[error("path is not a directory: {0}")]
+    #[error("path doesn't lead to a directory: {0}")]
     NotADirectory(PathBuf),
 
-    #[error("path is not a file: {0}")]
+    #[error("path doesn't lead to a file: {0}")]
     NotAFile(PathBuf),
+
+    #[error("path leads to a file but isn't an image file: {0}")]
+    NotAnImageFile(PathBuf),
 
     #[error("`{0}` is a reserved value")]
     Reserved(String),

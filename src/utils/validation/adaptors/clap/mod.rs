@@ -15,6 +15,10 @@ pub mod validate {
         v::existing_file(str).map_err(|e| e.to_string())
     }
 
+    pub fn existing_image_file(str: &str) -> Result<PathBuf, String> {
+        v::existing_image_file(str).map_err(|e| e.to_string())
+    }
+
     pub fn reserved<E: VariantNames>(str: &str) -> Result<String, String> {
         v::reserved::<E>(str).map_err(|e| e.to_string())
     }
