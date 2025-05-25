@@ -1,5 +1,5 @@
 use crate::{
-    ai::sync::gen,
+    ai::{blocking::gen, AiImageModel, ImageSize},
     services::ai::{traits::GenImage, AiServiceError},
 };
 
@@ -16,8 +16,16 @@ impl UserAiRepo {
 }
 
 impl GenImage for UserAiRepo {
-    fn gen_image(&self, description: &str) -> Result<String, AiServiceError> {
-        let url = gen::image(&self.api_key, description)?.generate()?;
+    fn gen_image(
+        &self,
+        description: &str,
+        model: AiImageModel,
+        size: ImageSize,
+    ) -> Result<String, AiServiceError> {
+        let url = gen::image(&self.api_key, description)?
+            .model(model)
+            .size(size)
+            .generate()?;
         Ok(url)
     }
 

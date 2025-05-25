@@ -1,17 +1,12 @@
-use builder::core::ImageGenBuilder;
-
 mod builder {
     pub mod core;
     pub mod generate;
-}
-mod enums {
-    pub mod ai_model;
-    pub mod image_size;
+    pub mod validate_size;
 }
 
 use crate::ai::AiError;
 
-pub use enums::{ai_model::AiImageModel, image_size::ImageSize};
+pub use builder::core::ImageGenBuilder;
 
 pub fn image(
     api_key: impl Into<String>,

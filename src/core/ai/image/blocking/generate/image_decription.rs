@@ -1,16 +1,17 @@
 use serde_json::json;
 
 use crate::{
-    ai::{error::Result, open_ai_client::OpenAiClient},
+    ai::{
+        image::{blocking::utils::OpenAiClient, models::ImageDescriptionResponse},
+        AiResult,
+    },
     utils::parse_model,
 };
-
-use super::ImageDescriptionResponse;
 
 const OPENAI_CHAT_URL: &str = "https://api.openai.com/v1/chat/completions";
 const OPENAI_AI_MODEL: &str = "gpt-4o";
 
-pub fn image_description(api_key: impl AsRef<str>, url: impl Into<String>) -> Result<String> {
+pub fn image_description(api_key: impl AsRef<str>, url: impl Into<String>) -> AiResult<String> {
     let body = json!({
       "model": OPENAI_AI_MODEL,
       "messages": [

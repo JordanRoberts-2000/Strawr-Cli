@@ -1,5 +1,10 @@
-pub mod error;
-pub mod sync;
+mod error;
+mod image;
 
-pub use error::AiError;
-pub(crate) use sync::open_ai_client;
+pub(super) use error::AiResult;
+
+pub use {error::AiError, image::enums::*};
+
+pub mod blocking {
+    pub use super::image::blocking::gen;
+}

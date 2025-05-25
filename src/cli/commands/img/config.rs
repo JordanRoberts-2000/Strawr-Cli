@@ -1,3 +1,7 @@
+use crate::ai::{AiImageModel, ImageSize};
+
+use super::utils::dalle_version_deserialize;
+
 #[derive(Debug, serde::Deserialize, validator::Validate, Clone)]
 pub struct ImgConfig {
     // pub default_format: ValidImageFormat,
@@ -16,7 +20,7 @@ pub struct ImgConfig {
     #[validate(range(min = 1, message = "Must be greater than 0"))]
     pub max_size: Option<u32>,
     // pub get: ImgGetConfig,
-    // pub gen: ImgGenConfig,
+    pub gen: ImgGenConfig,
 }
 
 // #[derive(Debug, serde::Deserialize, validator::Validate, Clone)]
@@ -24,8 +28,9 @@ pub struct ImgConfig {
 //     pub default_color_output: ColorOutput,
 // }
 
-// #[derive(Debug, serde::Deserialize, validator::Validate, Clone)]
-// pub struct ImgGenConfig {
-//     pub default_ai_model: Model,
-//     pub default_img_size: ImageSize,
-// }
+#[derive(Debug, serde::Deserialize, validator::Validate, Clone)]
+pub struct ImgGenConfig {
+    #[serde(deserialize_with = "dalle_version_deserialize")]
+    pub prefered_dalle_version: AiImageModel,
+    pub default_img_size: ImageSize,
+}

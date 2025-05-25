@@ -1,5 +1,7 @@
 use super::{repos::user::UserAiRepo, traits::GenImage, AiServiceError};
 
+use crate::ai::{AiImageModel, ImageSize};
+
 pub trait AiRepo: GenImage {}
 
 impl<T> AiRepo for T where T: GenImage {}
@@ -20,8 +22,13 @@ impl AiService {
         self
     }
 
-    pub fn generate_image(&self, description: &str) -> Result<String, AiServiceError> {
-        self.repo.gen_image(description)
+    pub fn generate_image(
+        &self,
+        description: &str,
+        model: AiImageModel,
+        size: impl Into<ImageSize>,
+    ) -> Result<String, AiServiceError> {
+        self.repo.gen_image(description, model, size.into())
     }
 
     pub fn get_image_description(&self, url: &str) -> Result<String, AiServiceError> {

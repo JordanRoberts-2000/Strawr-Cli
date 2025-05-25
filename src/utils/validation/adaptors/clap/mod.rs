@@ -30,4 +30,8 @@ pub mod validate {
     pub fn remote_url(str: &str) -> Result<Url, String> {
         v::remote_url(str).map_err(|e| e.to_string())
     }
+
+    pub fn not_empty(str: &str) -> Result<String, String> {
+        v::not_empty(str).map_err(|e| e.to_string())
+    }
 }

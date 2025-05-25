@@ -1,7 +1,9 @@
+use crate::utils::validation::adaptors::clap::validate;
+
 #[derive(clap::Parser, Debug)]
 #[command()]
 pub struct GetSubcommmand {
-    #[arg(help = "Path to img file or folder (positional argument)")]
+    #[arg(help = "Path to img file or folder (positional argument)", value_parser = validate::not_empty )]
     pub path: String,
 
     #[arg(

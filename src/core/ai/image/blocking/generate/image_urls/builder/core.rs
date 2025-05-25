@@ -1,6 +1,6 @@
 use crate::{
     ai::{
-        sync::r#gen::{AiImageModel, ImageSize},
+        image::enums::{AiImageModel, ImageSize},
         AiError,
     },
     utils::validation::validate,
@@ -18,8 +18,8 @@ impl ImageGenBuilder {
         api_key: impl Into<String>,
         description: impl Into<String>,
     ) -> Result<Self, AiError> {
-        let api_key = validate::is_empty(api_key.into())?;
-        let description = validate::is_empty(description.into())?;
+        let api_key = validate::not_empty(api_key.into())?;
+        let description = validate::not_empty(description.into())?;
 
         Ok(Self {
             api_key,
@@ -29,8 +29,8 @@ impl ImageGenBuilder {
         })
     }
 
-    pub fn size(mut self, size: ImageSize) -> Self {
-        self.size = size;
+    pub fn size(mut self, size: impl Into<ImageSize>) -> Self {
+        self.size = size.into();
         self
     }
 

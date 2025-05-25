@@ -10,13 +10,13 @@ use crate::{
     }, img::Img, utils::validation::adaptors::clap::validate, CliContext
 };
 
-// use super::sub_commands::{get::GetSubcommmand, r#gen::GenSubcommand};
+use super::sub_commands::{get::GetSubcommmand, r#gen::GenSubcommand};
 
 #[derive(Parser, Debug)]
 #[command(subcommand_negates_reqs = true)]
 pub struct ImgCommand {
-    // #[command(subcommand)]
-    // pub subcommand: Option<ImgSubcommand>,
+    #[command(subcommand)]
+    pub subcommand: Option<ImgSubcommand>,
     #[arg(help = "Path to an image file, directory of images, or a remote image URL")]
     pub input: Option<ImageInput>,
 
@@ -80,14 +80,29 @@ pub struct ImgCommand {
     pub prefix: Option<String>,
 }
 
-// #[derive(Subcommand, Debug)]
-// pub enum ImgSubcommand {
-//     Get(GetSubcommmand),
-//     Gen(GenSubcommand),
-// }
+#[derive(Subcommand, Debug)]
+pub enum ImgSubcommand {
+    Get(GetSubcommmand),
+    Gen(GenSubcommand),
+}
+
+impl ImgSubcommand {
+  pub fn execute(&self, ctx: &CliContext) -> Result<(), ImgError> {
+      match self {
+          Self::Gen(cmd) => cmd.execute(ctx)?,
+          Self::Get(cmd) => todo!(),
+      };
+
+      Ok(())
+  }
+}
 
 impl ImgCommand {
     pub fn execute(&self, ctx: &CliContext) -> Result<(), ImgError> {
+
+      if let Some(subcommand) = &self.subcommand {
+        return subcommand.execute(ctx);
+      }
         // let url = ctx.service.init_ai()?.generate_image("a zoo animal in a barn")?;
         // println!("{}", url);
         // let mut img = Img::download(&url)?;

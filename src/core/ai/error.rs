@@ -1,6 +1,6 @@
 use crate::{error::ParseError, utils::validation::ValidationError};
 
-pub(crate) type Result<T> = std::result::Result<T, AiError>;
+pub(crate) type AiResult<T> = std::result::Result<T, AiError>;
 
 #[derive(thiserror::Error, Debug)]
 pub enum AiError {
@@ -24,4 +24,10 @@ pub enum AiError {
 
     #[error("no images returned in `data`; raw JSON:\n{0}")]
     NoImagesReturned(serde_json::Value),
+
+    #[error("size `{size}` is not supported for model `{model}`")]
+    UnsupportedSize { size: String, model: String },
+
+    #[error("invalid image size `{0}`, must be one of 'sm', 'md', 'lg', 'tall', 'wide', or WxH")]
+    ParseImageSize(String),
 }
