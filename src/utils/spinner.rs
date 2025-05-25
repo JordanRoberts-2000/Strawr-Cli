@@ -1,16 +1,22 @@
+use indicatif::{ProgressBar, ProgressStyle};
 use std::time::Duration;
 
-use indicatif::{ProgressBar, ProgressStyle};
-
-pub fn spinner(msg: &str) -> ProgressBar {
-    let spinner = ProgressBar::new_spinner();
-    spinner.set_style(
+pub fn spinner<R, E, F>(msg: &str, op: F) -> Result<R, E>
+where
+    F: FnOnce() -> Result<R, E>,
+{
+    let pb = ProgressBar::new_spinner();
+    pb.set_style(
         ProgressStyle::with_template("{spinner} {msg}")
             .unwrap()
             .tick_strings(&["⠋", "⠙", "⠹", "⠸", "⠼", "⠴", "⠦", "⠧", "⠇", "⠏"]),
     );
-    spinner.set_message(msg.to_string());
-    spinner.enable_steady_tick(Duration::from_millis(100));
-    spinner
-    // spinner.finish_and_clear();
+    pb.set_message(msg.to_string());
+    pb.enable_steady_tick(Duration::from_millis(100));
+
+    // run the operation
+    let res = op();
+
+    pb.finish_and_clear();
+    res
 }

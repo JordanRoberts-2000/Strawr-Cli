@@ -4,7 +4,7 @@ use crate::{
     ai::{AiImageModel, Dalle2ImageSize, Dalle3ImageSize, ImageSize},
     commands::img::{utils::dalle_version_parse, ImgError},
     img::Img,
-    utils::validation::adaptors::clap::validate,
+    utils::{spinner, validation::adaptors::clap::validate},
     CliContext,
 };
 
@@ -58,14 +58,11 @@ impl GenSubcommand {
         let from_cli = self.dalle.is_some();
 
         let mut model = if from_cli {
-            // user override
             self.dalle.clone().unwrap()
         } else {
-            // config default
             ctx.config.img.gen.prefered_dalle_version.clone()
         };
 
-        // 2) Pick the size (CLI custom > wide/tall flags > config)
         let size = if let Some(ref s) = self.size {
             s.clone()
         } else if self.wide {
@@ -76,7 +73,6 @@ impl GenSubcommand {
             ctx.config.img.gen.default_img_size.clone()
         };
 
-        // 3) Only auto-fallback *if* we’re using the config default
         if !from_cli {
             model = match model {
                 AiImageModel::Dalle3 if Dalle3ImageSize::try_from(&size).is_err() => {
@@ -87,21 +83,20 @@ impl GenSubcommand {
                     // config said 2, but size not supported → switch to 3
                     AiImageModel::Dalle3
                 }
-                other => other, // includes Custom(_)
+                other => other,
             };
         }
 
-        println!("model: {:?}", model);
+        spinner("Generating image…", || -> Result<(), ImgError> {
+            let url = ctx.service.init_ai()?.generate_image(
+                &self.description,
+                model.clone(),
+                size.clone(),
+            )?;
 
-        // 4) Call the AI service
-        let url = ctx.service.init_ai()?.generate_image(
-            &self.description,
-            model.clone(),
-            size.clone(),
-        )?;
-
-        // 5) Download & save
-        Img::download(&url)?.save_to(&self.output)?;
+            Img::download(&url)?.save_to(&self.output)?;
+            Ok(())
+        })?;
 
         Ok(())
     }
