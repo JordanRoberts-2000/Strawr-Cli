@@ -1,6 +1,6 @@
 use crate::ai::{AiImageModel, ImageSize};
 
-use super::utils::dalle_version_deserialize;
+use super::{enums::ColorOutput, utils::dalle_version_deserialize};
 
 #[derive(Debug, serde::Deserialize, validator::Validate, Clone)]
 pub struct ImgConfig {
@@ -19,14 +19,14 @@ pub struct ImgConfig {
     pub placeholder_blur_intensity: u8,
     #[validate(range(min = 1, message = "Must be greater than 0"))]
     pub max_size: Option<u32>,
-    // pub get: ImgGetConfig,
+    pub get: ImgGetConfig,
     pub gen: ImgGenConfig,
 }
 
-// #[derive(Debug, serde::Deserialize, validator::Validate, Clone)]
-// pub struct ImgGetConfig {
-//     pub default_color_output: ColorOutput,
-// }
+#[derive(Debug, serde::Deserialize, validator::Validate, Clone)]
+pub struct ImgGetConfig {
+    pub default_color_output: ColorOutput,
+}
 
 #[derive(Debug, serde::Deserialize, validator::Validate, Clone)]
 pub struct ImgGenConfig {

@@ -76,11 +76,9 @@ impl GenSubcommand {
         if !from_cli {
             model = match model {
                 AiImageModel::Dalle3 if Dalle3ImageSize::try_from(&size).is_err() => {
-                    // config said 3, but size not supported → switch to 2
                     AiImageModel::Dalle2
                 }
                 AiImageModel::Dalle2 if Dalle2ImageSize::try_from(&size).is_err() => {
-                    // config said 2, but size not supported → switch to 3
                     AiImageModel::Dalle3
                 }
                 other => other,

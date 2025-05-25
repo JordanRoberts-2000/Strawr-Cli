@@ -1,6 +1,6 @@
 use std::path::PathBuf;
 
-use crate::{commands::img::ImgError, utils::validation::adaptors::clap::validate, CliContext};
+use crate::utils::validation::adaptors::clap::validate;
 
 #[derive(clap::Parser, Debug)]
 #[command(group(
@@ -50,11 +50,4 @@ pub struct GetSubcommmand {
         action = clap::ArgAction::SetTrue
     )]
     pub alt: bool,
-}
-
-impl GetSubcommmand {
-    pub fn execute(&self, ctx: &CliContext) -> Result<(), ImgError> {
-        println!("GET SUBCOMMAND");
-        Ok(())
-    }
 }

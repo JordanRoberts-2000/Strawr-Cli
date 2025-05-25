@@ -103,19 +103,9 @@ impl ImgCommand {
       if let Some(subcommand) = &self.subcommand {
         return subcommand.execute(ctx);
       }
-        // let url = ctx.service.init_ai()?.generate_image("a zoo animal in a barn")?;
-        // println!("{}", url);
-        // let mut img = Img::download(&url)?;
-        // let data_url = img.data_url()?;
-        // let description = ctx.service.init_ai()?.get_image_description(&data_url)?;
-        // println!("{}", description);
         
         // let controller = TemplateController::new(&ctx);
         // controller.handle_command(self, &ctx)
-
-        // if let Some(subcommand) = &args.subcommand {
-        //     return self.handle_subcommands(subcommand, &ctx);
-        // }
 
         // if let Some(input) = &self.input {
         //     self.resolve_image_input(input)
