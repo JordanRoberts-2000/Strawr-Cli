@@ -17,6 +17,8 @@ pub enum CliError {
     #[error(transparent)]
     SuggestCommand(#[from] SuggestCmdError),
     #[error(transparent)]
+    AiCommand(#[from] AiCmdError),
+    #[error(transparent)]
     ConfigCommand(#[from] ConfigCommandError),
     // #[error(transparent)]
     // TempCommand(#[from] TempError),

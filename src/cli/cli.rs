@@ -22,6 +22,8 @@ pub enum Command {
     Template(TemplateCommand),
     #[command(about = "")]
     Suggest(SuggestCommand),
+    #[command(about = "")]
+    Ai(AiCommand),
     #[command(about = "Edit configurations")]
     Config(ConfigCommand),
 }
@@ -32,6 +34,7 @@ impl Command {
             // Self::Grab(cmd) => cmd.execute(ctx)?,
             Self::Img(cmd) => cmd.execute(ctx)?,
             Self::Suggest(cmd) => cmd.execute(ctx)?,
+            Self::Ai(cmd) => cmd.execute(ctx)?,
             // Self::Temp(cmd) => cmd.execute(ctx)?,
             Self::Template(cmd) => cmd.execute(ctx)?,
             Self::Config(cmd) => cmd.execute(ctx)?,

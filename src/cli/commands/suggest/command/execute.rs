@@ -17,12 +17,20 @@ impl SuggestCommand {
                 let ctx_type = Self::resolve_context_arg(&args.context, ctx)?;
                 let prompt = Self::create_alts_prompt(&args.name, &args.description, &ctx_type);
                 let response = ctx.service.init_ai()?.prompt(&prompt, MAX_TOKENS)?;
+
+                if response == RESPONSE_ERROR {
+                    return Err(SuggestCmdError::GenerationUnsuccessful);
+                }
                 println!("{response}");
             }
             SuggestSubCommand::Name(args) => {
                 let ctx_type = Self::resolve_context_arg(&args.context, ctx)?;
                 let prompt = Self::create_name_prompt(&args.description, &ctx_type);
                 let response = ctx.service.init_ai()?.prompt(&prompt, MAX_TOKENS)?;
+
+                if response == RESPONSE_ERROR {
+                    return Err(SuggestCmdError::GenerationUnsuccessful);
+                }
                 println!("{response}");
             }
         }

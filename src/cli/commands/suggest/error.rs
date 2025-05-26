@@ -16,4 +16,7 @@ pub enum SuggestCmdError {
 
     #[error(transparent)]
     Prompt(#[from] PromptServiceError),
+
+    #[error("Unable to generate 8 valid names")]
+    GenerationUnsuccessful,
 }
