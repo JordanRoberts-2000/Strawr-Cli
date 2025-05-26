@@ -8,6 +8,7 @@ use crate::{
 use super::command::SuggestSubCommand;
 
 const MAX_TOKENS: u16 = 60;
+const RESPONSE_ERROR: &str = "ERROR: Unable to generate 8 valid names";
 
 impl SuggestCommand {
     pub fn execute(&self, ctx: &CliContext) -> Result<(), SuggestCmdError> {
@@ -17,16 +18,12 @@ impl SuggestCommand {
                 let prompt = Self::create_alts_prompt(&args.name, &args.description, &ctx_type);
                 let response = ctx.service.init_ai()?.prompt(&prompt, MAX_TOKENS)?;
                 println!("{response}");
-                // let suggestions = Self::parse_prompt_response?;
-                // Self::display_suggestions(&suggestions);
             }
             SuggestSubCommand::Name(args) => {
                 let ctx_type = Self::resolve_context_arg(&args.context, ctx)?;
                 let prompt = Self::create_name_prompt(&args.description, &ctx_type);
                 let response = ctx.service.init_ai()?.prompt(&prompt, MAX_TOKENS)?;
                 println!("{response}");
-                // let suggestions = Self::parse_prompt_response?;
-                // Self::display_suggestions(&suggestions);
             }
         }
 
@@ -48,11 +45,15 @@ impl SuggestCommand {
             context_label, name
         );
 
-        prompt.push_str(". Each on its own line, with no extra text.");
+        prompt.push_str(". Each on its own line and numbered 1-8, with no extra text.");
 
         if let Some(d) = desc {
             prompt.push_str(&format!(" Additional context: {}", d));
         }
+
+        prompt.push_str(&format!(
+            "If you cannot produce 8 meaningful, valid one-word names, respond with exactly:{RESPONSE_ERROR}"
+        ));
 
         prompt
     }
@@ -65,8 +66,8 @@ impl SuggestCommand {
 
         let prompt = format!(
             "Please generate 8 unique {}s for the following description: \"{}\". \
-          each on its own line, with no extra text.",
-            context_label, desc
+            each on its own line and numbered 1-8, with no extra text. If you cannot produce 8 meaningful, valid one-word names, respond with exactly:{}",
+            context_label, desc, RESPONSE_ERROR
         );
 
         prompt
