@@ -2,6 +2,7 @@ use strum::IntoEnumIterator;
 
 use crate::{
     commands::suggest::{enums::ContextType, SuggestCmdError, SuggestCommand},
+    utils::spinner,
     CliContext,
 };
 
@@ -16,7 +17,12 @@ impl SuggestCommand {
             SuggestSubCommand::Alts(args) => {
                 let ctx_type = Self::resolve_context_arg(&args.context, ctx)?;
                 let prompt = Self::create_alts_prompt(&args.name, &args.description, &ctx_type);
-                let response = ctx.service.init_ai()?.prompt(&prompt, MAX_TOKENS)?;
+
+                let response: String =
+                    spinner("Thinking…", || -> Result<String, SuggestCmdError> {
+                        let res = ctx.service.init_ai()?.prompt(&prompt, MAX_TOKENS)?;
+                        Ok(res)
+                    })?;
 
                 if response == RESPONSE_ERROR {
                     return Err(SuggestCmdError::GenerationUnsuccessful);
@@ -26,7 +32,12 @@ impl SuggestCommand {
             SuggestSubCommand::Name(args) => {
                 let ctx_type = Self::resolve_context_arg(&args.context, ctx)?;
                 let prompt = Self::create_name_prompt(&args.description, &ctx_type);
-                let response = ctx.service.init_ai()?.prompt(&prompt, MAX_TOKENS)?;
+
+                let response: String =
+                    spinner("Thinking…", || -> Result<String, SuggestCmdError> {
+                        let res = ctx.service.init_ai()?.prompt(&prompt, MAX_TOKENS)?;
+                        Ok(res)
+                    })?;
 
                 if response == RESPONSE_ERROR {
                     return Err(SuggestCmdError::GenerationUnsuccessful);

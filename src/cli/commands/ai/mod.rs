@@ -1,6 +1,7 @@
 use crate::{
     ai::AiError,
     services::{ai::AiServiceError, keyring::KeyringError},
+    utils::spinner,
     validation::adaptors::clap::validate,
     CliContext,
 };
@@ -52,7 +53,10 @@ impl AiCommand {
       self.question
   );
 
-        let response = ctx.service.init_ai()?.prompt(&prompt, MAX_TOKENS)?;
+        let response: String = spinner("Thinking…", || -> Result<String, AiCmdError> {
+            let res = ctx.service.init_ai()?.prompt(&prompt, MAX_TOKENS)?;
+            Ok(res)
+        })?;
 
         if response == QUESTION_FORMAT_ERROR {
             return Err(AiCmdError::InvalidQuestion);
