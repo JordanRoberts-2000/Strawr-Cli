@@ -20,13 +20,10 @@ pub enum Command {
     // Grab(GrabCommand),
     #[command(about = "Create or manipulate templates for your projects")]
     Template(TemplateCommand),
-
-    #[command(about = "Backup saved data")]
-    Backup,
+    #[command(about = "")]
+    Suggest(SuggestCommand),
     #[command(about = "Edit configurations")]
     Config(ConfigCommand),
-    #[command(about = "Uninstalls cli tool and deletes its saved data")]
-    Uninstall,
 }
 
 impl Command {
@@ -34,11 +31,10 @@ impl Command {
         match self {
             // Self::Grab(cmd) => cmd.execute(ctx)?,
             Self::Img(cmd) => cmd.execute(ctx)?,
+            Self::Suggest(cmd) => cmd.execute(ctx)?,
             // Self::Temp(cmd) => cmd.execute(ctx)?,
             Self::Template(cmd) => cmd.execute(ctx)?,
-            Self::Backup => todo!(),
             Self::Config(cmd) => cmd.execute(ctx)?,
-            Self::Uninstall => todo!(),
         }
 
         Ok(())
