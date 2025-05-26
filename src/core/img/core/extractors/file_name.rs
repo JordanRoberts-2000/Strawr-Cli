@@ -1,3 +1,5 @@
+use std::ffi::OsStr;
+
 use crate::img::{Img, ImgError};
 
 impl Img {
@@ -8,5 +10,14 @@ impl Img {
             .ok_or_else(|| ImgError::MissingFileName(self.target_path.clone()))?;
 
         Ok(file_name.to_string_lossy().to_string())
+    }
+
+    pub fn file_stem(&self) -> Result<String, ImgError> {
+        let stem = self
+            .target_path
+            .file_stem()
+            .and_then(OsStr::to_str)
+            .ok_or_else(|| ImgError::MissingFileName(self.target_path.clone()))?;
+        Ok(stem.to_string())
     }
 }

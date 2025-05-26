@@ -1,11 +1,17 @@
-use crate::ai::{AiImageModel, ImageSize};
+use crate::{
+    ai::{AiImageModel, ImageSize},
+    img::CompressionType,
+};
 
-use super::{enums::ColorOutput, utils::dalle_version_deserialize};
+use super::{
+    enums::{ColorOutput, ValidImageFormat},
+    utils::dalle_version_deserialize,
+};
 
 #[derive(Debug, serde::Deserialize, validator::Validate, Clone)]
 pub struct ImgConfig {
-    // pub default_format: ValidImageFormat,
-    // pub default_webp_compression: CompressionType,
+    pub default_format: ValidImageFormat,
+    pub default_webp_compression: CompressionType,
     #[validate(range(min = 1, max = 100, message = "Must be between 1 and 100"))]
     pub default_webp_quality: u8,
     #[validate(range(min = 1, max = 100, message = "Must be between 1 and 100"))]

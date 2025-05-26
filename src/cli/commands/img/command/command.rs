@@ -4,9 +4,7 @@ use clap::{value_parser, ArgAction, Parser, Subcommand};
 
 use crate::{
     commands::img::{
-        enums::{ImageInput, ImageSize, ValidImageFormat},
-        utils::aspect_ratio_parse,
-        ImgError,
+        enums::{ImageInput, ImageSize, ValidImageFormat}, utils::aspect_ratio_parse, ImgError
     }, validation::adaptors::clap::validate, CliContext
 };
 
@@ -17,6 +15,7 @@ use super::sub_commands::{get::GetSubcommmand, r#gen::GenSubcommand};
 pub struct ImgCommand {
     #[command(subcommand)]
     pub subcommand: Option<ImgSubcommand>,
+
     #[arg(help = "Path to an image file, directory of images, or a remote image URL")]
     pub input: Option<ImageInput>,
 
@@ -97,22 +96,4 @@ impl ImgSubcommand {
   }
 }
 
-impl ImgCommand {
-    pub fn execute(&self, ctx: &CliContext) -> Result<(), ImgError> {
 
-      if let Some(subcommand) = &self.subcommand {
-        return subcommand.execute(ctx);
-      }
-        
-        // let controller = TemplateController::new(&ctx);
-        // controller.handle_command(self, &ctx)
-
-        // if let Some(input) = &self.input {
-        //     self.resolve_image_input(input)
-        //         .process_images()
-        //         .save(self.output)?;
-        // }
-
-        Ok(())
-    }
-}

@@ -8,7 +8,7 @@ pub enum ImageSize {
     Md,
     Lg,
     Xl,
-    Pixels(u16),
+    Pixels(u32),
 }
 
 impl FromStr for ImageSize {
@@ -24,7 +24,7 @@ impl FromStr for ImageSize {
             other => {
                 // try to parse as raw pixels
                 other
-                    .parse::<u16>()
+                    .parse::<u32>()
                     .map(Self::Pixels)
                     .map_err(|_| ImgError::ParseImageSize(s.to_owned()))
             }
@@ -33,7 +33,7 @@ impl FromStr for ImageSize {
 }
 
 impl ImageSize {
-    pub fn to_pixels(&self) -> u16 {
+    pub fn to_pixels(&self) -> u32 {
         match *self {
             ImageSize::Sm => 640,
             ImageSize::Md => 768,

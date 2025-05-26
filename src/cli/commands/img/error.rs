@@ -5,10 +5,13 @@ use thiserror::Error;
 use crate::{
     img::ImgError as ImageError,
     services::{ai::AiServiceError, errors::ClipboardError, keyring::KeyringError},
+    validation::ValidationError,
 };
 
 #[derive(Error, Debug)]
 pub enum ImgError {
+    #[error(transparent)]
+    Validation(#[from] ValidationError),
     #[error("Invalid input, please provide valid file, directory or remote-url: {0}")]
     UnknownInputType(String),
     #[error("Input not found: the specified path does not exist: '{}'", .0.display())]
@@ -29,4 +32,6 @@ pub enum ImgError {
     NoConcreteFormat,
     #[error("invalid size: {0}")]
     ParseImageSize(String),
+    #[error("No valid image files found in '{}' or its subdirectories", .0.display())]
+    NoImagesFilesFound(PathBuf),
 }

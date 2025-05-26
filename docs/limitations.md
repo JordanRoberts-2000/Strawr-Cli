@@ -14,3 +14,10 @@ Avif
 - not supported by the image crate
 - Hardware decoders and encoders not on enough devices to see consistent performance benifits compared to webp
 - ravif crate used for encoding avif files, causing issues with rust analyzer
+
+need to add multi threading to folders
+get subcommand doesnt currently work on a url
+gen subcommand could support more models than dalle-2/3
+undo subcommand
+
+seperating features? download cli with only certian features??
