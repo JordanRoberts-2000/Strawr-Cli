@@ -11,19 +11,61 @@ impl SuggestCommand {
     pub fn execute(&self, ctx: &CliContext) -> Result<(), SuggestCmdError> {
         match &self.subcommand {
             SuggestSubCommand::Alts(args) => {
-                println!("name: {}", args.name);
-                println!("description: {:?}", args.description);
                 let ctx_type = Self::resolve_context_arg(&args.context, ctx)?;
-                println!("context: {:?}", ctx_type);
+                let prompt = Self::create_alts_prompt(&args.name, &args.description, &ctx_type);
+                // let response = ctx.service.init_ai().prompt(&prompt)?;
+                // let suggestions = Self::parse_prompt_response?;
+                // Self::display_suggestions(&suggestions);
             }
             SuggestSubCommand::Name(args) => {
-                println!("description: {}", args.description);
                 let ctx_type = Self::resolve_context_arg(&args.context, ctx)?;
-                println!("context: {:?}", ctx_type);
+                let prompt = Self::create_name_prompt(&args.description, &ctx_type);
+                // let response = ctx.service.init_ai().prompt(&prompt)?;
+                // let suggestions = Self::parse_prompt_response?;
+                // Self::display_suggestions(&suggestions);
             }
         }
 
         Ok(())
+    }
+
+    fn create_alts_prompt(
+        name: &str,
+        desc: &Option<String>,
+        ctx_type: &Option<ContextType>,
+    ) -> String {
+        let context_label = ctx_type
+            .as_ref()
+            .map(|ct| format!("{} name", ct.to_string()))
+            .unwrap_or_else(|| "name".into());
+
+        let mut prompt = format!(
+            "Please provide exactly 8 one-word alternative {}s for \"{}\"",
+            context_label, name
+        );
+
+        prompt.push_str(". Each on its own line, with no extra text.");
+
+        if let Some(d) = desc {
+            prompt.push_str(&format!(" Additional context: {}", d));
+        }
+
+        prompt
+    }
+
+    fn create_name_prompt(desc: &str, ctx_type: &Option<ContextType>) -> String {
+        let context_label = ctx_type
+            .as_ref()
+            .map(|ct| format!("{} name", ct.to_string()))
+            .unwrap_or_else(|| "name".into());
+
+        let prompt = format!(
+            "Please generate 8 unique {}s for the following description: \"{}\". \
+          each on its own line, with no extra text.",
+            context_label, desc
+        );
+
+        prompt
     }
 
     fn resolve_context_arg(
