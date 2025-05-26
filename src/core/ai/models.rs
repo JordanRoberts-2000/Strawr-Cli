@@ -1,9 +1,9 @@
 use serde::Deserialize;
 
-use crate::ai::AiError;
+use super::AiError;
 
 #[derive(Deserialize)]
-pub struct ImageDescriptionResponse {
+pub struct ChatCompletionResponse {
     pub choices: Vec<Choice>,
 }
 
@@ -17,8 +17,9 @@ pub struct Message {
     pub content: String,
 }
 
-impl ImageDescriptionResponse {
-    pub fn description(self, raw: serde_json::Value) -> Result<String, AiError> {
+impl ChatCompletionResponse {
+    /// Pulls the first choice’s content, or returns an error if no choices returned.
+    pub fn first_message(self, raw: serde_json::Value) -> Result<String, AiError> {
         self.choices
             .into_iter()
             .next()

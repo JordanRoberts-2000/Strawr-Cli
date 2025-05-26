@@ -1,10 +1,13 @@
-use super::{repos::user::UserAiRepo, traits::GenImage, AiServiceError};
+use super::{
+    repos::user::UserAiRepo,
+    traits::{GenImage, Prompt},
+    AiServiceError,
+};
 
 use crate::ai::{AiImageModel, ImageSize};
 
-pub trait AiRepo: GenImage {}
-
-impl<T> AiRepo for T where T: GenImage {}
+pub trait AiRepo: GenImage + Prompt {}
+impl<T> AiRepo for T where T: GenImage + Prompt {}
 
 pub struct AiService {
     pub(super) repo: Box<dyn AiRepo>,
@@ -33,5 +36,9 @@ impl AiService {
 
     pub fn get_image_description(&self, url: &str) -> Result<String, AiServiceError> {
         self.repo.get_image_description(url)
+    }
+
+    pub fn prompt(&self, prompt: &str, max_tokens: u16) -> Result<String, AiServiceError> {
+        self.repo.prompt(prompt, max_tokens)
     }
 }

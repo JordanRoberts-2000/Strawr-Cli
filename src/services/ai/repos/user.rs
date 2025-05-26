@@ -1,6 +1,10 @@
+use crate::ai::blocking::r#gen::PromptBuilder;
 use crate::{
     ai::{blocking::gen, AiImageModel, ImageSize},
-    services::ai::{traits::GenImage, AiServiceError},
+    services::ai::{
+        traits::{GenImage, Prompt},
+        AiServiceError,
+    },
 };
 
 pub struct UserAiRepo {
@@ -32,5 +36,14 @@ impl GenImage for UserAiRepo {
     fn get_image_description(&self, url: &str) -> Result<String, AiServiceError> {
         let description = gen::image_description(&self.api_key, url)?;
         Ok(description)
+    }
+}
+
+impl Prompt for UserAiRepo {
+    fn prompt(&self, prompt: &str, max_tokens: u16) -> Result<String, AiServiceError> {
+        let response = gen::prompt(&self.api_key, prompt)?
+            .max_tokens(max_tokens)
+            .generate()?;
+        Ok(response)
     }
 }

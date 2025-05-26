@@ -12,3 +12,7 @@ pub trait GenImage {
 
     fn get_image_description(&self, url: &str) -> Result<String, AiServiceError>;
 }
+
+pub trait Prompt {
+    fn prompt(&self, prompt: &str, max_tokens: u16) -> Result<String, AiServiceError>;
+}

@@ -1,6 +1,9 @@
 use crate::{
-    ai::{AiImageModel, ImageSize},
-    services::ai::{traits::GenImage, AiServiceError},
+    ai::{blocking::r#gen::PromptBuilder, AiImageModel, ImageSize},
+    services::ai::{
+        traits::{GenImage, Prompt},
+        AiServiceError,
+    },
 };
 use std::{cell::RefCell, collections::VecDeque};
 
@@ -8,6 +11,7 @@ use std::{cell::RefCell, collections::VecDeque};
 pub enum MockAiOutput {
     ImageUrl(String),
     ImageDescription(String),
+    PromptResponse(String),
 }
 
 pub struct MockAiRepo {
@@ -53,11 +57,46 @@ impl GenImage for MockAiRepo {
     }
 }
 
+impl Prompt for MockAiRepo {
+    fn prompt(&self, _prompt: &str, _max_tokens: u16) -> Result<String, AiServiceError> {
+        let mut q = self.responses.borrow_mut();
+        match q.pop_front() {
+            Some(MockAiOutput::PromptResponse(content)) => Ok(content),
+            Some(other) => panic!(
+                "MockAiRepo: expected PromptResponse, got {:?} in prompt()",
+                other
+            ),
+            None => panic!("MockAiRepo: no more responses left in prompt()"),
+        }
+    }
+}
+
 #[cfg(test)]
 mod tests {
     use super::*;
 
     use crate::ai::{AiImageModel, ImageSize};
+
+    #[test]
+    fn prompt_returns_in_order() {
+        let mock = MockAiRepo::new(vec![
+            MockAiOutput::PromptResponse("foo".into()),
+            MockAiOutput::PromptResponse("bar".into()),
+        ]);
+
+        let r1 = mock.prompt("anything", 50).unwrap();
+        assert_eq!(r1, "foo");
+
+        let r2 = mock.prompt("anything", 100).unwrap();
+        assert_eq!(r2, "bar");
+    }
+
+    #[test]
+    #[should_panic(expected = "no more responses left in prompt()")]
+    fn panic_if_no_responses_for_prompt() {
+        let mock = MockAiRepo::new(vec![]);
+        let _ = mock.prompt("anything", 10);
+    }
 
     #[test]
     fn gen_image_and_description_in_order() {

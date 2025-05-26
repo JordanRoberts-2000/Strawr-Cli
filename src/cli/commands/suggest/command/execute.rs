@@ -7,20 +7,24 @@ use crate::{
 
 use super::command::SuggestSubCommand;
 
+const MAX_TOKENS: u16 = 60;
+
 impl SuggestCommand {
     pub fn execute(&self, ctx: &CliContext) -> Result<(), SuggestCmdError> {
         match &self.subcommand {
             SuggestSubCommand::Alts(args) => {
                 let ctx_type = Self::resolve_context_arg(&args.context, ctx)?;
                 let prompt = Self::create_alts_prompt(&args.name, &args.description, &ctx_type);
-                // let response = ctx.service.init_ai().prompt(&prompt)?;
+                let response = ctx.service.init_ai()?.prompt(&prompt, MAX_TOKENS)?;
+                println!("{response}");
                 // let suggestions = Self::parse_prompt_response?;
                 // Self::display_suggestions(&suggestions);
             }
             SuggestSubCommand::Name(args) => {
                 let ctx_type = Self::resolve_context_arg(&args.context, ctx)?;
                 let prompt = Self::create_name_prompt(&args.description, &ctx_type);
-                // let response = ctx.service.init_ai().prompt(&prompt)?;
+                let response = ctx.service.init_ai()?.prompt(&prompt, MAX_TOKENS)?;
+                println!("{response}");
                 // let suggestions = Self::parse_prompt_response?;
                 // Self::display_suggestions(&suggestions);
             }

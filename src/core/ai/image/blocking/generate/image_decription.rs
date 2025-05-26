@@ -1,10 +1,7 @@
 use serde_json::json;
 
 use crate::{
-    ai::{
-        image::{blocking::utils::OpenAiClient, models::ImageDescriptionResponse},
-        AiResult,
-    },
+    ai::{client::blocking::OpenAiClient, models::ChatCompletionResponse, AiResult},
     utils::parse_model,
 };
 
@@ -27,7 +24,7 @@ pub fn image_description(api_key: impl AsRef<str>, url: impl Into<String>) -> Ai
 
     let json = OpenAiClient::new(api_key.as_ref()).post_json(OPENAI_CHAT_URL, &body)?;
 
-    let model: ImageDescriptionResponse = parse_model(&json)?;
+    let model: ChatCompletionResponse = parse_model(&json)?;
 
-    model.description(json)
+    model.first_message(json)
 }

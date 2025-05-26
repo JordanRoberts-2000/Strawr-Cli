@@ -1,10 +1,7 @@
 use serde_json::json;
 
 use crate::{
-    ai::{
-        image::{blocking::utils::OpenAiClient, models::ImageGenResponse},
-        AiResult,
-    },
+    ai::{client::blocking::OpenAiClient, image::models::ImageGenResponse, AiResult},
     utils::parse_model,
 };
 
