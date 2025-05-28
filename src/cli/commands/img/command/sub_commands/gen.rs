@@ -2,7 +2,7 @@ use std::path::PathBuf;
 
 use crate::{
     ai::{AiImageModel, Dalle2ImageSize, Dalle3ImageSize, ImageSize},
-    commands::img::{utils::dalle_version_parse, ImgError},
+    commands::img::{utils::dalle_version_parse, ImgCmdError},
     img::Img,
     utils::spinner,
     validation::adaptors::clap::validate,
@@ -55,7 +55,7 @@ pub struct GenSubcommand {
 }
 
 impl GenSubcommand {
-    pub fn execute(&self, ctx: &CliContext) -> Result<(), ImgError> {
+    pub fn execute(&self, ctx: &CliContext) -> Result<(), ImgCmdError> {
         let from_cli = self.dalle.is_some();
 
         let mut model = if from_cli {
@@ -86,7 +86,7 @@ impl GenSubcommand {
             };
         }
 
-        spinner("Generating image…", || -> Result<(), ImgError> {
+        spinner("Generating image…", || -> Result<(), ImgCmdError> {
             let url = ctx.service.init_ai()?.generate_image(
                 &self.description,
                 model.clone(),

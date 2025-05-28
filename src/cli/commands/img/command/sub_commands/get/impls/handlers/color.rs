@@ -1,11 +1,11 @@
 use crate::{
-    commands::img::{command::sub_commands::get::GetSubcommmand, enums::ColorOutput, ImgError},
+    commands::img::{command::sub_commands::get::GetSubcommmand, enums::ColorOutput, ImgCmdError},
     img::Img,
     CliContext,
 };
 
 impl GetSubcommmand {
-    pub fn handle_color(&self, ctx: &CliContext, img: &mut Img) -> Result<(), ImgError> {
+    pub fn handle_color(&self, ctx: &CliContext, img: &mut Img) -> Result<(), ImgCmdError> {
         match &ctx.config.img.get.default_color_output {
             ColorOutput::Rgb => {
                 let rgb = img.color()?.rgb();

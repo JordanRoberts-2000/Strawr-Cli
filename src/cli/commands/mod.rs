@@ -14,7 +14,7 @@ pub use {
 
 pub mod errors {
     pub use super::{
-        ai::AiCmdError, config::ConfigCommandError, img::ImgError, suggest::SuggestCmdError,
+        ai::AiCmdError, config::ConfigCommandError, img::ImgCmdError, suggest::SuggestCmdError,
         template::TemplateError,
     };
 }

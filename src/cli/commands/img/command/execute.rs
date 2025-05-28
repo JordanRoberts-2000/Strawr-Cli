@@ -3,7 +3,7 @@ use crate::{
         context::ImgContext,
         enums::ImageInput,
         flow::{ImagesResolved, ImgFlow},
-        ImgError,
+        ImgCmdError,
     },
     CliContext,
 };
@@ -11,7 +11,7 @@ use crate::{
 use super::ImgCommand;
 
 impl ImgCommand {
-    pub fn execute(&self, ctx: &CliContext) -> Result<(), ImgError> {
+    pub fn execute(&self, ctx: &CliContext) -> Result<(), ImgCmdError> {
         if let Some(subcommand) = &self.subcommand {
             return subcommand.execute(ctx);
         }
@@ -27,7 +27,7 @@ impl ImgCommand {
         Ok(())
     }
 
-    fn resolve_images(input: &ImageInput) -> Result<ImgFlow<ImagesResolved>, ImgError> {
+    fn resolve_images(input: &ImageInput) -> Result<ImgFlow<ImagesResolved>, ImgCmdError> {
         let flow = ImgFlow::new().resolve_images(input)?;
         Ok(flow)
     }

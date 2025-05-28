@@ -4,7 +4,7 @@ use {
 };
 
 use crate::{
-    commands::img::ImgError,
+    commands::img::ImgCmdError,
     validation::{validate, ValidationError},
 };
 
@@ -16,7 +16,7 @@ pub enum ImageInput {
 }
 
 impl FromStr for ImageInput {
-    type Err = ImgError;
+    type Err = ImgCmdError;
 
     fn from_str(s: &str) -> Result<Self, Self::Err> {
         let input = s.trim();
@@ -30,7 +30,7 @@ impl FromStr for ImageInput {
                     scheme: _,
                 },
             ) => {
-                return Err(ImgError::InputUrlNotRemote(s.to_string()));
+                return Err(ImgCmdError::InputUrlNotRemote(s.to_string()));
             }
             Err(_) => {}
         }
@@ -38,7 +38,7 @@ impl FromStr for ImageInput {
         match validate::existing_file(input) {
             Ok(path) => return Ok(ImageInput::File(path)),
             Err(ValidationError::PathNotFound(p)) => {
-                return Err(ImgError::InputNotFound(p));
+                return Err(ImgCmdError::InputNotFound(p));
             }
             Err(_) => {}
         }
@@ -46,11 +46,11 @@ impl FromStr for ImageInput {
         match validate::existing_dir(input) {
             Ok(path) => return Ok(ImageInput::Directory(path)),
             Err(ValidationError::PathNotFound(p)) => {
-                return Err(ImgError::InputNotFound(p));
+                return Err(ImgCmdError::InputNotFound(p));
             }
             Err(_) => {}
         }
 
-        Err(ImgError::UnknownInputType(input.to_string()))
+        Err(ImgCmdError::UnknownInputType(input.to_string()))
     }
 }

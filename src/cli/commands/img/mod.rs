@@ -8,4 +8,4 @@ pub(super) mod utils;
 
 pub use command::command::ImgCommand;
 pub use config::ImgConfig;
-pub use error::ImgError;
+pub use error::ImgCmdError;

@@ -1,11 +1,11 @@
 use crate::{
-    commands::img::{command::sub_commands::get::GetSubcommmand, ImgError},
+    commands::img::{command::sub_commands::get::GetSubcommmand, ImgCmdError},
     img::Img,
     CliContext,
 };
 
 impl GetSubcommmand {
-    pub fn execute(&self, ctx: &CliContext) -> Result<(), ImgError> {
+    pub fn execute(&self, ctx: &CliContext) -> Result<(), ImgCmdError> {
         let mut img = Img::open(&self.path)?;
 
         match true {

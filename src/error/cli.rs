@@ -13,7 +13,7 @@ pub enum CliError {
     // #[error(transparent)]
     // GrabCommand(#[from] GrabError),
     #[error(transparent)]
-    ImgCommand(#[from] ImgError),
+    ImgCommand(#[from] ImgCmdError),
     #[error(transparent)]
     SuggestCommand(#[from] SuggestCmdError),
     #[error(transparent)]

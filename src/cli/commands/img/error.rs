@@ -9,7 +9,7 @@ use crate::{
 };
 
 #[derive(Error, Debug)]
-pub enum ImgError {
+pub enum ImgCmdError {
     #[error(transparent)]
     Validation(#[from] ValidationError),
     #[error("Invalid input, please provide valid file, directory or remote-url: {0}")]

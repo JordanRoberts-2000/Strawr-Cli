@@ -4,7 +4,7 @@ use clap::{value_parser, ArgAction, Parser, Subcommand};
 
 use crate::{
     commands::img::{
-        enums::{ImageInput, ImageSize, ValidImageFormat}, utils::aspect_ratio_parse, ImgError
+        enums::{ImageInput, ImageSize, ValidImageFormat}, utils::aspect_ratio_parse, ImgCmdError
     }, validation::adaptors::clap::validate, CliContext
 };
 
@@ -86,7 +86,7 @@ pub enum ImgSubcommand {
 }
 
 impl ImgSubcommand {
-  pub fn execute(&self, ctx: &CliContext) -> Result<(), ImgError> {
+  pub fn execute(&self, ctx: &CliContext) -> Result<(), ImgCmdError> {
       match self {
           Self::Gen(cmd) => cmd.execute(ctx)?,
           Self::Get(cmd) => cmd.execute(ctx)?,

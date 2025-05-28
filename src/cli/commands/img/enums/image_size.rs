@@ -1,6 +1,6 @@
 use std::str::FromStr;
 
-use crate::commands::img::ImgError;
+use crate::commands::img::ImgCmdError;
 
 #[derive(Debug, Clone, PartialEq)]
 pub enum ImageSize {
@@ -12,7 +12,7 @@ pub enum ImageSize {
 }
 
 impl FromStr for ImageSize {
-    type Err = ImgError;
+    type Err = ImgCmdError;
 
     fn from_str(s: &str) -> Result<Self, Self::Err> {
         let low = s.to_ascii_lowercase();
@@ -26,7 +26,7 @@ impl FromStr for ImageSize {
                 other
                     .parse::<u32>()
                     .map(Self::Pixels)
-                    .map_err(|_| ImgError::ParseImageSize(s.to_owned()))
+                    .map_err(|_| ImgCmdError::ParseImageSize(s.to_owned()))
             }
         }
     }
